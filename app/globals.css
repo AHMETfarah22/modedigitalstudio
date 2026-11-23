@@ -476,12 +476,12 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 .hero-host__pose.pose-0 { --ax: -66.7%; }
 @keyframes hh-turn { from { opacity: 0.3; transform: translateX(var(--ax)) rotateY(-45deg) scale(0.97); } to { transform: translateX(var(--ax)); } }
 
-/* Corner host behind the page: cards and text pass over him */
-.guide { z-index: 0; transform: translateX(130%); transition: transform 1.6s cubic-bezier(0.25, 0.8, 0.3, 1); }
+/* Corner host walks in from the side and stays in front of the page */
+.guide { z-index: 40; transform: translateX(130%); transition: transform 1.6s cubic-bezier(0.25, 0.8, 0.3, 1); }
 .guide.is-on { transform: none; }
 .guide__bubble { display: none; }
 .guide__stage { width: clamp(110px, 11vw, 185px); }
-.guide__breathe img { opacity: 0.6; filter: brightness(0.75) saturate(0.7) drop-shadow(0 18px 24px rgb(0 0 0 / 0.45)) !important; }
+.guide__breathe img { opacity: 1; filter: drop-shadow(0 18px 24px rgb(0 0 0 / 0.45)) !important; }
 /* steps while he walks in */
 .guide.is-on .guide__stage { animation: g-steps 0.4s ease-in-out 4 both; }
 @keyframes g-steps { 50% { transform: translateY(-5px) rotate(1.2deg); } }
