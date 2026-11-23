@@ -4,106 +4,211 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ustura Berber Kulübü · Kadıköy</title>
-<meta name="description" content="Ustura Berber Kulübü: saç, sakal ve ustura tıraşı. Hattını seç, fişini damgalayalım.">
+<meta name="description" content="Ustura Berber Kulübü: saç, sakal ve ustura tıraşı. Hattını seç, fişini damgalayalım, koltuğun hazır.">
 <meta name="theme-color" content="#0b0908">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <a class="skip" href="#hatlar">İçeriğe geç</a>
 
-<!-- Opening: the shop light switches on -->
 <div class="curtain" aria-hidden="true">
   <div class="curtain__line"></div>
   <p class="curtain__word">USTURA</p>
 </div>
-
 <div class="grain" aria-hidden="true"></div>
-<div class="spot" aria-hidden="true"></div>
 
 <header class="top">
   <a class="brand" href="#ust" aria-label="Ustura Berber Kulübü, başa dön">
     <span class="brand__name">USTURA</span><span class="brand__sub">BERBER KULÜBÜ</span>
   </a>
-  <a class="btn btn--ghost btn--sm" href="#hatlar">Randevu al</a>
+  <nav class="nav" aria-label="Ana menü">
+    <a href="#hatlar">Fiyatlar</a>
+    <a href="#ustalar">Ustalar</a>
+    <a href="#kanit">Kanıt</a>
+    <a href="#randevu">Randevu</a>
+  </nav>
+  <a class="btn btn--light btn--sm" href="#randevu">Randevu al</a>
 </header>
 
 <main>
-  <!-- HERO -->
+  <!-- 1 · HERO: cinematic photo -->
   <section class="hero" id="ust">
-    <p class="hero__tag"><span class="dot"></span> KADIKÖY · SALI–PAZAR</p>
-    <h1 class="hero__title">
-      <span class="line"><span>İÇERİ GİR.</span></span>
-      <span class="line line--hot"><span>KESKİN ÇIK.</span></span>
-    </h1>
-    <p class="hero__lead">Saç, sakal ve ustura tıraşı. Sıcak havlu, keskin bıçak, acele yok.</p>
-    <div class="hero__cta">
-      <a class="btn btn--hot" href="#hatlar">Hattını seç</a>
+    <div class="hero__media" aria-hidden="true">
+      <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=2000&q=70&auto=format&fit=crop" alt="" fetchpriority="high">
     </div>
-    <div class="pole" aria-hidden="true"><span></span></div>
-    <a class="hero__scroll" href="#hatlar" aria-label="Hizmetlere in">AŞAĞI</a>
-  </section>
-
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee__track">
-      <span>SAÇ</span><i>✦</i><span>SAKAL</span><i>✦</i><span>USTURA</span><i>✦</i><span>SICAK HAVLU</span><i>✦</i><span>BIYIK</span><i>✦</i>
-      <span>SAÇ</span><i>✦</i><span>SAKAL</span><i>✦</i><span>USTURA</span><i>✦</i><span>SICAK HAVLU</span><i>✦</i><span>BIYIK</span><i>✦</i>
-    </div>
-  </div>
-
-  <!-- SERVICES + RECEIPT -->
-  <section class="lines" id="hatlar" aria-labelledby="lines-title">
-    <div class="lines__head">
-      <p class="eyebrow"><span class="dot"></span> HİZMETİNİ SEÇ</p>
-      <h2 id="lines-title" class="lines__title">BİR HAT SEÇ.<br><span class="hot">DAMGAYI BİZ VURALIM.</span></h2>
-      <p class="lines__lead">Hizmetlere dokun, fişe yazılsın. Bitince damgala; koltuğun hazır.</p>
-    </div>
-
-    <div class="lines__grid">
-      <ul class="menu" id="menu" aria-label="Hizmetler">
-        <!-- filled by app.js -->
-      </ul>
-
-      <div class="ticket-wrap">
-        <article class="ticket" id="ticket" aria-live="polite">
-          <header class="ticket__head">
-            <p class="ticket__brand">USTURA</p>
-            <p class="ticket__meta"><span>FİŞ NO</span><span id="ticketNo">#0000</span></p>
-            <p class="ticket__meta"><span>TARİH</span><span id="ticketDate">—</span></p>
-          </header>
-          <ol class="ticket__items" id="ticketItems">
-            <li class="ticket__empty" id="ticketEmpty">Fiş boş. Soldan bir hizmet seç.</li>
-          </ol>
-          <div class="ticket__total">
-            <span>TOPLAM</span><strong id="ticketTotal">0 ₺</strong>
-          </div>
-          <p class="ticket__time" id="ticketTime" hidden></p>
-          <div class="stamp" id="stamp" aria-hidden="true">
-            <span class="stamp__top">USTURA</span>
-            <span class="stamp__mid">ONAYLANDI</span>
-            <span class="stamp__bot" id="stampDate">—</span>
-          </div>
-          <p class="ticket__foot">Fiyatlar örnektir · Konsept tasarım</p>
-        </article>
-
-        <div class="slots" id="slots" hidden>
-          <p class="slots__label">Bugün boş saatler</p>
-          <div class="slots__grid" role="group" aria-label="Saat seç" id="slotGrid"></div>
-        </div>
-
-        <button class="btn btn--hot btn--wide" id="stampBtn" type="button" disabled>Fişi damgala</button>
-        <p class="done" id="done" role="status" hidden></p>
+    <div class="hero__shade" aria-hidden="true"></div>
+    <div class="hero__copy">
+      <p class="hero__tag"><span class="dot"></span> KADIKÖY · 2016'DAN BERİ</p>
+      <h1 class="hero__title">
+        <span class="line"><span>HER KESİM</span></span>
+        <span class="line line--hot"><span>BİR İMZA.</span></span>
+      </h1>
+      <div class="hero__row">
+        <p class="hero__lead">Saç, sakal ve ustura tıraşı. Sıcak havlu, keskin bıçak, acele yok.</p>
+        <a class="btn btn--hot" href="#randevu">Koltuğunu ayır</a>
       </div>
     </div>
   </section>
 
+  <!-- 2 · CROSSING TAPES -->
+  <div class="tapes" aria-hidden="true">
+    <div class="tape tape--a"><div class="tape__track">
+      <span>KLASİK KESİM</span><i>✦</i><span>SKİN FADE</span><i>✦</i><span>SAKAL TASARIMI</span><i>✦</i><span>SICAK HAVLU</span><i>✦</i><span>RANDEVUSUZ GEL</span><i>✦</i><span>21.00'E KADAR AÇIK</span><i>✦</i>
+      <span>KLASİK KESİM</span><i>✦</i><span>SKİN FADE</span><i>✦</i><span>SAKAL TASARIMI</span><i>✦</i><span>SICAK HAVLU</span><i>✦</i><span>RANDEVUSUZ GEL</span><i>✦</i><span>21.00'E KADAR AÇIK</span><i>✦</i>
+    </div></div>
+    <div class="tape tape--b"><div class="tape__track">
+      <span>USTURA</span><i>✦</i><span>BERBER KULÜBÜ</span><i>✦</i><span>KADIKÖY</span><i>✦</i><span>USTURA</span><i>✦</i><span>BERBER KULÜBÜ</span><i>✦</i><span>KADIKÖY</span><i>✦</i>
+      <span>USTURA</span><i>✦</i><span>BERBER KULÜBÜ</span><i>✦</i><span>KADIKÖY</span><i>✦</i><span>USTURA</span><i>✦</i><span>BERBER KULÜBÜ</span><i>✦</i><span>KADIKÖY</span><i>✦</i>
+    </div></div>
+  </div>
+
+  <!-- 3 · NOT AVERAGE + LIVE CLOCK -->
+  <section class="intro" aria-labelledby="intro-title">
+    <div>
+      <p class="chip"><span class="dot"></span> BİZ KİMİZ</p>
+      <h2 id="intro-title" class="big">SIRADAN BİR<br><span class="hot">BERBER</span> DEĞİL.</h2>
+      <p class="intro__lead">Üç koltuk, üç usta. Kapıdan girdiğin an sıcak havlu hazır, çay demde. Kesimi bitirmeden kalkmazsın.</p>
+    </div>
+    <aside class="clock" aria-label="Şu anki durum">
+      <p class="clock__top"><span class="clock__live"></span><span id="clockState">—</span></p>
+      <p class="clock__label">KADIKÖY'DE SAAT</p>
+      <p class="clock__time" id="clockTime">--:--</p>
+      <div class="clock__grid">
+        <div><span>BUGÜN</span><strong id="clockToday">—</strong></div>
+        <div><span>KOLTUK</span><strong id="clockChairs">—</strong></div>
+        <div><span>SIRA</span><strong id="clockWait">—</strong></div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- 4 · PICK A LINE, WE STAMP IT -->
+  <section class="lines" id="hatlar" aria-labelledby="lines-title">
+    <div class="lines__left">
+      <p class="chip"><span class="dot"></span> HİZMETİNİ SEÇ</p>
+      <h2 id="lines-title" class="big">BİR HAT SEÇ.<br><span class="dim">DAMGAYI BİZ VURALIM.</span></h2>
+      <p class="lines__lead">Fişteki bir satıra dokun; damgayı vuralım, koltuğa yazalım.</p>
+      <div class="picked" aria-live="polite">
+        <p class="picked__label">SEÇİLEN</p>
+        <p class="picked__name" id="pickedName">Henüz seçilmedi</p>
+        <p class="picked__price"><span id="pickedPrice">0</span> ₺</p>
+        <a class="btn btn--hot btn--sm" id="pickedGo" href="#randevu" aria-disabled="true">Bu hatla randevu al</a>
+      </div>
+    </div>
+
+    <article class="ticket" id="ticket" aria-label="Fiyat listesi">
+      <header class="ticket__head">
+        <p class="ticket__brand">FİYAT LİSTESİ</p>
+        <p class="ticket__script">Ustura Berber Kulübü</p>
+        <p class="ticket__meta"><span id="ticketDate">—</span><span>KADIKÖY</span></p>
+      </header>
+      <ol class="ticket__items" id="ticketItems" role="listbox" aria-label="Hizmet seç"></ol>
+      <p class="ticket__foot">Fiyatlar örnektir · Konsept tasarım</p>
+      <div class="stamp" id="stamp" aria-hidden="true">
+        <span class="stamp__top">USTURA</span>
+        <span class="stamp__mid">SEÇİLDİ</span>
+        <span class="stamp__bot" id="stampDate">—</span>
+      </div>
+    </article>
+  </section>
+
+  <!-- 5 · BARBERS -->
+  <section class="barbers" id="ustalar" aria-labelledby="barbers-title">
+    <div class="barbers__head">
+      <p class="chip"><span class="dot"></span> USTALAR</p>
+      <h2 id="barbers-title" class="big">ÜÇ KOLTUK.<br><span class="hot">ÜÇ USTA.</span></h2>
+    </div>
+    <div class="deck" id="deck" role="list"></div>
+    <div class="deck__nav">
+      <button class="round" type="button" id="deckPrev" aria-label="Önceki usta">←</button>
+      <p class="deck__count"><span id="deckNo">02</span> / 03</p>
+      <button class="round" type="button" id="deckNext" aria-label="Sonraki usta">→</button>
+    </div>
+  </section>
+
+  <!-- 6 · PROOF -->
+  <section class="proof" id="kanit" aria-labelledby="proof-title">
+    <div class="proof__head">
+      <p class="chip"><span class="dot"></span> İŞLERİMİZ</p>
+      <h2 id="proof-title" class="big">KANIT.</h2>
+    </div>
+    <div class="wall">
+      <figure class="tile tile--tall"><img src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=900&q=70&auto=format&fit=crop" alt="Usta makasla sakalı düzeltiyor, siyah beyaz" loading="lazy"></figure>
+      <figure class="tile"><img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=900&q=70&auto=format&fit=crop" alt="Tuğla duvar önünde deri berber koltuğu" loading="lazy"></figure>
+      <figure class="tile"><img src="https://images.unsplash.com/photo-1657105052497-f996284ffff8?w=900&q=70&auto=format&fit=crop" alt="Tarak ve inceltme makasıyla kesim" loading="lazy"></figure>
+      <figure class="tile tile--wide"><img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=1200&q=70&auto=format&fit=crop" alt="Arduvaz üzerinde makineler, makas ve tarak" loading="lazy"></figure>
+      <figure class="tile tile--tall"><img src="https://images.unsplash.com/photo-1788328155052-e02abe9ba983?w=900&q=70&auto=format&fit=crop" alt="Eldivenli usta alın çizgisini düzeltiyor" loading="lazy"></figure>
+      <figure class="tile tile--wide"><img src="https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?w=900&q=70&auto=format&fit=crop" alt="Usta ense kesimini tamamlıyor" loading="lazy"></figure>
+      <figure class="tile tile--wide"><img src="https://images.unsplash.com/photo-1621645582931-d1d3e6564943?w=900&q=70&auto=format&fit=crop" alt="Karanlık salonda berber koltukları" loading="lazy"></figure>
+    </div>
+  </section>
+
+  <!-- 7 · BOOKING WIZARD -->
+  <section class="book" id="randevu" aria-labelledby="book-title">
+    <div class="book__left">
+      <p class="chip"><span class="dot"></span> RANDEVU</p>
+      <h2 id="book-title" class="big">KOLTUĞUN<br>SENİ BEKLİYOR.</h2>
+      <p class="book__lead">İyi kesim tesadüf değildir. Dört adımda yerini ayır.</p>
+      <div class="note"><p class="note__label">SON DAKİKA?</p><p>Randevusuz da gel; boş koltuk varsa hemen oturursun.</p></div>
+    </div>
+
+    <div class="wizard" id="wizard">
+      <ol class="steps" role="tablist" aria-label="Randevu adımları">
+        <li><button type="button" role="tab" data-step="0" aria-selected="true"><b>01</b> Hizmet</button></li>
+        <li><button type="button" role="tab" data-step="1" aria-selected="false"><b>02</b> Usta</button></li>
+        <li><button type="button" role="tab" data-step="2" aria-selected="false"><b>03</b> Gün &amp; saat</button></li>
+        <li><button type="button" role="tab" data-step="3" aria-selected="false"><b>04</b> Bilgiler</button></li>
+      </ol>
+      <div class="panes">
+        <div class="pane is-on" role="tabpanel" data-pane="0">
+          <p class="pane__q">Hangi hizmet?</p>
+          <div class="opts" id="optService"></div>
+        </div>
+        <div class="pane" role="tabpanel" data-pane="1" hidden>
+          <p class="pane__q">Hangi usta?</p>
+          <div class="opts" id="optBarber"></div>
+        </div>
+        <div class="pane" role="tabpanel" data-pane="2" hidden>
+          <p class="pane__q">Ne zaman?</p>
+          <div class="days" id="optDay"></div>
+          <div class="slots" id="optSlot"></div>
+        </div>
+        <div class="pane" role="tabpanel" data-pane="3" hidden>
+          <p class="pane__q">Son olarak sen.</p>
+          <label class="field"><span>Ad soyad</span><input id="fName" autocomplete="name" required></label>
+          <label class="field"><span>Not (isteğe bağlı)</span><textarea id="fNote" rows="3" placeholder="Usta için bir not bırak"></textarea></label>
+        </div>
+        <div class="pane pane--done" data-pane="4" hidden>
+          <p class="done__stamp" aria-hidden="true">ONAY</p>
+          <p class="pane__q">Koltuğun hazır.</p>
+          <p class="done__sum" id="doneSum"></p>
+          <p class="done__note">Bu bir konsept site; gerçek randevu oluşturulmadı.</p>
+        </div>
+      </div>
+      <div class="wizard__foot">
+        <button class="btn btn--ghost btn--sm" type="button" id="wBack">← Geri</button>
+        <p class="wizard__sum" id="wSum"></p>
+        <button class="btn btn--hot btn--sm" type="button" id="wNext" disabled>Devam</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · FINALE -->
+  <section class="finale" aria-labelledby="finale-title">
+    <h2 id="finale-title" class="finale__title">
+      <span>İÇERİ BİR TÜRLÜ GİR.</span>
+      <span class="hot">BAŞKA ÇIK.</span>
+    </h2>
+    <a class="btn btn--light" href="#randevu">Koltuğunu ayır</a>
+  </section>
 </main>
 
 <footer class="foot">
-  <p class="foot__word" aria-hidden="true">USTURA</p>
-  <p class="foot__line">Moda, Kadıköy · Salı–Pazar 10.00–21.00 · Konsept tasarım · Mode Digital Studio</p>
+  <p>Moda, Kadıköy · Salı–Pazar 10.00–21.00 · merhaba@ustura.example</p>
+  <p>Konsept tasarım · Mode Digital Studio · Fotoğraflar: Unsplash</p>
 </footer>
 
 <script src="app.js" defer></script>

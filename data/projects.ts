@@ -136,8 +136,8 @@ export const CONCEPTS: Project[] = [
     cover: "/sites/loops/concept-barbershop.webp",
     loop: "/sites/loops/concept-barbershop.mp4",
     summary:
-      "A barbershop site with a cinematic opening: pick your services, watch them print onto a paper receipt, stamp it and choose a free chair.",
-    highlights: ["Receipt and stamp", "Time slots", "Neon and barber pole"],
+      "A cinematic barbershop site: crossing ticker tapes, a live open-or-closed clock, a price list you stamp, a barber deck, a photo wall and a four-step booking.",
+    highlights: ["Stamped price list", "Barber deck", "Booking steps"],
     demoUrl: "/demos/barbershop/index.html",
   },
 ].map((p) => ({ ...p, cover: asset(p.cover), loop: asset(p.loop), demoUrl: asset(p.demoUrl) }));
