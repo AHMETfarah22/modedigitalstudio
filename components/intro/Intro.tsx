@@ -86,13 +86,38 @@ export default function Intro() {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
 
-      t.set(q("[data-orb]"), { x: -vw * 0.42, y: -vh * 0.38, scale: 0.45, autoAlpha: 0 })
-        .to(q("[data-orb]"), { autoAlpha: 1, duration: 0.7, ease: "power2.out" }, 0.2)
-        .to(q("[data-orb]"), { x: 0, y: 0, scale: 1.15, duration: 1.5, ease: "power3.inOut" }, 0.45)
-        .to(q("[data-orb-spin]"), { rotateY: 540, rotateX: 200, duration: 2.2, ease: "power2.inOut" }, 0.3)
-        .to(q("[data-orb]"), { scale: 3.4, autoAlpha: 0.32, duration: 1.4, ease: "power2.inOut" }, 1.9)
-        .from(welcome.chars, { yPercent: 115, duration: 0.9, stagger: 0.035 }, 1.75)
-        .from(title.chars, { yPercent: 120, rotateX: -70, transformOrigin: "50% 100%", duration: 1.1, stagger: 0.028 }, 2.05)
+      // Four orbs rush in from the four sides, collide in the middle and burst like a bomb
+      const sides = q("[data-orb-side]");
+      const HIT = 1.25;
+      t.set(q("[data-orb]"), { x: -vw * 0.58, y: 0, scale: 0.5, autoAlpha: 0 })
+        .set(sides[0], { x: vw * 0.58, y: 0, autoAlpha: 0 })
+        .set(sides[1], { x: 0, y: -vh * 0.62, autoAlpha: 0 })
+        .set(sides[2], { x: 0, y: vh * 0.62, autoAlpha: 0 })
+        .to([q("[data-orb]"), ...sides], { autoAlpha: 1, duration: 0.35, ease: "power2.out" }, 0.15)
+        .to([q("[data-orb]"), ...sides], { x: 0, y: 0, duration: HIT - 0.2, ease: "power3.in" }, 0.2)
+        .to(q("[data-orb-spin]"), { rotateY: 540, rotateX: 200, duration: 2.2, ease: "power2.inOut" }, 0.2)
+        .to(sides, { scale: 0, autoAlpha: 0, duration: 0.15, ease: "power2.in" }, HIT)
+        .fromTo(q("[data-blast]"), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.1, ease: "power4.in" }, HIT)
+        .to(q("[data-blast]"), { autoAlpha: 0, duration: 0.9, ease: "power2.out" }, HIT + 0.1)
+        .fromTo(q("[data-shock]"), { scale: 0.4, autoAlpha: 1 }, { scale: 16, autoAlpha: 0, duration: 1.2, ease: "power2.out", stagger: 0.12 }, HIT)
+        .fromTo(
+          q("[data-spark-burst]"),
+          { x: 0, y: 0, scale: 1, autoAlpha: 1 },
+          {
+            x: () => Math.cos(Math.random() * Math.PI * 2) * (vw * (0.18 + Math.random() * 0.28)),
+            y: () => Math.sin(Math.random() * Math.PI * 2) * (vh * (0.18 + Math.random() * 0.3)),
+            scale: () => 0.4 + Math.random(),
+            autoAlpha: 0,
+            duration: () => 0.9 + Math.random() * 0.6,
+            ease: "power3.out",
+          },
+          HIT,
+        )
+        .fromTo(root.current, { x: 0, y: 0 }, { x: () => (Math.random() - 0.5) * 18, y: () => (Math.random() - 0.5) * 14, duration: 0.05, repeat: 7, yoyo: true, ease: "none", clearProps: "x,y" }, HIT)
+        .fromTo(q("[data-orb]"), { scale: 0.5 }, { scale: 1.6, duration: 0.25, ease: "back.out(3)" }, HIT)
+        .to(q("[data-orb]"), { scale: 3.4, autoAlpha: 0.32, duration: 1.3, ease: "power2.inOut" }, HIT + 0.3)
+        .from(welcome.chars, { yPercent: 115, duration: 0.9, stagger: 0.035 }, HIT + 0.45)
+        .from(title.chars, { yPercent: 120, rotateX: -70, transformOrigin: "50% 100%", duration: 1.1, stagger: 0.028 }, HIT + 0.7)
         // a wave of light runs through the letters once
         .to(title.chars, { color: "#2bb8ff", duration: 0.25, stagger: 0.03, yoyo: true, repeat: 1, ease: "sine.inOut" }, 3.1)
         .from(q("[data-presenter]"), { xPercent: -28, autoAlpha: 0, duration: 1.4, ease: "power3.out" }, 2.3)
@@ -153,6 +178,24 @@ export default function Intro() {
         </div>
         <span className="absolute left-1/2 top-1/2 size-7 -translate-x-1/2 -translate-y-1/2 rounded-full bg-sun shadow-[0_0_30px_8px_rgba(255,209,102,0.7)]" />
       </div>
+
+      {/* Three more orbs that fly in from the other sides and collide with the first */}
+      {[0, 1, 2].map((i) => (
+        <div key={i} data-orb-side aria-hidden className="invisible pointer-events-none absolute left-1/2 top-1/2 z-[1] -ml-10 -mt-10 size-20">
+          <div className="absolute inset-[-60%] rounded-full bg-[radial-gradient(closest-side,rgba(43,184,255,0.55),transparent)] blur-md" />
+          <span className="absolute inset-0 rounded-full border-4 border-ring shadow-[0_0_22px_rgba(43,184,255,0.8)]" />
+          <span className="absolute left-1/2 top-1/2 size-5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-sun shadow-[0_0_24px_6px_rgba(255,209,102,0.7)]" />
+        </div>
+      ))}
+
+      {/* The burst: a white flash, shock rings and sparks */}
+      <div data-blast aria-hidden className="invisible pointer-events-none absolute inset-0 z-[6] bg-[radial-gradient(circle_at_50%_50%,#ffffff_0%,#dff4ff_25%,rgba(191,232,255,0.6)_45%,transparent_75%)]" />
+      {[0, 1, 2].map((i) => (
+        <span key={i} data-shock aria-hidden className="invisible pointer-events-none absolute left-1/2 top-1/2 z-[5] -ml-14 -mt-14 size-28 rounded-full border-[6px] border-ring shadow-[0_0_40px_rgba(43,184,255,0.7),inset_0_0_30px_rgba(255,209,102,0.5)]" />
+      ))}
+      {Array.from({ length: 22 }, (_, i) => (
+        <span key={i} data-spark-burst aria-hidden className={`invisible pointer-events-none absolute left-1/2 top-1/2 z-[5] -ml-1 -mt-1 rounded-full ${i % 3 === 0 ? "size-3 bg-sun shadow-[0_0_14px_4px_rgba(255,209,102,0.8)]" : "size-2 bg-ring shadow-[0_0_12px_3px_rgba(43,184,255,0.8)]"}`} />
+      ))}
 
       {/* Stage A: welcome */}
       <div data-stage className="relative z-[2] mx-auto grid h-full max-w-[1400px] grid-rows-[1fr_auto] items-center px-6 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:grid-rows-1 md:px-12">
