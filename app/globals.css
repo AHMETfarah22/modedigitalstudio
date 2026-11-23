@@ -343,7 +343,7 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 .guide { position: fixed; right: clamp(8px, 1.6vw, 24px); bottom: 0; z-index: 40; display: flex; align-items: flex-start; gap: 6px; pointer-events: none;
   transform: translateY(105%); transition: transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .guide.is-on { transform: none; pointer-events: auto; }
-.guide__stage { position: relative; display: block; width: clamp(130px, 13.5vw, 225px); perspective: 900px; }
+.guide__stage { position: relative; display: block; width: clamp(120px, 11vw, 180px); margin-bottom: 18px; perspective: 900px; }
 /* a soft blue spotlight behind him, so he stands in the page's light rather than on top of it */
 .guide__stage::before { content: ""; position: absolute; left: -30%; right: -30%; top: 5%; bottom: -5%; border-radius: 50%;
   background: radial-gradient(closest-side, rgb(43 184 255 / 0.16), rgb(31 92 220 / 0.07) 55%, transparent); pointer-events: none; }
@@ -364,27 +364,30 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 @keyframes g-orb-loop { 0% { transform: none; } 50% { transform: translate(160%, -160%) scale(1.25) rotate(180deg); } 100% { transform: rotate(360deg); } }
 .act-spin { animation: g-nod 1.6s ease-in-out both; }
 .act-idea .guide__orb-core { box-shadow: 0 0 0 2px #ffd166, 0 0 26px 8px rgb(255 209 102 / 0.75); transition: box-shadow 0.3s; }
-.guide__sign { position: absolute; left: 48%; top: -15%; width: 30%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 999px;
+.guide__sign { position: absolute; left: 38%; top: -12%; z-index: 2; width: 30%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 999px;
   background: radial-gradient(circle at 32% 28%, #ffffff, var(--tone) 70%); box-shadow: 0 8px 20px -6px rgb(0 0 0 / 0.6), 0 0 18px 2px color-mix(in srgb, var(--tone) 55%, transparent);
   animation: g-sign 2.4s cubic-bezier(0.3, 1.6, 0.5, 1) both; }
 .guide__sign svg { width: 58%; height: 58%; fill: none; stroke: #0a1733; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 .tone-sun { --tone: #ffd166; } .tone-ring { --tone: #2bb8ff; } .tone-green { --tone: #6ee7a8; } .tone-pink { --tone: #ff8fb1; }
 .tone-pink svg { fill: #0a1733; stroke-width: 0; }
 @keyframes g-sign { 0% { opacity: 0; transform: translateY(20px) scale(0.3) rotate(-20deg); } 18% { opacity: 1; transform: translateY(-4px) scale(1.1) rotate(6deg); } 28% { transform: none; } 80% { opacity: 1; transform: translateY(-6px); } 100% { opacity: 0; transform: translateY(-22px) scale(0.8); } }
-.guide__breathe { position: relative; display: block; aspect-ratio: 203 / 495; animation: guide-breathe 6s ease-in-out infinite; transform-origin: 64% 100%; transform-style: preserve-3d; }
+/* he stands on a small studio card: his photo keeps its white floor, multiplied onto the light backdrop */
+.guide__breathe { position: relative; display: block; aspect-ratio: 0.6; overflow: hidden; border-radius: 20px; animation: guide-breathe 6s ease-in-out infinite; transform-origin: 50% 100%;
+  background: linear-gradient(180deg, #f6f4f1 0%, #ece9e4 66%, #dedad3 67%, #e7e3dd 100%);
+  box-shadow: 0 30px 60px -24px rgb(0 0 0 / 0.85), 0 0 0 1px rgb(255 255 255 / 0.1), inset 0 0 40px rgb(120 110 95 / 0.18); }
 /* every pose stands on the same spot: his feet line up whichever pose is showing */
-.guide__pose { position: absolute; bottom: 0; left: 63.7%; height: 100%; transform: translateX(calc(var(--ax) * -100%)); opacity: 0; transition: opacity 0.16s ease-out; }
+.guide__pose { position: absolute; bottom: -1%; left: 50%; height: 109%; mix-blend-mode: multiply; transform: translateX(calc(var(--ax) * -100%)); opacity: 0; transition: opacity 0.16s ease-out; }
 .guide__pose.is-on { opacity: 1; animation: guide-turn 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
 @keyframes guide-turn { from { transform: translateX(calc(var(--ax) * -100%)) rotateY(-55deg) scale(0.96); } to { transform: translateX(calc(var(--ax) * -100%)); } }
 .guide__pose img { height: 100%; }
-@keyframes guide-breathe { 0%, 100% { transform: rotateY(-9deg); } 50% { transform: rotateY(9deg) scale(1.01, 1.018); } }
-.guide__breathe img { display: block; width: 100%; filter: brightness(0.96) saturate(0.95) drop-shadow(0 0 0.6px rgb(170 210 255 / 0.55)) drop-shadow(-6px 0 14px rgb(43 184 255 / 0.22)) drop-shadow(0 22px 26px rgb(0 0 0 / 0.6)); user-select: none; }
+@keyframes guide-breathe { 0%, 100% { transform: rotateY(-10deg); } 50% { transform: rotateY(10deg); } }
+.guide__breathe img { display: block; width: 100%; user-select: none; }
 .guide__orb { position: absolute; left: -6%; top: 15%; width: 20%; aspect-ratio: 1; animation: guide-float 3s ease-in-out infinite; }
 @keyframes guide-float { 50% { transform: translateY(-6px); } }
 .guide__orb-ring { position: absolute; inset: -14%; border-radius: 999px; border: 2px dashed rgb(43 184 255 / 0.7); animation: spin-slow 8s linear infinite; }
 @keyframes spin-slow { to { rotate: 360deg; } }
 .guide__orb-core { position: absolute; inset: 0; display: grid; place-items: center; border-radius: 999px; background: var(--color-night); box-shadow: 0 0 0 2px #2bb8ff, 0 0 18px 4px rgb(43 184 255 / 0.65); }
-.guide__floor { position: absolute; left: 10%; right: 10%; bottom: -6px; height: 14px; border-radius: 50%; background: radial-gradient(closest-side, rgb(0 0 0 / 0.5), transparent); }
+.guide__floor { display: none; position: absolute; left: 10%; right: 10%; bottom: -6px; height: 14px; border-radius: 50%; background: radial-gradient(closest-side, rgb(0 0 0 / 0.5), transparent); }
 .guide__bubble { position: relative; margin-right: clamp(14px, 1.8vw, 28px); margin-top: clamp(14px, 2vw, 30px); max-width: 15rem; padding: 10px 14px; border-radius: 16px 16px 4px 16px; background: var(--color-ink); color: var(--color-night);
   font-size: 14px; font-weight: 600; line-height: 1.35; box-shadow: 0 14px 40px -12px rgb(0 0 0 / 0.7); transform-origin: 100% 100%; animation: guide-say 0.6s cubic-bezier(0.3, 1.6, 0.5, 1) 0.15s both; }
 .guide__bubble:empty { display: none; }
@@ -407,25 +410,29 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 .lang-switch button:hover { color: var(--color-ink); }
 .lang-switch button[aria-pressed="true"] { background: var(--color-ink); color: var(--color-night); }
 
-/* Hero host: big, in the empty right half of the first screen, pointing down to the work */
-.hero-host { position: absolute; right: clamp(12px, 5vw, 110px); bottom: 0; height: min(74svh, 720px); aspect-ratio: 173 / 490; z-index: 1; pointer-events: none; perspective: 1000px; }
-.hero-host__light { position: absolute; left: -70%; right: -70%; top: 0; bottom: -8%; border-radius: 50%;
-  background: radial-gradient(closest-side, rgb(43 184 255 / 0.2), rgb(31 92 220 / 0.08) 55%, transparent); }
-.hero-host__fig { position: absolute; inset: 0; display: block; transform-origin: 50% 100%; transform-style: preserve-3d;
-  animation: hh-in 1.3s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s both, hh-sway 7s ease-in-out 1.8s infinite; }
-.hero-host__fig img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: bottom;
-  filter: brightness(0.96) saturate(0.95) drop-shadow(0 0 0.8px rgb(170 210 255 / 0.55)) drop-shadow(-10px 0 24px rgb(43 184 255 / 0.25)) drop-shadow(0 30px 36px rgb(0 0 0 / 0.6)); }
-@keyframes hh-in { from { opacity: 0; transform: translateY(18%) rotateY(-50deg) scale(0.94); } to { opacity: 1; transform: none; } }
-@keyframes hh-sway { 0%, 100% { transform: rotateY(-10deg); } 50% { transform: rotateY(10deg) translateY(-1%) scale(1.01); } }
-.hero-host__floor { position: absolute; left: 5%; right: 5%; bottom: -10px; height: 26px; border-radius: 50%; background: radial-gradient(closest-side, rgb(0 0 0 / 0.55), transparent); animation: hh-fade 1s 0.8s both; }
-.hero-host__bubble { position: absolute; right: 88%; top: 50%; width: max-content; max-width: 15rem; padding: 12px 16px; border-radius: 18px 18px 4px 18px; background: var(--color-ink); color: var(--color-night);
-  font-size: 15px; font-weight: 600; line-height: 1.35; box-shadow: 0 16px 40px -12px rgb(0 0 0 / 0.7); transform-origin: 100% 100%; animation: guide-say 0.7s cubic-bezier(0.3, 1.6, 0.5, 1) 1.5s both; }
-.hero-host__sign { position: absolute; left: 50%; top: -9%; width: 22%; aspect-ratio: 1; margin-left: -11%; display: grid; place-items: center; border-radius: 999px;
-  background: radial-gradient(circle at 32% 28%, #ffffff, #2bb8ff 70%); box-shadow: 0 0 22px 4px rgb(43 184 255 / 0.5);
-  animation: hh-fade 0.6s 1.8s both, hh-bounce 1.6s ease-in-out 2.4s infinite; }
-.hero-host__sign svg { width: 56%; height: 56%; fill: none; stroke: #0a1733; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; }
-@keyframes hh-bounce { 50% { transform: translateY(10px); } }
-@keyframes hh-fade { from { opacity: 0; } }
-@media (max-width: 1023px) { .hero-host { height: 46svh; right: 8px; opacity: 0.9; } .hero-host__bubble { display: none; } }
-@media (max-width: 640px) { .hero-host { height: 34svh; } }
-@media (prefers-reduced-motion: reduce) { .hero-host__fig, .hero-host__sign, .hero-host__bubble, .hero-host__floor { animation: none; } }
+/* Hero lineup: the host on a light studio backdrop, his poses in a row behind him (lookbook style) */
+.lineup { position: absolute; right: max(var(--pad, 24px), calc((100vw - 1280px) / 2)); top: 50%; z-index: 1; display: none; width: min(34vw, 500px); aspect-ratio: 0.78;
+  transform: translateY(-46%); perspective: 1400px; }
+@media (min-width: 1024px) { .lineup { display: block; } }
+.lineup__panel { position: absolute; inset: 0; overflow: hidden; border-radius: 28px; transform-style: preserve-3d;
+  background: linear-gradient(180deg, #f6f4f1 0%, #ece9e4 62%, #dedad3 63%, #e7e3dd 100%);
+  box-shadow: 0 50px 90px -40px rgb(0 0 0 / 0.85), 0 0 0 1px rgb(255 255 255 / 0.08), inset 0 0 80px rgb(120 110 95 / 0.18);
+  transform: rotateY(var(--ry, 0deg)) rotateX(var(--rx, 0deg)); transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  animation: lineup-in 1.3s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s both; }
+@keyframes lineup-in { from { opacity: 0; transform: translateY(40px) rotateY(-28deg) scale(0.94); } }
+.lineup__spot { position: absolute; left: 0; right: 0; top: -10%; height: 80%; background: radial-gradient(50% 60% at 40% 40%, rgb(255 255 255 / 0.9), transparent 70%); }
+.lineup__floor { position: absolute; left: 0; right: 0; bottom: 0; height: 37%; background: linear-gradient(180deg, rgb(150 140 125 / 0.12), transparent 40%); }
+.lineup__fig { position: absolute; width: auto; mix-blend-mode: multiply; user-select: none;
+  transition: left 0.9s cubic-bezier(0.65, 0, 0.35, 1), height 0.9s cubic-bezier(0.65, 0, 0.35, 1), bottom 0.9s cubic-bezier(0.65, 0, 0.35, 1), filter 0.9s; filter: saturate(0.8); }
+.lineup__fig.is-front { filter: none; }
+.lineup__brand { position: absolute; left: 22px; top: 18px; font: 700 11px/1 var(--font-display, inherit); letter-spacing: 0.32em; color: rgb(10 23 51 / 0.55); }
+.lineup__nav { position: absolute; right: 16px; bottom: 14px; z-index: 20; display: flex; align-items: center; gap: 10px; color: #0a1733; }
+.lineup__nav button { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 999px; background: rgb(255 255 255 / 0.75); border: 1px solid rgb(10 23 51 / 0.12);
+  transition: transform 0.15s, background-color 0.2s; }
+.lineup__nav button:hover { background: #fff; transform: translateY(-1px); }
+.lineup__nav button:active { transform: scale(0.94); }
+.lineup__nav svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.lineup__count { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; font-variant-numeric: tabular-nums; }
+.lineup__bubble { position: absolute; left: -14%; bottom: 16%; z-index: 30; padding: 12px 16px; border-radius: 18px 18px 18px 4px; background: var(--color-sun); color: var(--color-night);
+  font-size: 15px; font-weight: 600; box-shadow: 0 16px 40px -12px rgb(0 0 0 / 0.7); transform-origin: 0 100%; animation: guide-say 0.7s cubic-bezier(0.3, 1.6, 0.5, 1) 1.6s both; white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .lineup__panel, .lineup__bubble { animation: none; } .lineup__fig { transition: none; } }
