@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Katman · Dondurmalı Kruvasan</title>
+<meta name="description" content="Katman: kat kat açılan tereyağlı kruvasan, içinde dondurma, üstünde çikolata. Kaydır, değişsin.">
+<meta name="theme-color" content="#efe2cf">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#menu">İçeriğe geç</a>
+
+<header class="top">
+  <a class="brand" href="#ust">KATMAN</a>
+  <nav class="nav" aria-label="Ana menü">
+    <a href="#ust">Lezzetler</a>
+    <a href="#hikaye">Hikâye</a>
+    <a href="#menu">Menü</a>
+    <a href="#siparis">Sipariş</a>
+  </nav>
+  <div class="top__right">
+    <a class="pill" href="#siparis">Sipariş ver</a>
+    <span class="bag" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg></span>
+  </div>
+</header>
+
+<main>
+  <!-- The story: one croissant travels and changes as you scroll -->
+  <section class="story" id="ust" aria-label="Kruvasanın hikâyesi">
+    <div class="stage" id="stage">
+      <div class="bgfx" aria-hidden="true">
+        <div class="snow"><i>❄</i><i>❄</i><i>❄</i><i>❄</i><i>❄</i></div>
+        <div class="butter"><i></i><i></i><i></i></div>
+        <svg class="curls" viewBox="0 0 1000 600" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="choco" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a4329"/><stop offset=".45" stop-color="#3d1f12"/><stop offset=".55" stop-color="#2a140b"/><stop offset="1" stop-color="#8c5235"/></linearGradient>
+          </defs>
+          <g transform="translate(150 140)"><g class="curl"><path d="M0 0 C40 -30 80 -10 70 20 C60 50 20 45 22 20 C24 0 50 0 52 18" fill="none" stroke="url(#choco)" stroke-width="16" stroke-linecap="round"/></g></g>
+          <g transform="translate(860 120)"><g class="curl"><path d="M0 0 C40 -30 80 -10 70 20 C60 50 20 45 22 20 C24 0 50 0 52 18" fill="none" stroke="url(#choco)" stroke-width="13" stroke-linecap="round"/></g></g>
+          <g transform="translate(110 470)"><g class="curl"><path d="M0 0 C40 -30 80 -10 70 20 C60 50 20 45 22 20 C24 0 50 0 52 18" fill="none" stroke="url(#choco)" stroke-width="18" stroke-linecap="round"/></g></g>
+          <g transform="translate(900 470)"><g class="curl"><path d="M0 0 C40 -30 80 -10 70 20 C60 50 20 45 22 20 C24 0 50 0 52 18" fill="none" stroke="url(#choco)" stroke-width="11" stroke-linecap="round"/></g></g>
+        </svg>
+      </div>
+
+      <!-- Copy for each step -->
+      <div class="copy">
+        <article class="step is-on" data-step="0">
+          <h1>KAT KAT<br>KEYİF.</h1>
+          <p>Tereyağlı hamur, kat kat açılan kabuk ve içinde seni bekleyen bir sürpriz.</p>
+          <a class="btn" href="#menu">Menüye bak</a>
+        </article>
+        <article class="step" data-step="1">
+          <h2>SOĞUK<br>TEREYAĞ.</h2>
+          <p>Hamur soğuk tereyağıyla katlanır; fırında açılan her kat çıtır kalır.</p>
+          <a class="btn" href="#menu">Menüye bak</a>
+        </article>
+        <article class="step step--light" data-step="2">
+          <h2>ÇİKOLATAYA<br>BATIRILDI.</h2>
+          <p>İçine iki top dondurma, üstüne sıcak bitter çikolata.</p>
+          <a class="btn" href="#siparis">Hemen sipariş ver</a>
+        </article>
+        <article class="step step--light" data-step="3">
+          <h2>KATLAR<br>KAPANDI.</h2>
+          <p>Kabuk dondurmanın üstüne kapanır; çikolata katların arasına süzülür.</p>
+          <a class="btn" href="#siparis">Hemen sipariş ver</a>
+        </article>
+        <article class="step" data-step="4">
+          <h2>KIRILMAK<br>İÇİN YAPILDI.</h2>
+          <p>Bıçak değdiği an kabuk çatırdar. Gerisi tabağında.</p>
+          <a class="btn" href="#menu">Menüye bak</a>
+        </article>
+        <article class="step" data-step="5">
+          <h2>DIŞI ÇITIR.<br>İÇİ SOĞUK.</h2>
+          <p>Ortadan ikiye ayır: dışı sıcak ve çıtır, içi soğuk ve yumuşak.</p>
+          <a class="btn" href="#siparis">Bir tane ayır</a>
+        </article>
+      </div>
+
+      <!-- The croissant, built from one photo: two clipped halves that can open, close and break -->
+      <div class="obj" id="obj" aria-hidden="true">
+        <div class="plate"></div>
+        <svg class="pour" viewBox="0 0 40 1000" preserveAspectRatio="none"><rect x="12" y="0" width="16" height="1000" rx="8" fill="url(#choco)"/></svg>
+        <div class="knife"><svg viewBox="0 0 420 70"><defs><linearGradient id="blade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7f7f7"/><stop offset=".55" stop-color="#a9b0b6"/><stop offset="1" stop-color="#e3e6e8"/></linearGradient></defs><path d="M120 18 L400 26 Q418 34 400 44 L120 52 Z" fill="url(#blade)"/><rect x="10" y="20" width="118" height="30" rx="12" fill="#2b1a12"/><circle cx="40" cy="35" r="4" fill="#c9a26a"/><circle cx="80" cy="35" r="4" fill="#c9a26a"/></svg></div>
+        <div class="half half--l"><div class="pastry"></div></div>
+        <div class="half half--r"><div class="pastry"></div></div>
+        <p class="obj__loading">Fırından çıkıyor…</p>
+      </div>
+
+      <ol class="dots" aria-hidden="true"><li></li><li></li><li></li><li></li><li></li><li></li></ol>
+    </div>
+  </section>
+
+  <!-- Menu -->
+  <section class="menu" id="menu" aria-labelledby="menu-title">
+    <div class="menu__head" id="hikaye">
+      <p class="eyebrow">MENÜ</p>
+      <h2 id="menu-title">HER KAT<br>BİR SEÇİM.</h2>
+    </div>
+    <ul class="cards">
+      <li class="card"><p class="card__no">01</p><h3>Klasik</h3><p>Sade tereyağlı kruvasan, sıcak servis.</p><p class="card__price">95 ₺</p></li>
+      <li class="card card--hot"><p class="card__no">02</p><h3>Dondurmalı</h3><p>İki top vanilya dondurma, bitter çikolata sosu.</p><p class="card__price">185 ₺</p></li>
+      <li class="card"><p class="card__no">03</p><h3>Fıstıklı</h3><p>Antep fıstığı kreması ve kırık fıstık.</p><p class="card__price">210 ₺</p></li>
+      <li class="card"><p class="card__no">04</p><h3>Karamelli</h3><p>Tuzlu karamel, çıtır şeker kabuğu.</p><p class="card__price">195 ₺</p></li>
+    </ul>
+    <p class="menu__note">Fiyatlar örnektir · Konsept tasarım</p>
+  </section>
+
+  <!-- Order -->
+  <section class="order" id="siparis" aria-labelledby="order-title">
+    <h2 id="order-title">BİR TANE<br>AYIRALIM MI?</h2>
+    <p>Moda'daki fırından sıcak çıktığı gibi. Gel al ya da kapına gelsin.</p>
+    <div class="order__cta">
+      <a class="btn btn--dark" href="#menu">Menüyü gör</a>
+      <a class="btn btn--line" href="mailto:merhaba@katman.example">merhaba@katman.example</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p class="foot__word" aria-hidden="true">KATMAN</p>
+  <p class="foot__line">Moda, Kadıköy · Konsept tasarım · Mode Digital Studio · Fotoğraflar: Unsplash</p>
+</footer>
+
+<script src="app.js" defer></script>
+</body>
+</html>

@@ -116,6 +116,18 @@ const RAW_PROJECTS: Project[] = [
     liveUrl: "https://hydro567.github.io/hydro-pizza/",
     featured: true,
   },
+  {
+    slug: "roneli",
+    name: "Roneli",
+    category: "web",
+    cover: "/sites/loops/roneli.webp",
+    loop: "/sites/loops/roneli.mp4",
+    summary:
+      "A site for a made-to-measure tailor. As visitors scroll, a suit is built piece by piece on a figure in the dark; the visit ends with the collection, common questions and a fitting appointment form.",
+    highlights: ["Scroll-built suit", "Collection", "Fitting appointment"],
+    liveUrl: "https://roneli.vercel.app/",
+    featured: true,
+  },
 ];
 
 export const PROJECTS: Project[] = RAW_PROJECTS.map((p) => ({
@@ -139,6 +151,17 @@ export const CONCEPTS: Project[] = [
       "A cinematic barbershop site: crossing ticker tapes, a live open-or-closed clock, a price list you stamp, a barber deck, a photo wall and a four-step booking.",
     highlights: ["Stamped price list", "Barber deck", "Booking steps"],
     demoUrl: "/demos/barbershop/index.html",
+  },
+  {
+    slug: "concept-croissant",
+    name: "Katman",
+    category: "web" as const,
+    cover: "/sites/loops/concept-croissant.webp",
+    loop: "/sites/loops/concept-croissant.mp4",
+    summary:
+      "A bakery site told by one croissant. As visitors scroll it opens, takes two scoops of ice cream and hot chocolate, closes, meets the knife and breaks in half on the plate.",
+    highlights: ["Scroll-driven story", "Six scenes", "Menu and order"],
+    demoUrl: "/demos/croissant/index.html",
   },
 ].map((p) => ({ ...p, cover: asset(p.cover), loop: asset(p.loop), demoUrl: asset(p.demoUrl) }));
 

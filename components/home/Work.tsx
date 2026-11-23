@@ -27,7 +27,7 @@ export default function Work() {
         {/* Two wide cards, then rows of three */}
         <ul className="mt-14 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-6">
           {FEATURED.map((p, i) => (
-            <li key={p.slug} className={i < 2 ? "lg:col-span-3" : "lg:col-span-2"}>
+            <li key={p.slug} className={FEATURED.length % 3 === 2 && i < 2 ? "lg:col-span-3" : "lg:col-span-2"}>
               <SiteCard project={p} onOpen={() => setActive(p)} priority={i < 2} />
             </li>
           ))}
