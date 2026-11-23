@@ -47,6 +47,8 @@ export type Project = {
   /** Where the full project can be seen (e.g. the showcase entry). */
   moreUrl?: string;
   featured?: boolean;
+  /** A concept site made by the studio as a sample, not client work. Opens the demo in /demos. */
+  demoUrl?: string;
 };
 
 const RAW_PROJECTS: Project[] = [
@@ -124,6 +126,67 @@ export const PROJECTS: Project[] = RAW_PROJECTS.map((p) => ({
 }));
 
 export const FEATURED = PROJECTS.filter((p) => p.featured);
+
+/** 3D concept sites built by the studio as samples (served from /public/demos). */
+const RAW_CONCEPTS: Project[] = [
+  {
+    slug: "concept-cafe",
+    name: "Telve Kahve",
+    category: "web",
+    cover: "/sites/loops/concept-cafe.webp",
+    loop: "/sites/loops/concept-cafe.mp4",
+    summary: "A specialty coffee house in 3D: a turning cup with latte art and steam, beans that swirl around it as you scroll, and the menu beside it.",
+    highlights: ["3D cup and steam", "Scroll story", "Menu"],
+    demoUrl: "/demos/cafe/index.html",
+  },
+  {
+    slug: "concept-restaurant",
+    name: "Sofra",
+    category: "web",
+    cover: "/sites/loops/concept-restaurant.webp",
+    loop: "/sites/loops/concept-restaurant.mp4",
+    summary: "An Anatolian restaurant: the dish assembles on the plate, the camera moves around a candle-lit table, and the evening ends at the reservation form.",
+    highlights: ["3D table", "Menu tabs", "Reservation form"],
+    demoUrl: "/demos/restaurant/index.html",
+  },
+  {
+    slug: "concept-hospital",
+    name: "Nabız Hastanesi",
+    category: "web",
+    cover: "/sites/loops/concept-hospital.webp",
+    loop: "/sites/loops/concept-hospital.mp4",
+    summary: "A private hospital site: a glass heart beating with a heartbeat line, a DNA helix for the departments, and online appointments.",
+    highlights: ["3D heart and DNA", "Departments", "Appointment form"],
+    demoUrl: "/demos/hospital/index.html",
+  },
+  {
+    slug: "concept-hotel",
+    name: "Liman Butik Otel",
+    category: "web",
+    cover: "/sites/loops/concept-hotel.webp",
+    loop: "/sites/loops/concept-hotel.mp4",
+    summary: "A boutique hotel on an Aegean bay: the water moves, the camera glides from the rooms to the pier, and the day turns to sunset as you scroll.",
+    highlights: ["3D bay and water", "Day to sunset", "Booking form"],
+    demoUrl: "/demos/hotel/index.html",
+  },
+  {
+    slug: "concept-bakery",
+    name: "Ekşi Maya Fırın",
+    category: "web",
+    cover: "/sites/loops/concept-bakery.webp",
+    loop: "/sites/loops/concept-bakery.mp4",
+    summary: "An artisan bakery: a sourdough loaf and simit in warm oven light, dough that rises with the scroll, and pre-orders for the morning.",
+    highlights: ["3D bread", "Baking story", "Pre-order form"],
+    demoUrl: "/demos/bakery/index.html",
+  },
+];
+
+export const CONCEPTS: Project[] = RAW_CONCEPTS.map((p) => ({
+  ...p,
+  cover: asset(p.cover),
+  loop: p.loop && asset(p.loop),
+  demoUrl: p.demoUrl && asset(p.demoUrl),
+}));
 
 export const hostOf = (url: string) => url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 

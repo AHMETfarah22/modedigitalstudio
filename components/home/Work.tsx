@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { CATEGORIES, FEATURED, hostOf, type Project } from "@/data/projects";
+import { CATEGORIES, CONCEPTS, FEATURED, hostOf, type Project } from "@/data/projects";
 import Reveal from "@/components/ui/Reveal";
 import Viewer from "@/components/ui/Viewer";
 import SiteCard from "./SiteCard";
@@ -29,6 +29,23 @@ export default function Work() {
           {FEATURED.map((p, i) => (
             <li key={p.slug} className={i < 2 ? "lg:col-span-3" : "lg:col-span-2"}>
               <SiteCard project={p} onOpen={() => setActive(p)} priority={i < 2} />
+            </li>
+          ))}
+        </ul>
+
+        {/* 3D concept sites made by the studio as samples */}
+        <div className="mt-[clamp(6rem,10vw,9rem)] grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
+          <Reveal as="h2" id="concepts-title" className="max-w-[18ch] text-[clamp(2rem,4.6vw,4rem)] font-bold">
+            3D sites for cafes, restaurants, hospitals and hotels.
+          </Reveal>
+          <p className="max-w-[26rem] text-mute">
+            Concept sites the studio built to show what a 3D, animated site can do for a local business. Open one and scroll through it.
+          </p>
+        </div>
+        <ul aria-labelledby="concepts-title" className="mt-12 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-6">
+          {CONCEPTS.map((p, i) => (
+            <li key={p.slug} className={i < 2 ? "lg:col-span-3" : "lg:col-span-2"}>
+              <SiteCard project={p} onOpen={() => setActive(p)} />
             </li>
           ))}
         </ul>
@@ -86,6 +103,11 @@ function ProjectDetail({ project: p }: { project: Project }) {
           </dl>
 
           <div className="mt-10 flex flex-wrap gap-3">
+            {p.demoUrl && (
+              <a href={p.demoUrl} target="_blank" rel="noopener" className="btn btn-sun">
+                Open the concept site
+              </a>
+            )}
             {p.liveUrl && (
               <a href={p.liveUrl} target="_blank" rel="noopener" className="btn btn-sun">
                 Visit live website
