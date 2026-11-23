@@ -385,7 +385,7 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 @keyframes spin-slow { to { rotate: 360deg; } }
 .guide__orb-core { position: absolute; inset: 0; display: grid; place-items: center; border-radius: 999px; background: var(--color-night); box-shadow: 0 0 0 2px #2bb8ff, 0 0 18px 4px rgb(43 184 255 / 0.65); }
 .guide__floor { position: absolute; left: 10%; right: 10%; bottom: -6px; height: 14px; border-radius: 50%; background: radial-gradient(closest-side, rgb(0 0 0 / 0.5), transparent); }
-.guide__bubble { position: relative; margin-right: clamp(14px, 1.8vw, 28px); margin-top: clamp(14px, 2vw, 30px); max-width: 15rem; padding: 10px 14px; border-radius: 16px 16px 4px 16px; background: var(--color-ink); color: var(--color-night);
+.guide__bubble { position: relative; margin-right: clamp(14px, 1.8vw, 28px); margin-top: clamp(14px, 2vw, 30px); max-width: 15rem; padding: 10px 14px; border-radius: 16px 16px 4px 16px; background: var(--color-navy); color: var(--color-ink);
   font-size: 14px; font-weight: 600; line-height: 1.35; box-shadow: 0 14px 40px -12px rgb(0 0 0 / 0.7); transform-origin: 100% 100%; animation: guide-say 0.6s cubic-bezier(0.3, 1.6, 0.5, 1) 0.15s both; }
 .guide__bubble:empty { display: none; }
 @keyframes guide-say { from { opacity: 0; transform: scale(0.6) translate(10px, 10px); } }
@@ -408,17 +408,17 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 .lang-switch button[aria-pressed="true"] { background: var(--color-ink); color: var(--color-night); }
 
 /* Hero host: big, in the empty right half of the first screen, pointing down to the work */
-.hero-host { position: absolute; right: clamp(40px, 11vw, 210px); bottom: 0; height: min(72svh, 700px); aspect-ratio: 173 / 490; z-index: 1; pointer-events: none; perspective: 1000px; }
+.hero-host { position: absolute; right: clamp(40px, 9vw, 180px); bottom: 0; height: min(80svh, 780px); aspect-ratio: 203 / 495; z-index: 1; pointer-events: none; perspective: 1000px; }
 .hero-host__light { position: absolute; left: -70%; right: -70%; top: 0; bottom: -8%; border-radius: 50%;
   background: radial-gradient(closest-side, rgb(43 184 255 / 0.2), rgb(31 92 220 / 0.08) 55%, transparent); }
 .hero-host__fig { position: absolute; inset: 0; display: block; transform-origin: 50% 100%; transform-style: preserve-3d;
   animation: hh-in 1.3s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s both, hh-sway 7s ease-in-out 1.8s infinite; }
-.hero-host__fig img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: bottom;
+.hero-host__fig img { display: block; width: 100%; height: 100%; object-fit: contain; object-position: bottom; filter: drop-shadow(0 30px 40px rgb(10 23 51 / 0.18)) !important;
   filter: brightness(0.96) saturate(0.95) drop-shadow(0 0 0.8px rgb(170 210 255 / 0.55)) drop-shadow(-10px 0 24px rgb(43 184 255 / 0.25)) drop-shadow(0 30px 36px rgb(0 0 0 / 0.6)); }
 @keyframes hh-in { from { opacity: 0; transform: translateY(18%) rotateY(-50deg) scale(0.94); } to { opacity: 1; transform: none; } }
 @keyframes hh-sway { 0%, 100% { transform: rotateY(-10deg); } 50% { transform: rotateY(10deg) translateY(-1%) scale(1.01); } }
-.hero-host__floor { position: absolute; left: 5%; right: 5%; bottom: -10px; height: 26px; border-radius: 50%; background: radial-gradient(closest-side, rgb(0 0 0 / 0.55), transparent); animation: hh-fade 1s 0.8s both; }
-.hero-host__bubble { position: absolute; right: 88%; top: 50%; width: max-content; max-width: 15rem; padding: 12px 16px; border-radius: 18px 18px 4px 18px; background: var(--color-ink); color: var(--color-night);
+.hero-host__floor { position: absolute; left: 0; right: 0; bottom: 1%; height: 30px; border-radius: 50%; background: radial-gradient(closest-side, rgb(10 23 51 / 0.28), transparent); filter: blur(2px); animation: hh-fade 1s 0.8s both; }
+.hero-host__bubble { position: absolute; right: 104%; top: 46%; width: max-content; max-width: 15rem; padding: 12px 16px; border-radius: 18px 18px 4px 18px; background: var(--color-ink); color: var(--color-night);
   font-size: 15px; font-weight: 600; line-height: 1.35; box-shadow: 0 16px 40px -12px rgb(0 0 0 / 0.7); transform-origin: 100% 100%; animation: guide-say 0.7s cubic-bezier(0.3, 1.6, 0.5, 1) 1.5s both; }
 .hero-host__sign { position: absolute; left: 50%; top: -9%; width: 22%; aspect-ratio: 1; margin-left: -11%; display: grid; place-items: center; border-radius: 999px;
   background: radial-gradient(circle at 32% 28%, #ffffff, #2bb8ff 70%); box-shadow: 0 0 22px 4px rgb(43 184 255 / 0.5);
@@ -430,13 +430,29 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 @media (max-width: 640px) { .hero-host { height: 34svh; } }
 @media (prefers-reduced-motion: reduce) { .hero-host__fig, .hero-host__sign, .hero-host__bubble, .hero-host__floor { animation: none; } }
 
-/* Ambient light on the presenter, so he sits inside the page instead of on top of it:
-   the overlay is masked to his own outline, tints his near side with the page's blue
-   and lets his legs sink into the night at the bottom of the screen. */
-.ambient { position: absolute; inset: 0; pointer-events: none; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-  background:
-    linear-gradient(to top, rgb(5 11 30 / 0.92) 0%, rgb(5 11 30 / 0.55) 12%, rgb(5 11 30 / 0) 34%),
-    radial-gradient(70% 55% at 0% 35%, rgb(43 184 255 / 0.34), transparent 70%),
-    radial-gradient(60% 50% at 100% 30%, rgb(10 23 51 / 0.45), transparent 75%); }
-.hero-host__fig img, .guide__breathe img { filter: brightness(0.9) saturate(0.88) contrast(1.02) drop-shadow(0 0 1px rgb(120 180 255 / 0.35)); }
-.hero-host__floor { background: radial-gradient(closest-side, rgb(43 184 255 / 0.18), transparent) !important; }
+/* First screen in the welcome's light studio */
+.hero-light { color: var(--color-navy); }
+.hero-light :is(.text-mute) { color: rgb(10 23 51 / 0.66); }
+.hero-light :is(.text-ink) { color: var(--color-navy); }
+.hero-light .border-line { border-color: rgb(10 23 51 / 0.12); }
+.hero-light .btn-line { border-color: rgb(10 23 51 / 0.3); color: var(--color-navy); }
+.hero-light .btn-line:hover { border-color: var(--color-navy); background: rgb(10 23 51 / 0.05); }
+.hero-ring { position: absolute; z-index: -1; right: clamp(-120px, -4vw, 0px); top: 50%; width: min(62vw, 820px); aspect-ratio: 1; transform: translateY(-46%); border-radius: 999px;
+  border: 14px solid rgb(43 184 255 / 0.28); box-shadow: 0 0 120px rgb(43 184 255 / 0.3), inset 0 0 110px rgb(43 184 255 / 0.2); animation: hh-fade 1.4s 0.3s both; }
+.hero-host__bubble { background: var(--color-navy) !important; color: var(--color-ink) !important; }
+.hero-host__orb { position: absolute; left: -6%; top: 15%; width: 20%; aspect-ratio: 1; animation: guide-float 3s ease-in-out infinite; }
+.hero-host__orb-glow { position: absolute; inset: -55%; border-radius: 999px; background: radial-gradient(closest-side, rgb(43 184 255 / 0.5), transparent); filter: blur(8px); }
+.hero-host__orb-ring { position: absolute; inset: -14%; border-radius: 999px; border: 2px dashed rgb(43 184 255 / 0.75); animation: spin-slow 8s linear infinite; }
+.hero-host__orb-core { position: absolute; inset: 0; display: grid; place-items: center; border-radius: 999px; background: var(--color-night); box-shadow: 0 0 0 3px #2bb8ff, 0 0 28px 6px rgb(43 184 255 / 0.6); }
+/* Header over the light first screen */
+.header-light { color: var(--color-navy); }
+.hero-light .hero-host__orb-core .text-ink { color: var(--color-ink); }
+.header-light :is(.text-ink, .text-mute) { color: var(--color-navy) !important; }
+.header-light .bg-ink { background: var(--color-navy); }
+.header-light .border-line { border-color: rgb(10 23 51 / 0.18); }
+.header-light .lang-switch { background: rgb(255 255 255 / 0.6); border-color: rgb(10 23 51 / 0.14); }
+.header-light .lang-switch button { color: rgb(10 23 51 / 0.6); }
+.header-light .lang-switch button[aria-pressed="true"] { background: var(--color-navy); color: var(--color-ink); }
+/* Corner presenter in his own colours, standing in a soft pool of light */
+.guide__breathe img { filter: drop-shadow(0 18px 24px rgb(0 0 0 / 0.45)) !important; }
+.guide__stage::before { background: radial-gradient(closest-side, rgb(238 242 250 / 0.22), rgb(43 184 255 / 0.1) 55%, transparent) !important; }

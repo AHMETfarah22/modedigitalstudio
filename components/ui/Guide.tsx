@@ -147,7 +147,6 @@ export default function Guide() {
                   style={{ aspectRatio: `${p.w} / ${p.h}`, ["--ax" as string]: p.ax } as React.CSSProperties}
                 >
                   <img src={asset(p.src)} alt="" width={p.w} height={p.h} draggable={false} />
-                  <span className="ambient" style={{ WebkitMaskImage: `url(${asset(p.src)})`, maskImage: `url(${asset(p.src)})` }} />
                   {i === 0 && (
                     <span className="guide__orb" aria-hidden>
                       <span className="guide__orb-ring" />

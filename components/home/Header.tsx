@@ -35,7 +35,7 @@ export default function Header() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-300 ${
-        solid || open ? "border-b border-line bg-night/75 backdrop-blur-xl" : "border-b border-transparent"
+        solid || open ? "border-b border-line bg-night/75 backdrop-blur-xl" : "header-light border-b border-transparent"
       }`}
     >
       <div className="wrap flex h-[72px] items-center justify-between gap-6">

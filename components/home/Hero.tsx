@@ -1,12 +1,12 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { hasWebGL, useExperience } from "@/lib/experience";
+import { useExperience } from "@/lib/experience";
+import ModeLogo from "@/components/ui/ModeLogo";
 import Magnetic from "@/components/ui/Magnetic";
 import { FEATURED, hostOf, logoTile } from "@/data/projects";
 import { STUDIO } from "@/data/studio";
@@ -15,17 +15,10 @@ import { asset } from "@/lib/asset";
 
 gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP);
 
-const HeroField = dynamic(() => import("@/components/three/HeroField"), { ssr: false });
-
 export default function Hero() {
-  const { phase, lite, reducedMotion } = useExperience();
+  const { phase, reducedMotion } = useExperience();
   const root = useRef<HTMLElement>(null);
-  const [gl, setGl] = useState(false);
   const { t, lang } = useLang();
-
-  useEffect(() => {
-    if (phase === "entered") setGl(hasWebGL());
-  }, [phase]);
 
   useGSAP(
     () => {
@@ -55,26 +48,24 @@ export default function Hero() {
   );
 
   return (
-    <section ref={root} id="top" className="relative isolate flex min-h-[100svh] flex-col overflow-hidden">
-      <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(70%_60%_at_72%_45%,#10204a_0%,#050b1e_70%)]" />
-      <div aria-hidden className="absolute inset-0 -z-10">
-        {gl ? (
-          <HeroField lite={lite} />
-        ) : (
-          <div className="absolute right-[-10%] top-1/2 aspect-square w-[min(80vw,820px)] -translate-y-1/2 rounded-full border-[18px] border-ring/30 shadow-[0_0_120px_rgba(43,184,255,0.35),inset_0_0_120px_rgba(43,184,255,0.25)]" />
-        )}
-      </div>
-      <div aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-night" />
+    <section ref={root} id="top" className="hero-light relative isolate flex min-h-[100svh] flex-col overflow-hidden">
+      {/* The same light studio as the welcome: porcelain wall, soft white light, a glowing ring */}
+      <div aria-hidden className="absolute inset-0 -z-10 bg-porcelain bg-[radial-gradient(60%_55%_at_70%_42%,#ffffff_0%,transparent_70%),radial-gradient(50%_40%_at_15%_100%,rgba(31,92,220,0.10),transparent_70%)]" />
+      <div aria-hidden className="hero-ring" />
+      <div aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-5 bg-gradient-to-b from-transparent to-night/40" />
 
-      {/* The host stands in the empty right half and points down to the work */}
+      {/* The host stands in the right half and presents the page with both hands */}
       {phase === "entered" && (
         <div aria-hidden className="hero-host">
-          <span className="hero-host__light" />
           <span className="hero-host__bubble">{t("Scroll down to see our work", "Aşağı kaydırın, işlerimizi görün")}</span>
           <span className="hero-host__fig">
-            <img src={asset("/intro/pose-4.webp")} alt="" width={173} height={490} draggable={false} />
-            {/* the page's own light on him: blue from the side, the night swallowing his feet */}
-            <span className="ambient" style={{ WebkitMaskImage: `url(${asset("/intro/pose-4.webp")})`, maskImage: `url(${asset("/intro/pose-4.webp")})` }} />
+            <img src={asset("/intro/pose-5.webp")} alt="" width={203} height={495} draggable={false} />
+            {/* the studio mark floats over his open palm, as in the welcome */}
+            <span className="hero-host__orb">
+              <span className="hero-host__orb-glow" />
+              <span className="hero-host__orb-ring" />
+              <span className="hero-host__orb-core"><ModeLogo className="h-[52%] w-auto text-ink" /></span>
+            </span>
           </span>
           <span className="hero-host__floor" />
         </div>
