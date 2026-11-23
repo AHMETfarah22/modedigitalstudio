@@ -11,6 +11,7 @@ import Magnetic from "@/components/ui/Magnetic";
 import { FEATURED, hostOf, logoTile } from "@/data/projects";
 import { STUDIO } from "@/data/studio";
 import { useLang } from "@/lib/i18n";
+import { asset } from "@/lib/asset";
 
 gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP);
 
@@ -65,7 +66,22 @@ export default function Hero() {
       </div>
       <div aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-b from-transparent to-night" />
 
-      <div data-hero-in className="wrap invisible flex flex-1 flex-col justify-center pb-10 pt-32">
+      {/* The host stands in the empty right half and points down to the work */}
+      {phase === "entered" && (
+        <div aria-hidden className="hero-host">
+          <span className="hero-host__light" />
+          <span className="hero-host__bubble">{t("Scroll down to see our work", "Aşağı kaydırın, işlerimizi görün")}</span>
+          <span className="hero-host__sign">
+            <svg viewBox="0 0 24 24"><path d="M12 4v15 M6 13l6 6 6-6" /></svg>
+          </span>
+          <span className="hero-host__fig">
+            <img src={asset("/intro/pose-4.webp")} alt="" width={173} height={490} draggable={false} />
+          </span>
+          <span className="hero-host__floor" />
+        </div>
+      )}
+
+      <div data-hero-in className="wrap invisible relative z-[2] flex flex-1 flex-col justify-center pb-10 pt-32">
         <div data-hero-copy>
           <h1 key={lang} data-hero-title className="font-display text-[clamp(2.6rem,7.4vw,7.6rem)] font-extrabold leading-[0.92] tracking-[-0.045em]">
             <span className="block">{t("WE CREATE.", "TASARLARIZ.")}</span>
@@ -93,7 +109,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <div data-hero-foot data-hero-in className="wrap invisible pb-8">
+      <div data-hero-foot data-hero-in className="wrap invisible relative z-[2] pb-8">
         <div className="flex flex-col gap-4 border-t border-line pt-6 text-sm text-mute md:flex-row md:items-center md:justify-between">
           <p>{t("Live now", "Şu an yayında")}</p>
           <ul className="flex flex-wrap gap-x-8 gap-y-3">

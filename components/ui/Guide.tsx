@@ -26,9 +26,9 @@ const LINES: { anchor: string; say: string; sayTr: string }[] = [
  * `ax` is where his feet are across the picture, so the poses line up.
  */
 const POSES = [
-  { src: "/intro/pose-5.webp", w: 203, h: 495, ax: 0.637 },
-  { src: "/intro/pose-2.webp", w: 183, h: 493, ax: 0.446 },
-  { src: "/intro/pose-4.webp", w: 173, h: 490, ax: 0.498 },
+  { src: "/intro/pose-5.webp", w: 203, h: 495, ax: 0.636 },
+  { src: "/intro/pose-2.webp", w: 183, h: 492, ax: 0.445 },
+  { src: "/intro/pose-4.webp", w: 173, h: 490, ax: 0.5 },
 ];
 
 /** Gestures he cycles through: a pose, a body move, and a sign that pops up over his head. */
