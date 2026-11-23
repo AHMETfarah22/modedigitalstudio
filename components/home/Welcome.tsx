@@ -8,6 +8,7 @@ import { useGSAP } from "@gsap/react";
 import Magnetic from "@/components/ui/Magnetic";
 import { STUDIO } from "@/data/studio";
 import { asset } from "@/lib/asset";
+import ModeLogo from "@/components/ui/ModeLogo";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
 
@@ -92,12 +93,12 @@ export default function Welcome() {
           </div>
 
           {/* The studio mark, floating above his raised palm */}
-          <div data-orb aria-hidden className="absolute left-[77%] top-[27%] aspect-square w-[16%]">
+          <div data-orb aria-hidden className="absolute left-[75%] top-[24%] aspect-square w-[18%]">
             <div className="absolute inset-[-55%] rounded-full bg-[radial-gradient(closest-side,rgba(43,184,255,0.55),transparent)] blur-md" />
-            <svg data-orb-ring viewBox="0 0 32 32" className="absolute inset-0 size-full drop-shadow-[0_0_12px_rgba(43,184,255,0.9)]">
-              <circle cx="16" cy="16" r="12" fill="none" stroke="#2bb8ff" strokeWidth="3" strokeDasharray="60 16" strokeLinecap="round" />
-            </svg>
-            <span className="absolute left-1/2 top-1/2 size-[30%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sun shadow-[0_0_18px_6px_rgba(255,209,102,0.7)]" />
+            <span data-orb-ring className="absolute inset-[-12%] rounded-full border-2 border-dashed border-ring/70" />
+            <span className="absolute inset-0 grid place-items-center rounded-full bg-night shadow-[0_0_0_3px_#2bb8ff,0_0_28px_6px_rgba(43,184,255,0.65)]">
+              <ModeLogo className="h-[52%] w-auto text-ink" />
+            </span>
           </div>
           {[0, 1, 2, 3].map((i) => (
             <span key={i} data-spark aria-hidden className="absolute left-[84%] top-[42%] size-1.5 rounded-full bg-sun shadow-[0_0_8px_2px_rgba(255,209,102,0.8)]" />

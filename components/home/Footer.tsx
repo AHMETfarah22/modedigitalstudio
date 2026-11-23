@@ -11,7 +11,7 @@ export default function Footer() {
 
         <div className="relative z-[1] grid gap-10 border-t border-line pt-10 md:grid-cols-[1.2fr_1fr_1fr]">
           <div className="flex items-start gap-3">
-            <Mark className="size-9" />
+            <Mark className="h-10 w-auto text-ink" />
             <div>
               <p className="font-display font-bold">Mode Digital Studio</p>
               <p className="mt-1 text-sm text-mute">

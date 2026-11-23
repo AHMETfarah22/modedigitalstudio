@@ -9,6 +9,7 @@ import { hasWebGL, useExperience } from "@/lib/experience";
 import type { PortalProgress } from "@/components/three/PortalScene";
 import Magnetic from "@/components/ui/Magnetic";
 import { asset } from "@/lib/asset";
+import ModeLogo from "@/components/ui/ModeLogo";
 import { STUDIO } from "@/data/studio";
 
 gsap.registerPlugin(SplitText, useGSAP);
@@ -169,12 +170,11 @@ export default function Intro() {
               />
             </div>
             {/* the studio mark appears above his raised palm */}
-            <div data-palm aria-hidden className="absolute left-[78%] top-[28%] aspect-square w-[15%]">
+            <div data-palm aria-hidden className="absolute left-[76%] top-[25%] aspect-square w-[17%]">
               <div className="absolute inset-[-55%] rounded-full bg-[radial-gradient(closest-side,rgba(43,184,255,0.5),transparent)] blur-md" />
-              <svg viewBox="0 0 32 32" className="absolute inset-0 size-full drop-shadow-[0_0_10px_rgba(43,184,255,0.9)]">
-                <circle cx="16" cy="16" r="12" fill="none" stroke="#2bb8ff" strokeWidth="3" />
-              </svg>
-              <span className="absolute left-1/2 top-1/2 size-[30%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sun shadow-[0_0_16px_5px_rgba(255,209,102,0.7)]" />
+              <span className="absolute inset-0 grid place-items-center rounded-full bg-night shadow-[0_0_0_3px_#2bb8ff,0_0_28px_6px_rgba(43,184,255,0.65)]">
+                <ModeLogo className="h-[52%] w-auto text-ink" />
+              </span>
             </div>
           </div>
         </div>

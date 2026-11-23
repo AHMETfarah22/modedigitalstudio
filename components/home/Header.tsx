@@ -3,14 +3,11 @@
 import { useEffect, useState } from "react";
 import { NAV, STUDIO } from "@/data/studio";
 import Magnetic from "@/components/ui/Magnetic";
+import ModeLogo from "@/components/ui/ModeLogo";
 
+/** The Mode Academy logo, in the current text colour. */
 export function Mark({ className = "size-8" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 32 32" className={className} aria-hidden>
-      <circle cx="16" cy="16" r="11" fill="none" stroke="#2bb8ff" strokeWidth="3" />
-      <circle cx="16" cy="16" r="4" fill="#ffd166" />
-    </svg>
-  );
+  return <ModeLogo className={className} />;
 }
 
 export default function Header() {
@@ -41,9 +38,9 @@ export default function Header() {
     >
       <div className="wrap flex h-[72px] items-center justify-between gap-6">
         <a href="#top" className="flex items-center gap-3" aria-label="Mode Digital Studio, back to top">
-          <Mark />
-          <span className="whitespace-nowrap font-display text-[0.85rem] font-bold tracking-[0.02em] sm:text-[0.95rem]">
-            MODE <span className="font-normal text-mute">DIGITAL STUDIO</span>
+          <Mark className="h-9 w-auto text-ink" />
+          <span className="whitespace-nowrap font-display text-[0.85rem] font-bold tracking-[0.04em] sm:text-[0.95rem]">
+            DIGITAL STUDIO
           </span>
         </a>
 
