@@ -70,7 +70,7 @@ export default function SiteCard({
     else v.pause();
   }, [inView, armed, p.loop]);
 
-  const arrowHref = p.liveUrl ?? p.moreUrl;
+  const arrowHref = p.liveUrl ?? p.demoUrl ?? p.moreUrl;
 
   return (
     <article className="kcard group">
@@ -116,7 +116,7 @@ export default function SiteCard({
             target="_blank"
             rel="noopener"
             className="kcard-go"
-            aria-label={p.liveUrl ? `Open ${p.name} live website` : `See ${p.name} in the showcase`}
+            aria-label={p.liveUrl ? `Open ${p.name} live website` : p.demoUrl ? `Open the ${p.name} concept site` : `See ${p.name} in the showcase`}
           >
             <svg viewBox="0 0 24 24" aria-hidden>
               <path d="M7 17L17 7M9 7h8v8" />
@@ -131,13 +131,19 @@ export default function SiteCard({
             {p.name}
           </button>
           <span className="truncate text-sm text-mute/80">
-            {p.liveUrl ? hostOf(p.liveUrl).replace(/\/.*$/, "") : p.author ? `by ${p.author}` : ""}
+            {p.liveUrl ? hostOf(p.liveUrl).replace(/\/.*$/, "") : p.demoUrl ? "Concept site" : p.author ? `by ${p.author}` : ""}
           </span>
         </h3>
         {p.liveUrl && (
           <span className="flex shrink-0 items-center gap-1.5 text-sm text-ink/80">
             <span className="size-1.5 rounded-full bg-[#3ddc84]" aria-hidden />
             Live
+          </span>
+        )}
+        {p.demoUrl && (
+          <span className="flex shrink-0 items-center gap-1.5 text-sm text-ink/80">
+            <span className="size-1.5 rounded-full bg-sun" aria-hidden />
+            Concept
           </span>
         )}
       </div>

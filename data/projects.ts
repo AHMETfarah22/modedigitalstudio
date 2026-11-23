@@ -47,6 +47,8 @@ export type Project = {
   /** Where the full project can be seen (e.g. the showcase entry). */
   moreUrl?: string;
   featured?: boolean;
+  /** A concept site made by the studio as a sample, not client work. Opens the demo in /demos. */
+  demoUrl?: string;
 };
 
 const RAW_PROJECTS: Project[] = [
@@ -124,6 +126,21 @@ export const PROJECTS: Project[] = RAW_PROJECTS.map((p) => ({
 }));
 
 export const FEATURED = PROJECTS.filter((p) => p.featured);
+
+/** Concept sites built by the studio as samples (served from /public/demos). */
+export const CONCEPTS: Project[] = [
+  {
+    slug: "concept-barbershop",
+    name: "Ustura Berber Kulübü",
+    category: "web" as const,
+    cover: "/sites/loops/concept-barbershop.webp",
+    loop: "/sites/loops/concept-barbershop.mp4",
+    summary:
+      "A barbershop site with a cinematic opening: pick your services, watch them print onto a paper receipt, stamp it and choose a free chair.",
+    highlights: ["Receipt and stamp", "Time slots", "Neon and barber pole"],
+    demoUrl: "/demos/barbershop/index.html",
+  },
+].map((p) => ({ ...p, cover: asset(p.cover), loop: asset(p.loop), demoUrl: asset(p.demoUrl) }));
 
 export const hostOf = (url: string) => url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 

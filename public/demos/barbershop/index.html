@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ustura Berber Kulübü · Kadıköy</title>
+<meta name="description" content="Ustura Berber Kulübü: saç, sakal ve ustura tıraşı. Hattını seç, fişini damgalayalım.">
+<meta name="theme-color" content="#0b0908">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#hatlar">İçeriğe geç</a>
+
+<!-- Opening: the shop light switches on -->
+<div class="curtain" aria-hidden="true">
+  <div class="curtain__line"></div>
+  <p class="curtain__word">USTURA</p>
+</div>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="spot" aria-hidden="true"></div>
+
+<header class="top">
+  <a class="brand" href="#ust" aria-label="Ustura Berber Kulübü, başa dön">
+    <span class="brand__name">USTURA</span><span class="brand__sub">BERBER KULÜBÜ</span>
+  </a>
+  <nav class="nav" aria-label="Ana menü">
+    <a href="#hatlar">Hizmetler</a>
+    <a href="#kulup">Kulüp</a>
+    <a href="#saatler">Saatler</a>
+  </nav>
+  <a class="btn btn--ghost btn--sm" href="#hatlar">Randevu al</a>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" id="ust">
+    <p class="hero__tag"><span class="dot"></span> KADIKÖY · SALI–PAZAR</p>
+    <h1 class="hero__title">
+      <span class="line"><span>İÇERİ GİR.</span></span>
+      <span class="line line--hot"><span>KESKİN ÇIK.</span></span>
+    </h1>
+    <p class="hero__lead">Saç, sakal ve ustura tıraşı. Sıcak havlu, keskin bıçak, acele yok.</p>
+    <div class="hero__cta">
+      <a class="btn btn--hot" href="#hatlar">Hattını seç</a>
+      <a class="btn btn--ghost" href="#saatler">Saatlere bak</a>
+    </div>
+    <div class="pole" aria-hidden="true"><span></span></div>
+    <a class="hero__scroll" href="#hatlar" aria-label="Hizmetlere in">AŞAĞI</a>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span>SAÇ</span><i>✦</i><span>SAKAL</span><i>✦</i><span>USTURA</span><i>✦</i><span>SICAK HAVLU</span><i>✦</i><span>BIYIK</span><i>✦</i>
+      <span>SAÇ</span><i>✦</i><span>SAKAL</span><i>✦</i><span>USTURA</span><i>✦</i><span>SICAK HAVLU</span><i>✦</i><span>BIYIK</span><i>✦</i>
+    </div>
+  </div>
+
+  <!-- SERVICES + RECEIPT -->
+  <section class="lines" id="hatlar" aria-labelledby="lines-title">
+    <div class="lines__head">
+      <p class="eyebrow"><span class="dot"></span> HİZMETİNİ SEÇ</p>
+      <h2 id="lines-title" class="lines__title">BİR HAT SEÇ.<br><span class="hot">DAMGAYI BİZ VURALIM.</span></h2>
+      <p class="lines__lead">Hizmetlere dokun, fişe yazılsın. Bitince damgala; koltuğun hazır.</p>
+    </div>
+
+    <div class="lines__grid">
+      <ul class="menu" id="menu" aria-label="Hizmetler">
+        <!-- filled by app.js -->
+      </ul>
+
+      <div class="ticket-wrap">
+        <article class="ticket" id="ticket" aria-live="polite">
+          <header class="ticket__head">
+            <p class="ticket__brand">USTURA</p>
+            <p class="ticket__meta"><span>FİŞ NO</span><span id="ticketNo">#0000</span></p>
+            <p class="ticket__meta"><span>TARİH</span><span id="ticketDate">—</span></p>
+          </header>
+          <ol class="ticket__items" id="ticketItems">
+            <li class="ticket__empty" id="ticketEmpty">Fiş boş. Soldan bir hizmet seç.</li>
+          </ol>
+          <div class="ticket__total">
+            <span>TOPLAM</span><strong id="ticketTotal">0 ₺</strong>
+          </div>
+          <p class="ticket__time" id="ticketTime" hidden></p>
+          <div class="stamp" id="stamp" aria-hidden="true">
+            <span class="stamp__top">USTURA</span>
+            <span class="stamp__mid">ONAYLANDI</span>
+            <span class="stamp__bot" id="stampDate">—</span>
+          </div>
+          <p class="ticket__foot">Fiyatlar örnektir · Konsept tasarım</p>
+        </article>
+
+        <div class="slots" id="slots" hidden>
+          <p class="slots__label">Bugün boş saatler</p>
+          <div class="slots__grid" role="group" aria-label="Saat seç" id="slotGrid"></div>
+        </div>
+
+        <button class="btn btn--hot btn--wide" id="stampBtn" type="button" disabled>Fişi damgala</button>
+        <p class="done" id="done" role="status" hidden></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLUB -->
+  <section class="club" id="kulup" aria-labelledby="club-title">
+    <h2 id="club-title" class="club__title">KOLTUK<br>SENİN.</h2>
+    <div class="club__cols">
+      <article class="rule"><p class="rule__no">01</p><h3>Sıcak havlu</h3><p>Her tıraş sıcak havluyla başlar, soğuk losyonla biter.</p></article>
+      <article class="rule"><p class="rule__no">02</p><h3>Tek kullanımlık jilet</h3><p>Ustura bıçağı her müşteride yenilenir, gözünün önünde.</p></article>
+      <article class="rule"><p class="rule__no">03</p><h3>Acele yok</h3><p>Randevular arası on beş dakika boşluk; kimse kapıda beklemez.</p></article>
+    </div>
+    <div class="neon" aria-hidden="true">AÇIK</div>
+  </section>
+
+  <!-- HOURS -->
+  <section class="hours" id="saatler" aria-labelledby="hours-title">
+    <h2 id="hours-title" class="hours__title">GEL, OTUR.</h2>
+    <dl class="hours__list">
+      <div><dt>Salı – Cuma</dt><dd>10.00 – 21.00</dd></div>
+      <div><dt>Cumartesi</dt><dd>09.00 – 22.00</dd></div>
+      <div><dt>Pazar</dt><dd>11.00 – 19.00</dd></div>
+      <div><dt>Pazartesi</dt><dd>Kapalı</dd></div>
+    </dl>
+    <p class="hours__where">Moda, Kadıköy · merhaba@ustura.example</p>
+    <a class="btn btn--hot" href="#hatlar">Randevu al</a>
+  </section>
+</main>
+
+<footer class="foot">
+  <p class="foot__word" aria-hidden="true">USTURA</p>
+  <p class="foot__line">Konsept tasarım · Mode Digital Studio</p>
+</footer>
+
+<script src="app.js" defer></script>
+</body>
+</html>
