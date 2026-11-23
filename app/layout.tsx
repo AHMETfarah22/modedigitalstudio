@@ -36,10 +36,10 @@ export const viewport: Viewport = {
 };
 
 /**
- * The intro plays only on a visitor's first visit; reloading never shows it again. `?intro` in the URL forces it.
- * Runs before paint so returning visitors never see a flash of the overlay.
+ * The welcome intro plays on every page load, reloads included, and the page always starts at the top.
+ * `?nointro` in the URL skips it (handy for links straight to a section).
  */
-const introScript = `try{var q=location.search.indexOf('intro')>-1;if(!q&&(localStorage.getItem('mds-intro')==='1'||sessionStorage.getItem('mds-intro')==='1')){document.documentElement.dataset.intro='seen'}}catch(e){}`;
+const introScript = `try{history.scrollRestoration='manual';if(location.search.indexOf('nointro')>-1){document.documentElement.dataset.intro='seen'}else{window.scrollTo(0,0)}}catch(e){}`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

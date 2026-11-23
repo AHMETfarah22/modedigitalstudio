@@ -32,10 +32,7 @@ export function ExperienceProvider({ children }: { children: React.ReactNode }) 
 
     const seen = document.documentElement.dataset.intro === "seen";
     setPhase(seen ? "entered" : "intro");
-    // remember at once, so a reload during the intro does not play it again
-    try {
-      localStorage.setItem("mds-intro", "1");
-    } catch {}
+    if (!seen) window.scrollTo(0, 0);
 
     return () => {
       rm.removeEventListener("change", sync);

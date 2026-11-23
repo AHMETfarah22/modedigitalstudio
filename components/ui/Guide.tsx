@@ -20,17 +20,30 @@ const LINES: { anchor: string; say: string; sayTr: string }[] = [
   { anchor: "#about", say: "This is what the studio makes.", sayTr: "Stüdyonun yaptıkları bunlar." },
 ];
 
-/** Gestures he cycles through: a body move plus a sign that pops up over his head. */
+/**
+ * His poses, cut from one sheet: 1 presents with an open palm (the mark floats on it), 2 raises a finger,
+ * 3 points at the page, 4 points down. `ax` is where his feet are across the picture, so poses line up.
+ */
+const POSES = [
+  { src: "/intro/pose-1.webp", w: 212, h: 496, ax: 0.331 },
+  { src: "/intro/pose-2.webp", w: 183, h: 493, ax: 0.446 },
+  { src: "/intro/pose-3.webp", w: 153, h: 492, ax: 0.479 },
+  { src: "/intro/pose-4.webp", w: 173, h: 490, ax: 0.498 },
+];
+
+/** Gestures he cycles through: a pose, a body move, and a sign that pops up over his head. */
 const ACTS = {
-  surprise: { sign: "M12 4v10 M12 19v.5", tone: "sun" },
-  think: { sign: "M9 9a3 3 0 1 1 4.5 2.6c-.9.5-1.5 1.2-1.5 2.4 M12 18.5v.5", tone: "ring" },
-  nod: { sign: "M5 12.5l4.5 4.5L19 7", tone: "green" },
-  idea: { sign: "M9 18h6 M10 21h4 M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z", tone: "sun" },
-  wave: { sign: "M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z", tone: "pink" },
-  spin: { sign: "M12 3l2.2 6.3L21 9.5l-5.4 4 2 6.5L12 16l-5.6 4 2-6.5-5.4-4 6.8-.2z", tone: "sun" },
+  point: { pose: 3, sign: "M12 4v10 M12 19v.5", tone: "sun" },
+  think: { pose: 2, sign: "M9 9a3 3 0 1 1 4.5 2.6c-.9.5-1.5 1.2-1.5 2.4 M12 18.5v.5", tone: "ring" },
+  idea: { pose: 2, sign: "M9 18h6 M10 21h4 M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z", tone: "sun" },
+  nod: { pose: 1, sign: "M5 12.5l4.5 4.5L19 7", tone: "green" },
+  wave: { pose: 1, sign: "M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z", tone: "pink" },
+  spin: { pose: 1, sign: "M12 3l2.2 6.3L21 9.5l-5.4 4 2 6.5L12 16l-5.6 4 2-6.5-5.4-4 6.8-.2z", tone: "sun" },
+  down: { pose: 4, sign: "M12 4v15 M6 13l6 6 6-6", tone: "ring" },
+  surprise: { pose: 3, sign: "M12 4v10 M12 19v.5", tone: "sun" },
 } as const;
 type Act = keyof typeof ACTS;
-const IDLE: Act[] = ["think", "nod", "idea", "wave", "spin", "surprise"];
+const IDLE: Act[] = ["think", "nod", "idea", "wave", "spin", "down", "point"];
 
 export default function Guide() {
   const { phase, reducedMotion } = useExperience();
@@ -73,7 +86,7 @@ export default function Guide() {
   // and, after a few seconds, he steps back so he never sits on the content for long
   useEffect(() => {
     if (line < 0) return;
-    setAct((a) => ({ name: "surprise", n: (a?.n ?? 0) + 1 }));
+    setAct((a) => ({ name: line === 0 ? "down" : "point", n: (a?.n ?? 0) + 1 }));
     setQuiet(false);
     const t = window.setTimeout(() => setQuiet(true), 4500);
     return () => window.clearTimeout(t);
@@ -127,11 +140,21 @@ export default function Guide() {
         <span ref={tiltRef} className="guide__tilt">
           <span key={`a${act?.n ?? 0}`} className={`guide__act ${act ? `act-${act.name}` : ""}`}>
             <span className="guide__breathe">
-              <img src={asset("/intro/host.webp")} alt="" width={363} height={521} draggable={false} />
-            </span>
-            <span className="guide__orb" aria-hidden>
-              <span className="guide__orb-ring" />
-              <span className="guide__orb-core"><ModeLogo className="h-[52%] w-auto text-ink" /></span>
+              {POSES.map((p, i) => (
+                <span
+                  key={p.src}
+                  className={`guide__pose ${(act ? ACTS[act.name].pose : 1) === i + 1 ? "is-on" : ""}`}
+                  style={{ aspectRatio: `${p.w} / ${p.h}`, ["--ax" as string]: p.ax } as React.CSSProperties}
+                >
+                  <img src={asset(p.src)} alt="" width={p.w} height={p.h} draggable={false} />
+                  {i === 0 && (
+                    <span className="guide__orb" aria-hidden>
+                      <span className="guide__orb-ring" />
+                      <span className="guide__orb-core"><ModeLogo className="h-[52%] w-auto text-ink" /></span>
+                    </span>
+                  )}
+                </span>
+              ))}
             </span>
             {act && (
               <span className={`guide__sign tone-${ACTS[act.name].tone}`} aria-hidden>
