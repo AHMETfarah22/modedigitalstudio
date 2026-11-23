@@ -58,7 +58,7 @@ export default function Hero() {
         <div aria-hidden className="hero-host">
           <span className="hero-host__bubble">{t("Scroll down to see our work", "Aşağı kaydırın, işlerimizi görün")}</span>
           <span className="hero-host__fig">
-            <img src={asset("/intro/pose-5.webp")} alt="" width={203} height={495} draggable={false} />
+            <img src={asset("/intro/pose-5.webp")} alt="" width={222} height={495} draggable={false} />
           </span>
           <span className="hero-host__floor" />
         </div>

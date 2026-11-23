@@ -371,9 +371,9 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 .tone-sun { --tone: #ffd166; } .tone-ring { --tone: #2bb8ff; } .tone-green { --tone: #6ee7a8; } .tone-pink { --tone: #ff8fb1; }
 .tone-pink svg { fill: #0a1733; stroke-width: 0; }
 @keyframes g-sign { 0% { opacity: 0; transform: translateY(20px) scale(0.3) rotate(-20deg); } 18% { opacity: 1; transform: translateY(-4px) scale(1.1) rotate(6deg); } 28% { transform: none; } 80% { opacity: 1; transform: translateY(-6px); } 100% { opacity: 0; transform: translateY(-22px) scale(0.8); } }
-.guide__breathe { position: relative; display: block; aspect-ratio: 203 / 495; animation: guide-breathe 6s ease-in-out infinite; transform-origin: 64% 100%; transform-style: preserve-3d; }
+.guide__breathe { position: relative; display: block; aspect-ratio: 222 / 495; animation: guide-breathe 6s ease-in-out infinite; transform-origin: 67% 100%; transform-style: preserve-3d; }
 /* every pose stands on the same spot: his feet line up whichever pose is showing */
-.guide__pose { position: absolute; bottom: 0; left: 63.7%; height: 100%; transform: translateX(calc(var(--ax) * -100%)); opacity: 0; transition: opacity 0.16s ease-out; }
+.guide__pose { position: absolute; bottom: 0; left: 66.7%; height: 100%; transform: translateX(calc(var(--ax) * -100%)); opacity: 0; transition: opacity 0.16s ease-out; }
 .guide__pose.is-on { opacity: 1; animation: guide-turn 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
 @keyframes guide-turn { from { transform: translateX(calc(var(--ax) * -100%)) rotateY(-55deg) scale(0.96); } to { transform: translateX(calc(var(--ax) * -100%)); } }
 .guide__pose img { height: 100%; }
@@ -408,7 +408,7 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 .lang-switch button[aria-pressed="true"] { background: var(--color-ink); color: var(--color-night); }
 
 /* Hero host: big, in the empty right half of the first screen, pointing down to the work */
-.hero-host { position: absolute; right: clamp(40px, 9vw, 180px); bottom: 0; height: min(80svh, 780px); aspect-ratio: 203 / 495; z-index: 1; pointer-events: none; perspective: 1000px; }
+.hero-host { position: absolute; right: clamp(40px, 9vw, 180px); bottom: 0; height: min(80svh, 780px); aspect-ratio: 222 / 495; z-index: 1; pointer-events: none; perspective: 1000px; }
 .hero-host__light { position: absolute; left: -70%; right: -70%; top: 0; bottom: -8%; border-radius: 50%;
   background: radial-gradient(closest-side, rgb(43 184 255 / 0.2), rgb(31 92 220 / 0.08) 55%, transparent); }
 .hero-host__fig { position: absolute; inset: 0; display: block; transform-origin: 50% 100%; transform-style: preserve-3d;
