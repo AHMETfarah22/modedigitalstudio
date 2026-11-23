@@ -25,7 +25,7 @@ export default function Home() {
       </a>
       <Intro />
       <Header />
-      <main>
+      <main className="relative z-[1]">
         <Hero />
         <Work />
         <MotionGallery />

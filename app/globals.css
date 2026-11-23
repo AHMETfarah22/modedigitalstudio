@@ -456,3 +456,40 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 /* Corner presenter in his own colours, standing in a soft pool of light */
 .guide__breathe img { filter: drop-shadow(0 18px 24px rgb(0 0 0 / 0.45)) !important; }
 .guide__stage::before { background: radial-gradient(closest-side, rgb(238 242 250 / 0.22), rgb(43 184 255 / 0.1) 55%, transparent) !important; }
+
+/* Host in the background: smaller, softer, behind the copy and the cards, but alive */
+.hero-host { height: min(66svh, 640px); right: clamp(60px, 12vw, 240px); z-index: 0; }
+.hero-host__fig { animation: hh-walk 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s both, hh-sway 7s ease-in-out 2s infinite; }
+.hero-host__fig img { opacity: 0.8; filter: saturate(0.8) drop-shadow(0 24px 30px rgb(10 23 51 / 0.16)) !important; }
+/* he walks in from the right: a few steps, then settles */
+@keyframes hh-walk {
+  0% { opacity: 0; transform: translateX(55%) rotateY(-35deg); }
+  20% { opacity: 1; transform: translateX(42%) translateY(-1.2%) rotateY(-30deg); }
+  40% { transform: translateX(28%) translateY(0) rotateY(-24deg); }
+  60% { transform: translateX(14%) translateY(-1.2%) rotateY(-14deg); }
+  80% { transform: translateX(4%) translateY(0) rotateY(-5deg); }
+  100% { opacity: 1; transform: none; }
+}
+/* every pose keeps his feet on the same spot; a change of pose is a quick turn */
+.hero-host__pose { position: absolute; bottom: 0; left: 66.7%; width: auto !important; height: 100% !important; transform: translateX(-66.7%); animation: hh-turn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.hero-host__pose.pose-1 { transform: translateX(-50%); --ax: -50%; }
+.hero-host__pose.pose-0 { --ax: -66.7%; }
+@keyframes hh-turn { from { opacity: 0.3; transform: translateX(var(--ax)) rotateY(-45deg) scale(0.97); } to { transform: translateX(var(--ax)); } }
+
+/* Corner host behind the page: cards and text pass over him */
+.guide { z-index: 0; transform: translateX(130%); transition: transform 1.6s cubic-bezier(0.25, 0.8, 0.3, 1); }
+.guide.is-on { transform: none; }
+.guide__bubble { display: none; }
+.guide__stage { width: clamp(110px, 11vw, 185px); }
+.guide__breathe img { opacity: 0.6; filter: brightness(0.75) saturate(0.7) drop-shadow(0 18px 24px rgb(0 0 0 / 0.45)) !important; }
+/* steps while he walks in */
+.guide.is-on .guide__stage { animation: g-steps 0.4s ease-in-out 4 both; }
+@keyframes g-steps { 50% { transform: translateY(-5px) rotate(1.2deg); } }
+@media (max-width: 767px) { .guide__stage { width: 80px; } .guide.is-on.is-quiet { transform: translateY(40%); } }
+@media (prefers-reduced-motion: reduce) { .hero-host__fig, .hero-host__pose, .guide.is-on .guide__stage { animation: none; } .guide { transition: none; } }
+
+/* The light line that types the first-screen heading: a thin lamp with a glow */
+.type-caret { position: absolute; left: 0; top: 0; width: 6px; height: 0.8em; border-radius: 6px; pointer-events: none; transform-origin: 50% 100%; opacity: 0;
+  background: linear-gradient(180deg, #ffffff, #ffd166 45%, #2bb8ff);
+  box-shadow: 0 0 10px 2px rgb(255 209 102 / 0.75), 0 0 34px 8px rgb(43 184 255 / 0.45); animation: caret-glow 1.1s ease-in-out infinite; }
+@keyframes caret-glow { 50% { filter: brightness(1.35); box-shadow: 0 0 16px 4px rgb(255 209 102 / 0.95), 0 0 48px 12px rgb(43 184 255 / 0.6); } }

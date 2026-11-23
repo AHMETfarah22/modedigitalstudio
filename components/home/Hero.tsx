@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -18,6 +18,13 @@ export default function Hero() {
   const { phase, reducedMotion } = useExperience();
   const root = useRef<HTMLElement>(null);
   const { t, lang } = useLang();
+  // He switches between presenting with both hands and pointing down to the work
+  const [pose, setPose] = useState(0);
+  useEffect(() => {
+    if (phase !== "entered" || reducedMotion) return;
+    const id = window.setInterval(() => setPose((p) => 1 - p), 5200);
+    return () => window.clearInterval(id);
+  }, [phase, reducedMotion]);
 
   useGSAP(
     () => {
@@ -27,13 +34,48 @@ export default function Hero() {
         gsap.set(q("[data-hero-in]"), { autoAlpha: 1 });
         return;
       }
-      const split = new SplitText(q("[data-hero-title] > span"), { type: "words,chars", mask: "chars" });
+      const split = new SplitText(q("[data-hero-title] > span:not([data-caret])"), { type: "words,chars" });
+      const title = q("[data-hero-title]")[0] as HTMLElement;
+      const caret = q("[data-caret]")[0] as HTMLElement;
+      const chars = split.chars as HTMLElement[];
+
+      // the glowing light line sits right after a letter
+      const caretTo = (el: HTMLElement | null, after = true) => {
+        if (!el) { gsap.set(caret, { x: 0, y: 0 }); return; }
+        const r = el.getBoundingClientRect(), b = title.getBoundingClientRect();
+        gsap.set(caret, { x: (after ? r.right : r.left) - b.left + 4, y: r.top - b.top + r.height * 0.08, height: r.height * 0.82 });
+      };
+
+      // Types the heading letter by letter behind the light line, holds, erases, and types again every 30 s
+      const typeLoop = () => {
+        const loop = gsap.timeline({ repeat: -1 });
+        loop
+          .set(chars, { autoAlpha: 0 })
+          .call(() => caretTo(chars[0], false))
+          .fromTo(caret, { scaleY: 0, autoAlpha: 0 }, { scaleY: 1, autoAlpha: 1, duration: 0.45, ease: "back.out(2)" })
+          .to(chars, {
+            autoAlpha: 1,
+            duration: 0.01,
+            stagger: { each: 0.065, onStart(this: gsap.core.Tween) { caretTo(this.targets()[0] as HTMLElement); } },
+          })
+          .to({}, { duration: 30 - 0.45 - chars.length * 0.065 - chars.length * 0.022 - 0.6 })
+          .to([...chars].reverse(), {
+            autoAlpha: 0,
+            duration: 0.01,
+            stagger: { each: 0.022, onStart(this: gsap.core.Tween) { caretTo(this.targets()[0] as HTMLElement, false); } },
+          })
+          .to(caret, { scaleY: 0, autoAlpha: 0, duration: 0.3 }, "+=0.1")
+          .to({}, { duration: 0.2 });
+        return loop;
+      };
+
+      gsap.set(chars, { autoAlpha: 0 });
       const tl = gsap.timeline({ defaults: { ease: "expo.out" }, delay: 0.15 });
       tl.set(q("[data-hero-in]"), { autoAlpha: 1 })
-        .from(split.chars, { yPercent: 105, duration: 1.2, stagger: 0.022 })
-        .from(q("[data-hero-sub]"), { y: 20, autoAlpha: 0, duration: 1 }, 0.55)
-        .from(q("[data-hero-cta] > *"), { y: 16, autoAlpha: 0, duration: 0.9, stagger: 0.08 }, 0.7)
-        .from(q("[data-hero-foot]"), { autoAlpha: 0, duration: 1 }, 0.9);
+        .add(typeLoop(), 0.1)
+        .from(q("[data-hero-sub]"), { y: 20, autoAlpha: 0, duration: 1 }, 1.6)
+        .from(q("[data-hero-cta] > *"), { y: 16, autoAlpha: 0, duration: 0.9, stagger: 0.08 }, 1.8)
+        .from(q("[data-hero-foot]"), { autoAlpha: 0, duration: 1 }, 2.0);
 
       // Subtle parallax: the copy drifts up a little faster than the page.
       gsap.to(q("[data-hero-copy]"), {
@@ -58,7 +100,7 @@ export default function Hero() {
         <div aria-hidden className="hero-host">
           <span className="hero-host__bubble">{t("Scroll down to see our work", "Aşağı kaydırın, işlerimizi görün")}</span>
           <span className="hero-host__fig">
-            <img src={asset("/intro/pose-5.webp")} alt="" width={222} height={495} draggable={false} />
+            <img key={`p${pose}`} className={`hero-host__pose pose-${pose}`} src={asset(pose ? "/intro/pose-4.webp" : "/intro/pose-5.webp")} alt="" width={pose ? 173 : 222} height={pose ? 490 : 495} draggable={false} />
           </span>
           <span className="hero-host__floor" />
         </div>
@@ -66,7 +108,8 @@ export default function Hero() {
 
       <div data-hero-in className="wrap invisible relative z-[2] flex flex-1 flex-col justify-center pb-10 pt-32">
         <div data-hero-copy>
-          <h1 key={lang} data-hero-title className="font-display text-[clamp(2.6rem,7.4vw,7.6rem)] font-extrabold leading-[0.92] tracking-[-0.045em]">
+          <h1 key={lang} data-hero-title className="relative font-display text-[clamp(2.4rem,8.6vw,4.2rem)] font-extrabold leading-[1.08] tracking-[-0.04em] lg:text-[clamp(3rem,4.9vw,5.4rem)]">
+            <span data-caret aria-hidden className="type-caret" />
             <span className="block">{t("WE CREATE.", "TASARLARIZ.")}</span>
             <span className="block">{t("WE BUILD.", "GELİŞTİRİRİZ.")}</span>
             <span className="block">{t("WE ANIMATE.", "CANLANDIRIRIZ.")}</span>
