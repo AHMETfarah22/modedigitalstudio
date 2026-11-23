@@ -71,9 +71,6 @@ export default function Hero() {
         <div aria-hidden className="hero-host">
           <span className="hero-host__light" />
           <span className="hero-host__bubble">{t("Scroll down to see our work", "Aşağı kaydırın, işlerimizi görün")}</span>
-          <span className="hero-host__sign">
-            <svg viewBox="0 0 24 24"><path d="M12 4v15 M6 13l6 6 6-6" /></svg>
-          </span>
           <span className="hero-host__fig">
             <img src={asset("/intro/pose-4.webp")} alt="" width={173} height={490} draggable={false} />
             {/* the page's own light on him: blue from the side, the night swallowing his feet */}

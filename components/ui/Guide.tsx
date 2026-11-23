@@ -157,11 +157,6 @@ export default function Guide() {
                 </span>
               ))}
             </span>
-            {act && (
-              <span className={`guide__sign tone-${ACTS[act.name].tone}`} aria-hidden>
-                <svg viewBox="0 0 24 24"><path d={ACTS[act.name].sign} /></svg>
-              </span>
-            )}
           </span>
         </span>
         <span className="guide__floor" aria-hidden />
