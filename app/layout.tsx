@@ -39,7 +39,7 @@ export const viewport: Viewport = {
  * The intro plays only on a visitor's first visit; reloading never shows it again. `?intro` in the URL forces it.
  * Runs before paint so returning visitors never see a flash of the overlay.
  */
-const introScript = `try{var q=location.search.indexOf('intro')>-1;if(!q&&localStorage.getItem('mds-intro')==='1'){document.documentElement.dataset.intro='seen'}}catch(e){}`;
+const introScript = `try{var q=location.search.indexOf('intro')>-1;if(!q&&(localStorage.getItem('mds-intro')==='1'||sessionStorage.getItem('mds-intro')==='1')){document.documentElement.dataset.intro='seen'}}catch(e){}`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
