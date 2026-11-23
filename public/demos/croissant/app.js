@@ -57,11 +57,11 @@
   });
 
   const DRIZZLE = `<svg class="drizzle" viewBox="0 0 400 220" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M18 92 C70 50 112 112 164 74 S262 46 306 86 S372 78 388 62" stroke="url(#choco)" stroke-width="16" fill="none" stroke-linecap="round"/>
-    <path d="M62 82 C110 60 150 104 206 82 S300 64 340 96" stroke="url(#choco)" stroke-width="9" fill="none" stroke-linecap="round" opacity=".9"/>
-    <path d="M128 88 q3 34 -1 56" stroke="url(#choco)" stroke-width="9" stroke-linecap="round" fill="none"/><circle cx="127" cy="148" r="7" fill="#3a1d10"/>
-    <path d="M232 78 q4 26 0 44" stroke="url(#choco)" stroke-width="8" stroke-linecap="round" fill="none"/><circle cx="232" cy="126" r="6" fill="#3a1d10"/>
-    <path d="M306 88 q2 20 -1 30" stroke="url(#choco)" stroke-width="7" stroke-linecap="round" fill="none"/>
+    <path pathLength="1" d="M18 92 C70 50 112 112 164 74 S262 46 306 86 S372 78 388 62" stroke="url(#choco)" stroke-width="16" fill="none" stroke-linecap="round"/>
+    <path pathLength="1" d="M62 82 C110 60 150 104 206 82 S300 64 340 96" stroke="url(#choco)" stroke-width="9" fill="none" stroke-linecap="round" opacity=".9"/>
+    <path pathLength="1" d="M128 88 q3 34 -1 56" stroke="url(#choco)" stroke-width="9" stroke-linecap="round" fill="none"/><circle class="drop" cx="127" cy="148" r="7" fill="#3a1d10"/>
+    <path pathLength="1" d="M232 78 q4 26 0 44" stroke="url(#choco)" stroke-width="8" stroke-linecap="round" fill="none"/><circle class="drop" cx="232" cy="126" r="6" fill="#3a1d10"/>
+    <path pathLength="1" d="M306 88 q2 20 -1 30" stroke="url(#choco)" stroke-width="7" stroke-linecap="round" fill="none"/>
   </svg>`;
 
   const obj = $("#obj"), stage = $("#stage"), story = $(".story");
@@ -75,6 +75,13 @@
         <div class="core"></div>`;
     });
     obj.classList.add("is-ready");
+    // menu and order pictures reuse the same croissant, each with its own topping
+    const TOP = { choc: ["#7a4329", "#2a140b"], pistachio: ["#b9cf6a", "#6f8a2c"], caramel: ["#f0b25a", "#a8611c"] };
+    $$(".card__pic").forEach((el) => {
+      const t = TOP[el.dataset.kind];
+      el.innerHTML = `<img src="${cr.url}" alt="">` + (t ? `<svg viewBox="0 0 400 220" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="g-${el.dataset.kind}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${t[0]}"/><stop offset="1" stop-color="${t[1]}"/></linearGradient></defs><path d="M30 96 C80 54 122 112 172 78 S268 50 310 88 S366 80 380 66" stroke="url(#g-${el.dataset.kind})" stroke-width="15" fill="none" stroke-linecap="round"/><path d="M70 86 C118 64 156 106 212 86 S300 68 336 98" stroke="url(#g-${el.dataset.kind})" stroke-width="8" fill="none" stroke-linecap="round"/></svg>` : "") + (el.dataset.kind === "choc" ? '<span class="mini-scoop"></span><span class="mini-scoop mini-scoop--b"></span>' : "") + (el.dataset.kind === "pistachio" ? '<span class="nuts"><i></i><i></i><i></i><i></i><i></i></span>' : "");
+    });
+    $(".order__pic").innerHTML = `<img src="${cr.url}" alt="">`;
     update();
   }).catch(() => { $(".obj__loading").textContent = "Görsel yüklenemedi."; });
 
@@ -86,12 +93,13 @@
   const K = {
     tx: [17, 17, 16, 17, 16, 18], ty: [2, 4, 8, 5, 12, 12], sc: [1, .96, .98, 1, 1.02, 1.02], rot: [-8, -6, -2, -5, 0, 0],
     topY: [0, -26, -34, 0, 0, 0], topR: [0, -7, -8, 0, 0, 0], botY: [0, 4, 5, 0, 0, 0],
-    scoopY: [-150, -150, 0, 10, 10, 10], fill: [1, 1, 1, 0, 0, 0], sauce: [0, 0, 1, 1, 1, 1], drizzle: [0, 0, 1, 1, 1, 1], pour: [0, 0, 1, 0, 0, 0], seam: [0, 0, 0, 1, 1, 0],
+    scoopY: [-150, -150, 0, 10, 10, 10], fill: [1, 1, 1, 0, 0, 0], sauce: [0, 0, 1, 1, 1, 1], drizzle: [0, 0, 1, 1, 1, 1], pour: [0, 0, 1, 0, 0, 0], seam: [0, 0, 0, 1, 0, 0],
     snow: [0, 1, .6, 0, 0, 0], butter: [0, 1, 0, 0, 0, 0], curl: [0, 0, 1, .4, 0, 0],
-    plate: [0, 0, 0, 0, 1, 1], knifeO: [0, 0, 0, 0, 1, 0], knifeY: [-120, -120, -120, -120, 4, -120], split: [0, 0, 0, 0, 0, 1],
+    plate: [0, 0, 0, 0, 1, 1], knifeO: [0, 0, 0, 0, 1, 1], knifeY: [-95, -95, -95, -95, -30, -6], knifeR: [-70, -70, -70, -70, -80, -90], split: [0, 0, 0, 0, 0, 1], burst: [0, 0, 0, 0, 0, 1],
+    steam: [1, 0, 0, 0, 0, .7],
   };
-  const MOBILE = { tx: [0, 0, 0, 0, 0, 0], ty: [17, 17, 20, 18, 21, 21] };
-  const UNIT = { tx: "vw", ty: "vh", topY: "%", botY: "%", scoopY: "vh", knifeY: "%", rot: "deg", topR: "deg" };
+  const MOBILE = { tx: [0, 0, 0, 0, 0, 0], ty: [17, 17, 20, 18, 21, 21], knifeY: [-60, -60, -60, -60, -13, -3] };
+  const UNIT = { tx: "vw", ty: "vh", topY: "%", botY: "%", scoopY: "vh", knifeY: "vh", rot: "deg", topR: "deg", knifeR: "deg" };
 
   const steps = $$(".step"), dots = $$(".dots li");
   let lastStep = -1, ticking = false;
@@ -105,7 +113,9 @@
     const mobile = innerWidth <= 900;
     for (const key in K) {
       const arr = mobile && MOBILE[key] ? MOBILE[key] : K[key];
-      const v = lerp(arr[i], arr[i + 1], f);
+      // the knife goes down first, then the halves part around it
+      const ff = (key === "split" || key === "burst") && i === 4 ? smooth(Math.min(1, Math.max(0, (s - i - .35) / .65))) : f;
+      const v = lerp(arr[i], arr[i + 1], ff);
       stage.style.setProperty("--" + key, v.toFixed(3) + (UNIT[key] || ""));
     }
     const bg = BG[i].map((c, ch) => Math.round(lerp(c, BG[i + 1][ch], f)));
@@ -120,6 +130,8 @@
       dots.forEach((el, k) => el.classList.toggle("is-on", k === step));
     }
   };
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .2 });
+  $$(".card, .order, .menu__head").forEach((el) => io.observe(el));
   addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
   addEventListener("resize", update);
   update();

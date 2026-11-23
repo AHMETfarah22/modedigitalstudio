@@ -85,7 +85,9 @@
       <div class="obj" id="obj" aria-hidden="true">
         <div class="plate"></div>
         <svg class="pour" viewBox="0 0 40 1000" preserveAspectRatio="none"><rect x="12" y="0" width="16" height="1000" rx="8" fill="url(#choco)"/></svg>
-        <div class="knife"><svg viewBox="0 0 420 70"><defs><linearGradient id="blade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7f7f7"/><stop offset=".55" stop-color="#a9b0b6"/><stop offset="1" stop-color="#e3e6e8"/></linearGradient></defs><path d="M120 18 L400 26 Q418 34 400 44 L120 52 Z" fill="url(#blade)"/><rect x="10" y="20" width="118" height="30" rx="12" fill="#2b1a12"/><circle cx="40" cy="35" r="4" fill="#c9a26a"/><circle cx="80" cy="35" r="4" fill="#c9a26a"/></svg></div>
+        <div class="knife"><img src="knife.webp" alt="" width="1100" height="142"></div>
+        <svg class="steam" viewBox="0 0 200 160" aria-hidden="true"><path d="M50 150 C30 120 70 100 50 70 S60 30 48 8"/><path d="M100 150 C80 118 120 96 100 66 S112 28 100 4"/><path d="M150 150 C130 122 170 102 150 72 S160 34 150 12"/></svg>
+        <div class="crumbs"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <div class="half half--l"><div class="pastry"></div></div>
         <div class="half half--r"><div class="pastry"></div></div>
         <p class="obj__loading">Fırından çıkıyor…</p>
@@ -102,16 +104,17 @@
       <h2 id="menu-title">HER KAT<br>BİR SEÇİM.</h2>
     </div>
     <ul class="cards">
-      <li class="card"><p class="card__no">01</p><h3>Klasik</h3><p>Sade tereyağlı kruvasan, sıcak servis.</p><p class="card__price">95 ₺</p></li>
-      <li class="card card--hot"><p class="card__no">02</p><h3>Dondurmalı</h3><p>İki top vanilya dondurma, bitter çikolata sosu.</p><p class="card__price">185 ₺</p></li>
-      <li class="card"><p class="card__no">03</p><h3>Fıstıklı</h3><p>Antep fıstığı kreması ve kırık fıstık.</p><p class="card__price">210 ₺</p></li>
-      <li class="card"><p class="card__no">04</p><h3>Karamelli</h3><p>Tuzlu karamel, çıtır şeker kabuğu.</p><p class="card__price">195 ₺</p></li>
+      <li class="card"><div class="card__pic" data-kind="plain"></div><p class="card__no">01</p><h3>Klasik</h3><p>Sade tereyağlı kruvasan, sıcak servis.</p><p class="card__price" data-assumed>95 ₺</p></li>
+      <li class="card card--hot"><div class="card__pic" data-kind="choc"></div><p class="card__no">02</p><h3>Dondurmalı</h3><p>İki top vanilya dondurma, bitter çikolata sosu.</p><p class="card__price" data-assumed>185 ₺</p></li>
+      <li class="card"><div class="card__pic" data-kind="pistachio"></div><p class="card__no">03</p><h3>Fıstıklı</h3><p>Antep fıstığı kreması ve kırık fıstık.</p><p class="card__price" data-assumed>210 ₺</p></li>
+      <li class="card"><div class="card__pic" data-kind="caramel"></div><p class="card__no">04</p><h3>Karamelli</h3><p>Tuzlu karamel, çıtır şeker kabuğu.</p><p class="card__price" data-assumed>195 ₺</p></li>
     </ul>
     <p class="menu__note">Fiyatlar örnektir · Konsept tasarım</p>
   </section>
 
   <!-- Order -->
   <section class="order" id="siparis" aria-labelledby="order-title">
+    <div class="order__pic" aria-hidden="true"></div>
     <h2 id="order-title">BİR TANE<br>AYIRALIM MI?</h2>
     <p>Moda'daki fırından sıcak çıktığı gibi. Gel al ya da kapına gelsin.</p>
     <div class="order__cta">
@@ -123,7 +126,7 @@
 
 <footer class="foot">
   <p class="foot__word" aria-hidden="true">KATMAN</p>
-  <p class="foot__line">Moda, Kadıköy · Konsept tasarım · Mode Digital Studio · Fotoğraflar: Unsplash</p>
+  <p class="foot__line">Moda, Kadıköy · Konsept tasarım · Mode Digital Studio · Fotoğraflar: Unsplash · Bıçak: Jacek Halicki, Wikimedia Commons, CC BY-SA 4.0, kırpıldı</p>
 </footer>
 
 <script src="app.js" defer></script>
