@@ -15,10 +15,33 @@
 <body>
 <a class="skip" href="#hatlar">İçeriğe geç</a>
 
-<div class="curtain" aria-hidden="true">
-  <div class="curtain__line"></div>
-  <p class="curtain__word">USTURA</p>
+<!-- Opening: scissors cut the screen open -->
+<div class="cut" id="cut" aria-hidden="true">
+  <div class="cut__half cut__half--top"><p class="cut__word">USTURA</p></div>
+  <div class="cut__half cut__half--bot"><p class="cut__word">USTURA</p><p class="cut__sub">BERBER KULÜBÜ · KADIKÖY</p></div>
+  <div class="cut__line" id="cutLine"></div>
+  <canvas class="cut__hair" id="cutHair"></canvas>
+  <svg class="scissors" id="scissors" viewBox="0 0 150 72">
+    <defs>
+      <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fafafa"/><stop offset=".5" stop-color="#8e959c"/><stop offset="1" stop-color="#e6e6e6"/>
+      </linearGradient>
+    </defs>
+    <g id="bladeA">
+      <path d="M54 36 L142 31.5 Q146 33 142 35 L54 39 Z" fill="url(#steel)"/>
+      <path d="M54 36 C42 30 35 22 31 16" stroke="#26201c" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <circle cx="22" cy="13" r="10.5" fill="none" stroke="#ff7a1a" stroke-width="5.5"/>
+    </g>
+    <g id="bladeB">
+      <path d="M54 36 L142 40.5 Q146 39 142 37 L54 33 Z" fill="url(#steel)"/>
+      <path d="M54 36 C42 42 35 50 31 56" stroke="#26201c" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <circle cx="22" cy="59" r="10.5" fill="none" stroke="#ff7a1a" stroke-width="5.5"/>
+    </g>
+    <circle cx="54" cy="36" r="3.4" fill="#3a3330" stroke="#c9c9c9" stroke-width="1.2"/>
+  </svg>
 </div>
+<button class="cut__skip" id="cutSkip" type="button">Geç</button>
+
 <div class="grain" aria-hidden="true"></div>
 
 <header class="top">

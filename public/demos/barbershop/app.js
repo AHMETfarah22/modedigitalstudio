@@ -25,6 +25,79 @@
   ];
   const SLOTS = ["10.00", "11.00", "12.00", "13.30", "14.30", "15.30", "17.00", "18.00", "19.00", "20.00"];
 
+  /* Opening: scissors snip across, hair falls, the screen splits open */
+  (() => {
+    const cut = $("#cut"), skip = $("#cutSkip");
+    const open = () => document.body.classList.add("is-open");
+    if (!cut) { open(); return; }
+    const sc = $("#scissors"), line = $("#cutLine"), cv = $("#cutHair"), ctx = cv.getContext("2d");
+    const A = $("#bladeA"), B = $("#bladeB");
+    let W = 0, H = 0, dpr = Math.min(devicePixelRatio || 1, 2);
+    const size = () => { W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); };
+    size(); addEventListener("resize", size);
+    const hair = [];
+    const COLORS = ["#d8c3a5", "#b8996f", "#8a6a4a", "#efe6d8", "#ff9a4a"];
+    const burst = (x, y, n) => {
+      for (let i = 0; i < n; i++) hair.push({
+        x: x + (Math.random() - .5) * 30, y: y + (Math.random() - .5) * 8,
+        vx: (Math.random() - .5) * 2.2, vy: -Math.random() * 2.2 - .4,
+        r: Math.random() * Math.PI, vr: (Math.random() - .5) * .25,
+        l: 9 + Math.random() * 18, bend: (Math.random() - .5) * 10,
+        c: COLORS[(Math.random() * COLORS.length) | 0], w: .8 + Math.random() * 1.2, life: 1,
+      });
+    };
+    let done = false, splitAt = 0, t0 = 0, lastSnap = 1, raf = 0;
+    const DUR = 1900, START = 650;
+    const ease = (p) => p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+    const split = () => {
+      if (splitAt) return;
+      splitAt = performance.now();
+      cut.classList.add("is-sliced");
+      setTimeout(() => { cut.classList.add("is-split"); skip.hidden = true; open(); }, 180);
+      setTimeout(() => { cut.classList.add("is-gone"); cancelAnimationFrame(raf); done = true; }, 1400);
+    };
+    const frame = (now) => {
+      if (!t0) t0 = now;
+      const t = now - t0;
+      // scissors travel and snip
+      const p = Math.min(1, Math.max(0, (t - START) / DUR));
+      const sw = sc.getBoundingClientRect().width || 150;
+      const x = -sw - 20 + (W + sw + 60) * ease(p);
+      const snip = .5 + .5 * Math.cos((t - START) / 1000 * Math.PI * 2 * 3.1);
+      const ang = p > 0 && p < 1 ? 17 * snip : 10;
+      A.setAttribute("transform", `rotate(${-ang} 54 36)`);
+      B.setAttribute("transform", `rotate(${ang} 54 36)`);
+      sc.style.transform = `translate(${x}px, -50%)`;
+      const tipX = x + sw * .96;
+      line.style.transform = `scaleX(${Math.max(0, Math.min(1, tipX / W))})`;
+      if (p > 0 && p < 1 && snip < .12 && lastSnap >= .12) burst(Math.max(0, tipX - sw * .15), H / 2, 42);
+      lastSnap = snip;
+      if (p >= 1) split();
+      // hair
+      ctx.clearRect(0, 0, W, H);
+      for (let i = hair.length - 1; i >= 0; i--) {
+        const h = hair[i];
+        h.vy += .16; h.vx *= .99; h.x += h.vx; h.y += h.vy; h.r += h.vr;
+        if (splitAt) h.life -= .012;
+        if (h.y > H + 40 || h.life <= 0) { hair.splice(i, 1); continue; }
+        ctx.save(); ctx.translate(h.x, h.y); ctx.rotate(h.r); ctx.globalAlpha = Math.max(0, h.life);
+        ctx.strokeStyle = h.c; ctx.lineWidth = h.w; ctx.lineCap = "round";
+        ctx.beginPath(); ctx.moveTo(-h.l / 2, 0); ctx.quadraticCurveTo(0, h.bend, h.l / 2, 0); ctx.stroke(); ctx.restore();
+      }
+      if (!done) raf = requestAnimationFrame(frame);
+    };
+    const skipNow = () => { if (!splitAt) { line.style.transform = "scaleX(1)"; split(); } };
+    if (reduce) {
+      cut.classList.add("is-split"); skip.hidden = true; open();
+      setTimeout(() => cut.classList.add("is-gone"), 300);
+    } else {
+      raf = requestAnimationFrame(frame);
+      cut.addEventListener("click", skipNow);
+      skip.addEventListener("click", skipNow);
+      addEventListener("keydown", (e) => { if (e.key === "Escape" || e.key === "Enter" || e.key === " ") skipNow(); }, { once: true });
+    }
+  })();
+
   /* Header + reveals */
   const top = $(".top");
   const onScroll = () => top.classList.toggle("is-solid", scrollY > 40);
