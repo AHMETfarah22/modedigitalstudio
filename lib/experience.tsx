@@ -32,6 +32,10 @@ export function ExperienceProvider({ children }: { children: React.ReactNode }) 
 
     const seen = document.documentElement.dataset.intro === "seen";
     setPhase(seen ? "entered" : "intro");
+    // remember at once, so a reload during the intro does not play it again
+    try {
+      localStorage.setItem("mds-intro", "1");
+    } catch {}
 
     return () => {
       rm.removeEventListener("change", sync);
@@ -44,9 +48,6 @@ export function ExperienceProvider({ children }: { children: React.ReactNode }) 
   }, [phase]);
 
   const enter = useCallback(() => {
-    try {
-      sessionStorage.setItem("mds-intro", "1");
-    } catch {}
     document.documentElement.dataset.intro = "seen";
     setPhase("entered");
     const hash = window.location.hash;
