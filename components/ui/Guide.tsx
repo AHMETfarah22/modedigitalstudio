@@ -127,7 +127,7 @@ export default function Guide() {
         <span ref={tiltRef} className="guide__tilt">
           <span key={`a${act?.n ?? 0}`} className={`guide__act ${act ? `act-${act.name}` : ""}`}>
             <span className="guide__breathe">
-              <img src={asset("/intro/host.webp")} alt="" width={760} height={1065} draggable={false} />
+              <img src={asset("/intro/host.webp")} alt="" width={363} height={521} draggable={false} />
             </span>
             <span className="guide__orb" aria-hidden>
               <span className="guide__orb-ring" />

@@ -85,8 +85,8 @@ export default function Welcome() {
               <img
                 src={asset("/intro/host.webp")}
                 alt={t("The studio host smiling and presenting with an open hand", "Gülümseyen ve açık eliyle sunum yapan stüdyo sunucusu")}
-                width={760}
-                height={1065}
+                width={363}
+                height={521}
                 loading="lazy"
                 className="relative block w-full select-none"
                 draggable={false}
@@ -95,7 +95,7 @@ export default function Welcome() {
           </div>
 
           {/* The studio mark, floating above his raised palm */}
-          <div data-orb aria-hidden className="absolute left-[75%] top-[24%] aspect-square w-[18%]">
+          <div data-orb aria-hidden className="absolute left-[81%] top-[26%] aspect-square w-[18%]">
             <div className="absolute inset-[-55%] rounded-full bg-[radial-gradient(closest-side,rgba(43,184,255,0.55),transparent)] blur-md" />
             <span data-orb-ring className="absolute inset-[-12%] rounded-full border-2 border-dashed border-ring/70" />
             <span className="absolute inset-0 grid place-items-center rounded-full bg-night shadow-[0_0_0_3px_#2bb8ff,0_0_28px_6px_rgba(43,184,255,0.65)]">
@@ -103,7 +103,7 @@ export default function Welcome() {
             </span>
           </div>
           {[0, 1, 2, 3].map((i) => (
-            <span key={i} data-spark aria-hidden className="absolute left-[84%] top-[42%] size-1.5 rounded-full bg-sun shadow-[0_0_8px_2px_rgba(255,209,102,0.8)]" />
+            <span key={i} data-spark aria-hidden className="absolute left-[88%] top-[41%] size-1.5 rounded-full bg-sun shadow-[0_0_8px_2px_rgba(255,209,102,0.8)]" />
           ))}
         </div>
       </div>

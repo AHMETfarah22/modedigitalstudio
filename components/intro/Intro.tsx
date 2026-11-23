@@ -165,14 +165,14 @@ export default function Intro() {
               <img
                 src={asset("/intro/host.webp")}
                 alt={t("The studio host smiling and presenting the studio with an open hand", "Gülümseyen ve açık eliyle stüdyoyu tanıtan stüdyo sunucusu")}
-                width={760}
-                height={1065}
+                width={363}
+                height={521}
                 className="block h-[42vh] w-auto max-w-none select-none drop-shadow-[0_30px_40px_rgba(10,23,51,0.18)] md:h-[82vh]"
                 draggable={false}
               />
             </div>
             {/* the studio mark appears above his raised palm */}
-            <div data-palm aria-hidden className="absolute left-[76%] top-[25%] aspect-square w-[17%]">
+            <div data-palm aria-hidden className="absolute left-[81%] top-[26%] aspect-square w-[17%]">
               <div className="absolute inset-[-55%] rounded-full bg-[radial-gradient(closest-side,rgba(43,184,255,0.5),transparent)] blur-md" />
               <span className="absolute inset-0 grid place-items-center rounded-full bg-night shadow-[0_0_0_3px_#2bb8ff,0_0_28px_6px_rgba(43,184,255,0.65)]">
                 <ModeLogo className="h-[52%] w-auto text-ink" />
