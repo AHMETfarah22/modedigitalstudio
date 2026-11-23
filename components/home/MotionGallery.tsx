@@ -5,6 +5,7 @@ import { CHAPTERS, VIDEOS, driveView, drivePreview, posterOf, type ChapterId, ty
 import Reveal from "@/components/ui/Reveal";
 import Viewer from "@/components/ui/Viewer";
 import { Mark } from "./Header";
+import { useLang, type Lang } from "@/lib/i18n";
 
 type Filter = "all" | ChapterId;
 const FIRST = 9; // cards shown before "Show all"
@@ -15,6 +16,7 @@ export default function MotionGallery() {
   const [expanded, setExpanded] = useState(false);
   const [playing, setPlaying] = useState<VideoItem | null>(null);
   const close = useCallback(() => setPlaying(null), []);
+  const { t, lang } = useLang();
 
   const ordered = useMemo(() => CHAPTERS.flatMap((c) => VIDEOS.filter((v) => v.chapter === c.id)), []);
   const list = filter === "all" ? ordered : ordered.filter((v) => v.chapter === filter);
@@ -27,14 +29,14 @@ export default function MotionGallery() {
       <div className="wrap relative">
         <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
           <Reveal id="motion-title" className="max-w-[16ch] text-[clamp(2.2rem,5.4vw,4.75rem)] font-bold">
-            Videos of our games, VR and motion work.
+            {t("Videos of our games, VR and motion work.", "Oyunlarımızın, VR ve hareketli grafik işlerimizin videoları.")}
           </Reveal>
           <p className="max-w-[26rem] text-mute">
-            Games, virtual reality, camps and motion graphics. Open any card to watch it full screen.
+            {t("Games, virtual reality, camps and motion graphics. Open any card to watch it full screen.", "Oyunlar, sanal gerçeklik, kamplar ve hareketli grafikler. İzlemek için herhangi bir kartı tam ekran açın.")}
           </p>
         </div>
 
-        <div role="group" aria-label="Filter videos" className="mt-10 flex flex-wrap gap-2">
+        <div role="group" aria-label={t("Filter videos", "Videoları filtrele")} className="mt-10 flex flex-wrap gap-2">
           {(["all", ...CHAPTERS.map((c) => c.id)] as Filter[]).map((f) => (
             <button
               key={f}
@@ -46,7 +48,7 @@ export default function MotionGallery() {
                 setExpanded(false);
               }}
             >
-              {f === "all" ? "All" : CHAPTERS.find((c) => c.id === f)?.label}{" "}
+              {f === "all" ? t("All", "Tümü") : (() => { const c = CHAPTERS.find((c) => c.id === f); return c ? t(c.label, c.labelTr) : ""; })()}{" "}
               <span className="opacity-60">{count(f)}</span>
             </button>
           ))}
@@ -55,7 +57,7 @@ export default function MotionGallery() {
         <ul className="mt-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {shown.map((v, i) => (
             <li key={`${v.drive ?? v.src}-${i}`}>
-              <VideoCard video={v} onPlay={() => setPlaying(v)} />
+              <VideoCard video={v} onPlay={() => setPlaying(v)} lang={lang} />
             </li>
           ))}
         </ul>
@@ -63,22 +65,30 @@ export default function MotionGallery() {
         {filter === "all" && list.length > FIRST && (
           <div className="mt-12 flex justify-center">
             <button type="button" className="btn btn-line" onClick={() => setExpanded((x) => !x)} aria-expanded={expanded}>
-              {expanded ? "Show fewer videos" : `Show all ${list.length} videos`}
+              {expanded ? t("Show fewer videos", "Daha az video göster") : t(`Show all ${list.length} videos`, `${list.length} videonun tümünü göster`)}
             </button>
           </div>
         )}
       </div>
 
-      <Viewer open={!!playing} onClose={close} label={playing ? `${playing.title} video` : "Video"} tone="black">
-        {playing && <Player video={playing} />}
+      <Viewer open={!!playing} onClose={close} label={playing ? `${vt(playing, lang).title} video` : "Video"} tone="black">
+        {playing && <Player video={playing} lang={lang} />}
       </Viewer>
     </section>
   );
 }
 
-const chapterLabel = (v: VideoItem) => CHAPTERS.find((c) => c.id === v.chapter)?.label ?? "";
+const chapterLabel = (v: VideoItem, lang: Lang) => {
+  const c = CHAPTERS.find((c) => c.id === v.chapter);
+  return c ? (lang === "tr" ? c.labelTr : c.label) : "";
+};
+const vt = (v: VideoItem, lang: Lang) => ({
+  title: (lang === "tr" && v.titleTr) || v.title,
+  note: (lang === "tr" && v.noteTr) || v.note,
+});
 
-function VideoCard({ video: v, onPlay }: { video: VideoItem; onPlay: () => void }) {
+function VideoCard({ video: v, onPlay, lang }: { video: VideoItem; onPlay: () => void; lang: Lang }) {
+  const tx = vt(v, lang);
   const poster = posterOf(v);
   const preview = useRef<HTMLVideoElement>(null);
   const [live, setLive] = useState(false);
@@ -100,7 +110,7 @@ function VideoCard({ video: v, onPlay }: { video: VideoItem; onPlay: () => void 
     <article className="kcard" onPointerEnter={(e) => e.pointerType === "mouse" && start()} onPointerLeave={stop}>
       <div className="kcard-frame">
         {poster && <img aria-hidden src={poster} alt="" className="kcard-glow" loading="lazy" />}
-        <button type="button" onClick={onPlay} className="kcard-hit" aria-label={`Play ${v.title}`} data-cursor="Play">
+        <button type="button" onClick={onPlay} className="kcard-hit" aria-label={lang === "tr" ? `${tx.title} oynat` : `Play ${tx.title}`} data-cursor={lang === "tr" ? "Oynat" : "Play"}>
           {poster ? (
             <img src={poster} alt="" loading="lazy" className="kcard-media" style={{ objectPosition: "center" }} draggable={false} />
           ) : (
@@ -136,11 +146,11 @@ function VideoCard({ video: v, onPlay }: { video: VideoItem; onPlay: () => void 
             <rect x="3" y="5" width="18" height="14" rx="2.5" />
             <path d="M10 9.5v5l4.5-2.5z" />
           </svg>
-          {chapterLabel(v)}
+          {chapterLabel(v, lang)}
         </span>
 
         {v.drive && (
-          <a href={driveView(v.drive)} target="_blank" rel="noopener" className="kcard-go" aria-label={`Open ${v.title} in Google Drive`}>
+          <a href={driveView(v.drive)} target="_blank" rel="noopener" className="kcard-go" aria-label={lang === "tr" ? `${tx.title} videosunu Google Drive'da aç` : `Open ${tx.title} in Google Drive`}>
             <svg viewBox="0 0 24 24" aria-hidden>
               <path d="M7 17L17 7M9 7h8v8" />
             </svg>
@@ -151,16 +161,17 @@ function VideoCard({ video: v, onPlay }: { video: VideoItem; onPlay: () => void 
       <div className="mt-4 flex min-w-0 items-baseline gap-2.5">
         <h3 className="min-w-0 truncate">
           <button type="button" onClick={onPlay} className="truncate font-display text-lg font-bold leading-tight hover:text-ring">
-            {v.title}
+            {tx.title}
           </button>
         </h3>
-        {v.note && <span className="truncate text-sm text-mute/80">{v.note}</span>}
+        {tx.note && <span className="truncate text-sm text-mute/80">{tx.note}</span>}
       </div>
     </article>
   );
 }
 
-function Player({ video: v }: { video: VideoItem }) {
+function Player({ video: v, lang }: { video: VideoItem; lang: Lang }) {
+  const tx = vt(v, lang);
   const portrait = v.shape === "portrait";
   return (
     <div className="flex h-full flex-col">
@@ -169,7 +180,7 @@ function Player({ video: v }: { video: VideoItem }) {
           {v.drive ? (
             <iframe
               src={drivePreview(v.drive)}
-              title={v.title}
+              title={tx.title}
               allow="autoplay; fullscreen; encrypted-media"
               allowFullScreen
               className="absolute inset-0 size-full border-0"
@@ -181,15 +192,15 @@ function Player({ video: v }: { video: VideoItem }) {
       </div>
       <div className="wrap flex flex-wrap items-end justify-between gap-4 border-t border-line py-5">
         <div className="min-w-0">
-          <p className="text-sm text-mute">{chapterLabel(v)}</p>
+          <p className="text-sm text-mute">{chapterLabel(v, lang)}</p>
           <h2 className="mt-1 text-2xl font-bold">
-            {v.title}
-            {v.note && <span className="ml-3 text-base font-normal text-mute">{v.note}</span>}
+            {tx.title}
+            {tx.note && <span className="ml-3 text-base font-normal text-mute">{tx.note}</span>}
           </h2>
         </div>
         {v.drive && (
           <a href={driveView(v.drive)} target="_blank" rel="noopener" className="btn btn-line btn-sm">
-            Open in Google Drive
+            {lang === "tr" ? "Google Drive'da aç" : "Open in Google Drive"}
           </a>
         )}
       </div>

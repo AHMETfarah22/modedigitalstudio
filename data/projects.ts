@@ -25,6 +25,15 @@ export const CATEGORIES: Record<Category, string> = {
   motion: "Motion Graphics",
 };
 
+export const CATEGORIES_TR: Record<Category, string> = {
+  web: "Web Geliştirme",
+  software: "Yazılım ve Uygulamalar",
+  uiux: "UI/UX Tasarım",
+  creative: "Kreatif Tasarım",
+  animation: "2D ve 3D Animasyon",
+  motion: "Hareketli Grafik",
+};
+
 export type Project = {
   slug: string;
   name: string;
@@ -36,6 +45,9 @@ export type Project = {
   /** Light logos sit on a dark tile. */
   logoOnDark?: boolean;
   summary: string;
+  /** Turkish summary and highlights. */
+  summaryTr?: string;
+  highlightsTr?: string[];
   /** What the project contains (features, formats). */
   highlights: string[];
   /** Technologies — fill in only when confirmed. */
@@ -63,6 +75,9 @@ const RAW_PROJECTS: Project[] = [
     summary:
       "A dark, sound-led 3D world for a process consultant. Visitors choose to enter with or without sound, then move through a scene that goes from chaos to order.",
     highlights: ["3D scene", "Sound design", "Italian and English"],
+    summaryTr:
+      "Bir süreç danışmanı için karanlık, sesle ilerleyen bir 3D dünya. Ziyaretçi sesli ya da sessiz girmeyi seçer, sonra kaostan düzene giden bir sahnede ilerler.",
+    highlightsTr: ["3D sahne", "Ses tasarımı", "İtalyanca ve İngilizce"],
     liveUrl: "https://lorenzolottici.it/en",
     featured: true,
   },
@@ -76,6 +91,9 @@ const RAW_PROJECTS: Project[] = [
     summary:
       "A developer's site that follows the founder's road from Somalia to Turkey on a map. Visitors describe what they want to build and start a project on the spot.",
     highlights: ["Interactive map", "Three languages", "Project form"],
+    summaryTr:
+      "Kurucusunun Somali'den Türkiye'ye uzanan yolunu harita üzerinde anlatan bir yazılımcı sitesi. Ziyaretçi ne yaptırmak istediğini yazar ve projeyi hemen başlatır.",
+    highlightsTr: ["Etkileşimli harita", "Üç dil", "Proje formu"],
     liveUrl: "https://afmcoding.com/",
     featured: true,
   },
@@ -89,6 +107,9 @@ const RAW_PROJECTS: Project[] = [
     summary:
       "Where Mode Academy students prepare their TEKNOFEST and TÜBİTAK projects: a 20-module path, a team board and mentor sessions in one place.",
     highlights: ["Learning platform", "Team board", "Mentor sessions"],
+    summaryTr:
+      "Mode Academy öğrencilerinin TEKNOFEST ve TÜBİTAK projelerine hazırlandığı yer: 20 modüllük yol, takım panosu ve mentor görüşmeleri bir arada.",
+    highlightsTr: ["Öğrenme platformu", "Takım panosu", "Mentor görüşmeleri"],
     liveUrl: "https://modeacademy.tr/proje-ussu",
     featured: true,
   },
@@ -101,6 +122,9 @@ const RAW_PROJECTS: Project[] = [
     summary:
       "A 3D product site for a niche perfume house inspired by the sea. Visitors pick one of four scents, follow its top, heart and base notes over the hours on skin, and add the bottle to the cart.",
     highlights: ["3D bottle", "Four scents", "Notes timeline"],
+    summaryTr:
+      "Denizden ilham alan niş bir parfüm evi için 3D ürün sitesi. Ziyaretçi dört kokudan birini seçer, üst, orta ve alt notaların tende saatler içindeki değişimini izler ve şişeyi sepete ekler.",
+    highlightsTr: ["3D şişe", "Dört koku", "Nota zaman çizelgesi"],
     liveUrl: "https://hydro567.github.io/Hydro-parf-m-evi/",
     featured: true,
   },
@@ -113,6 +137,9 @@ const RAW_PROJECTS: Project[] = [
     summary:
       "A food-ordering site where visitors choose pizza, burger or wrap and build it themselves: toppings on the pizza, layers in the burger, the filling in the wrap.",
     highlights: ["3D packaging", "Build your own order", "Three menus"],
+    summaryTr:
+      "Ziyaretçinin pizza, burger ya da dürüm seçip kendisinin hazırladığı bir sipariş sitesi: pizzaya malzeme, burgere kat, dürüme iç.",
+    highlightsTr: ["3D paketleme", "Kendi siparişini hazırla", "Üç menü"],
     liveUrl: "https://hydro567.github.io/hydro-pizza/",
     featured: true,
   },
@@ -125,6 +152,9 @@ const RAW_PROJECTS: Project[] = [
     summary:
       "A site for a made-to-measure tailor. As visitors scroll, a suit is built piece by piece on a figure in the dark; the visit ends with the collection, common questions and a fitting appointment form.",
     highlights: ["Scroll-built suit", "Collection", "Fitting appointment"],
+    summaryTr:
+      "Ölçüye özel çalışan bir terzi için site. Ziyaretçi kaydırdıkça karanlıkta bir figürün üzerinde takım parça parça oluşur; ziyaret koleksiyon, sık sorulan sorular ve prova randevu formuyla biter.",
+    highlightsTr: ["Kaydırdıkça oluşan takım", "Koleksiyon", "Prova randevusu"],
     liveUrl: "https://roneli.vercel.app/",
     featured: true,
   },
@@ -150,6 +180,9 @@ export const CONCEPTS: Project[] = [
     summary:
       "A cinematic barbershop site: crossing ticker tapes, a live open-or-closed clock, a price list you stamp, a barber deck, a photo wall and a four-step booking.",
     highlights: ["Stamped price list", "Barber deck", "Booking steps"],
+    summaryTr:
+      "Sinematik bir berber sitesi: çapraz kayan şeritler, açık mı kapalı mı gösteren canlı saat, damgalanan fiyat listesi, berber kartları, fotoğraf duvarı ve dört adımlı randevu.",
+    highlightsTr: ["Damgalı fiyat listesi", "Berber kartları", "Randevu adımları"],
     demoUrl: "/demos/barbershop/index.html",
   },
   {
@@ -161,6 +194,9 @@ export const CONCEPTS: Project[] = [
     summary:
       "A bakery site told by one croissant. As visitors scroll it opens, takes two scoops of ice cream and hot chocolate, closes, meets the knife and breaks in half on the plate.",
     highlights: ["Scroll-driven story", "Six scenes", "Menu and order"],
+    summaryTr:
+      "Tek bir kruvasanla anlatılan bir fırın sitesi. Ziyaretçi kaydırdıkça kruvasan açılır, iki top dondurma ve sıcak çikolata alır, kapanır, bıçakla buluşur ve tabakta ikiye ayrılır.",
+    highlightsTr: ["Kaydırmayla ilerleyen hikâye", "Altı sahne", "Menü ve sipariş"],
     demoUrl: "/demos/croissant/index.html",
   },
 ].map((p) => ({ ...p, cover: asset(p.cover), loop: asset(p.loop), demoUrl: asset(p.demoUrl) }));

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useLang } from "@/lib/i18n";
 
 /**
  * A spiral-bound notebook you leaf through by hand.
@@ -58,6 +59,7 @@ export default function Notebook({
   const maxTurn = spread ? leaves : n - 1;
 
   const [turned, setTurned] = useState(0);
+  const { t } = useLang();
   const [turning, setTurning] = useState<number | null>(null);
   const timer = useRef<number>(0);
   const pointer = useRef<{ x: number; y: number } | null>(null);
@@ -101,9 +103,9 @@ export default function Notebook({
 
   const counter = spread
     ? turned === 0
-      ? `Cover`
-      : visible.filter((p) => p >= 0 && p < n).map((p) => p + 1).join("–") + ` of ${n}`
-    : `${turned + 1} of ${n}`;
+      ? t("Cover", "Kapak")
+      : t(visible.filter((p) => p >= 0 && p < n).map((p) => p + 1).join("–") + ` of ${n}`, `${n} sayfadan ` + visible.filter((p) => p >= 0 && p < n).map((p) => p + 1).join("–"))
+    : t(`${turned + 1} of ${n}`, `${n} sayfadan ${turned + 1}`);
 
   const activeChapter = chapters ? [...chapters].reverse().find((c) => c.page <= Math.max(0, firstVisible + (spread && turned > 0 ? 1 : 0))) : undefined;
 
@@ -121,7 +123,7 @@ export default function Notebook({
   return (
     <div className="flex flex-col items-center gap-6">
       {chapters && chapters.length > 0 && (
-        <div role="group" aria-label="Chapters" className="flex flex-wrap justify-center gap-2">
+        <div role="group" aria-label={t("Chapters", "Bölümler")} className="flex flex-wrap justify-center gap-2">
           {chapters.map((c) => (
             <button
               key={c.label}
@@ -208,22 +210,22 @@ export default function Notebook({
           <button type="button" tabIndex={-1} aria-hidden onClick={next} className="nb-corner nb-corner-next" data-cursor="Next" />
         )}
         {turned > 0 && (
-          <button type="button" tabIndex={-1} aria-hidden onClick={prev} className="nb-corner nb-corner-prev" data-cursor="Back" style={spread ? undefined : { display: "none" }} />
+          <button type="button" tabIndex={-1} aria-hidden onClick={prev} className="nb-corner nb-corner-prev" data-cursor={t("Back", "Geri")} style={spread ? undefined : { display: "none" }} />
         )}
       </div>
 
       <div className="flex w-full max-w-md items-center justify-between gap-4">
-        <button type="button" onClick={prev} disabled={turned === 0} className="btn btn-line btn-sm disabled:opacity-35" aria-label="Previous page">
+        <button type="button" onClick={prev} disabled={turned === 0} className="btn btn-line btn-sm disabled:opacity-35" aria-label={t("Previous page", "Önceki sayfa")}>
           <svg viewBox="0 0 24 24" className="size-4" aria-hidden>
             <path d="M15 5l-7 7 7 7" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
           </svg>
-          Back
+          {t("Back", "Geri")}
         </button>
         <p className="text-sm tabular-nums text-mute" aria-live="polite">
           {counter}
         </p>
-        <button type="button" onClick={next} disabled={turned >= maxTurn} className="btn btn-line btn-sm disabled:opacity-35" aria-label="Next page">
-          Next
+        <button type="button" onClick={next} disabled={turned >= maxTurn} className="btn btn-line btn-sm disabled:opacity-35" aria-label={t("Next page", "Sonraki sayfa")}>
+          {t("Next", "İleri")}
           <svg viewBox="0 0 24 24" className="size-4" aria-hidden>
             <path d="M9 5l7 7-7 7" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />
           </svg>

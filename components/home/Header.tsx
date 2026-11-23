@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { NAV, STUDIO } from "@/data/studio";
 import Magnetic from "@/components/ui/Magnetic";
 import ModeLogo from "@/components/ui/ModeLogo";
+import { useLang, LangSwitch } from "@/lib/i18n";
 
 /** The Mode Academy logo, in the current text colour. */
 export function Mark({ className = "size-8" }: { className?: string }) {
@@ -13,6 +14,7 @@ export function Mark({ className = "size-8" }: { className?: string }) {
 export default function Header() {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
+  const { t } = useLang();
 
   useEffect(() => {
     const on = () => setSolid(window.scrollY > 24);
@@ -37,26 +39,27 @@ export default function Header() {
       }`}
     >
       <div className="wrap flex h-[72px] items-center justify-between gap-6">
-        <a href="#top" className="flex items-center gap-3" aria-label="Mode Digital Studio, back to top">
+        <a href="#top" className="flex items-center gap-3" aria-label={t("Mode Digital Studio, back to top", "Mode Digital Studio, başa dön")}>
           <Mark className="h-9 w-auto text-ink" />
           <span className="whitespace-nowrap font-display text-[0.85rem] font-bold tracking-[0.04em] sm:text-[0.95rem]">
             DIGITAL STUDIO
           </span>
         </a>
 
-        <nav aria-label="Main" className="hidden items-center gap-8 lg:flex">
+        <nav aria-label={t("Main", "Ana menü")} className="hidden items-center gap-8 lg:flex">
           {NAV.map((n) => (
             <a key={n.href} href={n.href} className="link-draw py-2 text-[0.95rem] text-mute transition-colors hover:text-ink">
-              {n.label}
+              {t(n.label, n.labelTr)}
             </a>
           ))}
         </nav>
 
         <div className="flex items-center gap-3">
+          <LangSwitch />
           <span className="hidden sm:block">
             <Magnetic>
               <a href={STUDIO.whatsapp} target="_blank" rel="noopener" className="btn btn-sun btn-sm">
-                Start a project
+                {t("Start a project", "Proje başlat")}
               </a>
             </Magnetic>
           </span>
@@ -65,7 +68,7 @@ export default function Header() {
             className="relative grid size-11 place-items-center rounded-full border border-line lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-menu"
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={open ? t("Close menu", "Menüyü kapat") : t("Open menu", "Menüyü aç")}
             onClick={() => setOpen((o) => !o)}
           >
             <span className={`absolute h-px w-5 bg-ink transition-transform duration-300 ${open ? "rotate-45" : "-translate-y-1"}`} />
@@ -79,7 +82,7 @@ export default function Header() {
         hidden={!open}
         className="h-[calc(100dvh-72px)] overflow-y-auto border-t border-line bg-night px-[clamp(20px,4vw,56px)] pb-10 pt-6 lg:hidden"
       >
-        <nav aria-label="Mobile">
+        <nav aria-label={t("Mobile", "Mobil menü")}>
           <ul className="flex flex-col">
             {NAV.map((n) => (
               <li key={n.href}>
@@ -88,14 +91,14 @@ export default function Header() {
                   onClick={() => setOpen(false)}
                   className="block border-b border-line py-5 font-display text-3xl font-bold"
                 >
-                  {n.label}
+                  {t(n.label, n.labelTr)}
                 </a>
               </li>
             ))}
           </ul>
         </nav>
         <a href={STUDIO.whatsapp} target="_blank" rel="noopener" className="btn btn-sun mt-8 w-full">
-          Start a project on WhatsApp
+          {t("Start a project on WhatsApp", "WhatsApp'tan proje başlat")}
         </a>
       </div>
     </header>

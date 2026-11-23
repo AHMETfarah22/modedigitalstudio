@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useLang } from "@/lib/i18n";
 
 /**
  * Full-screen viewer on top of the native <dialog>: focus is trapped, Esc closes,
@@ -20,6 +21,7 @@ export default function Viewer({
   tone?: "dark" | "black";
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const { t } = useLang();
 
   useEffect(() => {
     const d = ref.current;
@@ -60,7 +62,7 @@ export default function Viewer({
             type="button"
             onClick={() => ref.current?.close()}
             className="absolute right-4 top-4 z-10 grid size-12 place-items-center rounded-full bg-ink/10 backdrop-blur transition-colors hover:bg-ink/20 md:right-8 md:top-6"
-            aria-label="Close"
+            aria-label={t("Close", "Kapat")}
           >
             <svg viewBox="0 0 24 24" className="size-5" aria-hidden>
               <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />

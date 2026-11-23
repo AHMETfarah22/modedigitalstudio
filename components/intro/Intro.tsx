@@ -11,6 +11,7 @@ import Magnetic from "@/components/ui/Magnetic";
 import { asset } from "@/lib/asset";
 import ModeLogo from "@/components/ui/ModeLogo";
 import { STUDIO } from "@/data/studio";
+import { useLang } from "@/lib/i18n";
 
 gsap.registerPlugin(SplitText, useGSAP);
 
@@ -25,6 +26,7 @@ const PortalScene = dynamic(() => import("@/components/three/PortalScene"), { ss
  */
 export default function Intro() {
   const { phase, enter, reducedMotion, lite } = useExperience();
+  const { t } = useLang();
   const root = useRef<HTMLDivElement>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
   const progress = useRef<PortalProgress>({ p: 0 }).current;
@@ -137,7 +139,7 @@ export default function Intro() {
       data-intro-overlay
       role="dialog"
       aria-modal="true"
-      aria-label="Welcome to Mode Digital Studio"
+      aria-label={t("Welcome to Mode Digital Studio", "Mode Digital Studio'ya hoş geldiniz")}
       className="fixed inset-0 z-[70] overflow-hidden bg-porcelain text-navy"
     >
       {/* Soft studio light on the porcelain wall */}
@@ -162,7 +164,7 @@ export default function Intro() {
             <div data-breathe style={{ transformOrigin: "50% 100%" }}>
               <img
                 src={asset("/intro/host.webp")}
-                alt="The studio host smiling and presenting the studio with an open hand"
+                alt={t("The studio host smiling and presenting the studio with an open hand", "Gülümseyen ve açık eliyle stüdyoyu tanıtan stüdyo sunucusu")}
                 width={760}
                 height={1065}
                 className="block h-[42vh] w-auto max-w-none select-none drop-shadow-[0_30px_40px_rgba(10,23,51,0.18)] md:h-[82vh]"
@@ -181,7 +183,7 @@ export default function Intro() {
 
         <div className="order-1 pt-[12vh] text-center md:order-2 md:pt-0 md:text-left">
           <p data-welcome className="font-display text-[clamp(0.95rem,1.6vw,1.35rem)] font-medium tracking-[0.42em] text-signal">
-            WELCOME TO
+            {t("WELCOME TO", "HOŞ GELDİNİZ")}
           </p>
           <h1
             data-title
@@ -194,7 +196,7 @@ export default function Intro() {
             STUDIO
           </h1>
           <p data-line className="mt-6 text-[clamp(1rem,1.4vw,1.2rem)] text-navy/70">
-            The digital production studio of Mode Academy.
+            {t("The digital production studio of Mode Academy.", "Mode Academy'nin dijital üretim stüdyosu.")}
           </p>
         </div>
       </div>
@@ -208,7 +210,7 @@ export default function Intro() {
 
       {/* Tagline and progress, top left */}
       <div data-bar-wrap className="absolute left-6 top-6 z-[6] hidden w-64 md:left-10 md:top-10 md:block">
-        <p className="text-sm text-navy/60">{STUDIO.tagline}</p>
+        <p className="text-sm text-navy/60">{t(STUDIO.tagline, STUDIO.taglineTr)}</p>
         <div className="mt-3 h-px w-full bg-navy/15">
           <div data-bar className="h-px origin-left scale-x-0 bg-signal" />
         </div>
@@ -223,7 +225,7 @@ export default function Intro() {
             onClick={() => close(true)}
             className="btn bg-navy text-ink shadow-[0_10px_40px_-10px_rgba(10,23,51,0.6)] hover:bg-signal"
           >
-            Enter studio
+            {t("Enter studio", "Stüdyoya gir")}
             <span aria-hidden className="inline-block size-2 rounded-full bg-sun" />
           </button>
         </Magnetic>

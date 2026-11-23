@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CATEGORIES, hostOf, type Category, type Project } from "@/data/projects";
+import { CATEGORIES, CATEGORIES_TR, hostOf, type Category, type Project } from "@/data/projects";
+import { useLang } from "@/lib/i18n";
 
 /**
  * Project card: a framed preview that plays a short muted loop of the real site
@@ -56,6 +57,7 @@ export default function SiteCard({
   priority?: boolean;
 }) {
   const [frameRef, inView] = useInView<HTMLDivElement>();
+  const { t, lang } = useLang();
   const video = useRef<HTMLVideoElement>(null);
   const [armed, setArmed] = useState(false); // src attached once the card comes near
   const [playing, setPlaying] = useState(false);
@@ -78,7 +80,7 @@ export default function SiteCard({
         {/* soft colour glow behind the frame on hover */}
         <img aria-hidden src={p.cover} alt="" className="kcard-glow" loading="lazy" />
 
-        <button type="button" onClick={onOpen} className="kcard-hit" aria-label={`View ${p.name}`} data-cursor="View">
+        <button type="button" onClick={onOpen} className="kcard-hit" aria-label={t(`View ${p.name}`, `${p.name} projesini incele`)} data-cursor={t("View", "İncele")}>
           <img
             src={p.cover}
             alt=""
@@ -107,7 +109,7 @@ export default function SiteCard({
           <svg viewBox="0 0 24 24" aria-hidden>
             {ICONS[p.category]}
           </svg>
-          {CATEGORIES[p.category]}
+          {(lang === "tr" ? CATEGORIES_TR : CATEGORIES)[p.category]}
         </span>
 
         {arrowHref && (
@@ -116,7 +118,7 @@ export default function SiteCard({
             target="_blank"
             rel="noopener"
             className="kcard-go"
-            aria-label={p.liveUrl ? `Open ${p.name} live website` : p.demoUrl ? `Open the ${p.name} concept site` : `See ${p.name} in the showcase`}
+            aria-label={p.liveUrl ? t(`Open ${p.name} live website`, `${p.name} canlı sitesini aç`) : p.demoUrl ? t(`Open the ${p.name} concept site`, `${p.name} konsept sitesini aç`) : t(`See ${p.name} in the showcase`, `${p.name} projesini vitrinde gör`)}
           >
             <svg viewBox="0 0 24 24" aria-hidden>
               <path d="M7 17L17 7M9 7h8v8" />
@@ -131,23 +133,23 @@ export default function SiteCard({
             {p.name}
           </button>
           <span className="truncate text-sm text-mute/80">
-            {p.liveUrl ? hostOf(p.liveUrl).replace(/\/.*$/, "") : p.demoUrl ? "Concept site" : p.author ? `by ${p.author}` : ""}
+            {p.liveUrl ? hostOf(p.liveUrl).replace(/\/.*$/, "") : p.demoUrl ? t("Concept site", "Konsept site") : p.author ? t(`by ${p.author}`, p.author) : ""}
           </span>
         </h3>
         {p.liveUrl && (
           <span className="flex shrink-0 items-center gap-1.5 text-sm text-ink/80">
             <span className="size-1.5 rounded-full bg-[#3ddc84]" aria-hidden />
-            Live
+            {t("Live", "Yayında")}
           </span>
         )}
         {p.demoUrl && (
           <span className="flex shrink-0 items-center gap-1.5 text-sm text-ink/80">
             <span className="size-1.5 rounded-full bg-sun" aria-hidden />
-            Concept
+            {t("Concept", "Konsept")}
           </span>
         )}
       </div>
-      <p className="mt-1.5 truncate text-[0.95rem] text-mute">{p.summary}</p>
+      <p className="mt-1.5 truncate text-[0.95rem] text-mute">{(lang === "tr" && p.summaryTr) || p.summary}</p>
     </article>
   );
 }

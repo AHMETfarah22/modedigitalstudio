@@ -9,6 +9,7 @@ import Magnetic from "@/components/ui/Magnetic";
 import { STUDIO } from "@/data/studio";
 import { asset } from "@/lib/asset";
 import ModeLogo from "@/components/ui/ModeLogo";
+import { useLang } from "@/lib/i18n";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
 
@@ -19,6 +20,7 @@ gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
  */
 export default function Welcome() {
   const root = useRef<HTMLDivElement>(null);
+  const { t, lang } = useLang();
 
   useGSAP(
     () => {
@@ -69,7 +71,7 @@ export default function Welcome() {
         split.revert();
       };
     },
-    { scope: root },
+    { scope: root, dependencies: [lang], revertOnUpdate: true },
   );
 
   return (
@@ -82,7 +84,7 @@ export default function Welcome() {
             <div data-breathe>
               <img
                 src={asset("/intro/host.webp")}
-                alt="The studio host smiling and presenting with an open hand"
+                alt={t("The studio host smiling and presenting with an open hand", "Gülümseyen ve açık eliyle sunum yapan stüdyo sunucusu")}
                 width={760}
                 height={1065}
                 loading="lazy"
@@ -111,21 +113,21 @@ export default function Welcome() {
         <div data-bubble className="relative inline-block rounded-2xl rounded-bl-sm bg-ink px-5 py-3 font-semibold text-night shadow-[0_14px_40px_-12px_rgba(0,0,0,0.6)]">
           Her zaman bekleriz.
         </div>
-        <h2 data-say className="mt-6 text-[clamp(2.6rem,7vw,6.5rem)] font-extrabold leading-[0.95] tracking-[-0.04em]">
-          You&rsquo;re always welcome.
+        <h2 key={lang} data-say className="mt-6 text-[clamp(2.6rem,7vw,6.5rem)] font-extrabold leading-[0.95] tracking-[-0.04em]">
+          {t("You’re always welcome.", "Kapımız her zaman açık.")}
         </h2>
         <div data-after>
           <p className="mt-8 max-w-[30rem] text-lg text-mute">
-            Tell us what you want to build. We reply on WhatsApp, weekdays between 10:00 and 20:00.
+            {t("Tell us what you want to build. We reply on WhatsApp, weekdays between 10:00 and 20:00.", "Ne yapmak istediğinizi anlatın. Hafta içi 10:00 ile 20:00 arasında WhatsApp'tan yanıt veriyoruz.")}
           </p>
           <div className="mt-8">
             <Magnetic>
               <a href={STUDIO.whatsapp} target="_blank" rel="noopener" className="btn btn-sun text-base">
-                Start a project on WhatsApp
+                {t("Start a project on WhatsApp", "WhatsApp'tan proje başlat")}
               </a>
             </Magnetic>
           </div>
-          <p className="mt-10 font-display text-sm text-mute">{STUDIO.tagline}</p>
+          <p className="mt-10 font-display text-sm text-mute">{t(STUDIO.tagline, STUDIO.taglineTr)}</p>
         </div>
       </div>
     </div>

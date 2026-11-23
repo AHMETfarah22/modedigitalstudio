@@ -10,6 +10,7 @@ import { hasWebGL, useExperience } from "@/lib/experience";
 import Magnetic from "@/components/ui/Magnetic";
 import { FEATURED, hostOf, logoTile } from "@/data/projects";
 import { STUDIO } from "@/data/studio";
+import { useLang } from "@/lib/i18n";
 
 gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP);
 
@@ -19,6 +20,7 @@ export default function Hero() {
   const { phase, lite, reducedMotion } = useExperience();
   const root = useRef<HTMLElement>(null);
   const [gl, setGl] = useState(false);
+  const { t, lang } = useLang();
 
   useEffect(() => {
     if (phase === "entered") setGl(hasWebGL());
@@ -48,7 +50,7 @@ export default function Hero() {
       });
       return () => split.revert();
     },
-    { scope: root, dependencies: [phase, reducedMotion], revertOnUpdate: true },
+    { scope: root, dependencies: [phase, reducedMotion, lang], revertOnUpdate: true },
   );
 
   return (
@@ -65,24 +67,26 @@ export default function Hero() {
 
       <div data-hero-in className="wrap invisible flex flex-1 flex-col justify-center pb-10 pt-32">
         <div data-hero-copy>
-          <h1 data-hero-title className="font-display text-[clamp(2.6rem,7.4vw,7.6rem)] font-extrabold leading-[0.92] tracking-[-0.045em]">
-            <span className="block">WE CREATE.</span>
-            <span className="block">WE BUILD.</span>
-            <span className="block">WE ANIMATE.</span>
+          <h1 key={lang} data-hero-title className="font-display text-[clamp(2.6rem,7.4vw,7.6rem)] font-extrabold leading-[0.92] tracking-[-0.045em]">
+            <span className="block">{t("WE CREATE.", "TASARLARIZ.")}</span>
+            <span className="block">{t("WE BUILD.", "GELİŞTİRİRİZ.")}</span>
+            <span className="block">{t("WE ANIMATE.", "CANLANDIRIRIZ.")}</span>
           </h1>
           <p data-hero-sub className="mt-8 max-w-[34rem] text-[clamp(1.1rem,1.6vw,1.35rem)] leading-relaxed text-mute">
-            Transforming ideas into powerful digital experiences. Websites, software, games and animation from the
-            studio of Mode Academy.
+            {t(
+              "Transforming ideas into powerful digital experiences. Websites, software, games and animation from the studio of Mode Academy.",
+              "Fikirleri güçlü dijital deneyimlere dönüştürüyoruz. Mode Academy'nin stüdyosundan web siteleri, yazılım, oyun ve animasyon.",
+            )}
           </p>
           <div data-hero-cta className="mt-10 flex flex-wrap gap-3">
             <Magnetic>
               <a href="#work" className="btn btn-sun">
-                See the work
+                {t("See the work", "İşleri gör")}
               </a>
             </Magnetic>
             <Magnetic>
               <a href={STUDIO.whatsapp} target="_blank" rel="noopener" className="btn btn-line">
-                Start a project
+                {t("Start a project", "Proje başlat")}
               </a>
             </Magnetic>
           </div>
@@ -91,7 +95,7 @@ export default function Hero() {
 
       <div data-hero-foot data-hero-in className="wrap invisible pb-8">
         <div className="flex flex-col gap-4 border-t border-line pt-6 text-sm text-mute md:flex-row md:items-center md:justify-between">
-          <p>Live now</p>
+          <p>{t("Live now", "Şu an yayında")}</p>
           <ul className="flex flex-wrap gap-x-8 gap-y-3">
             {FEATURED.filter((p) => p.logo).map((p) => (
               <li key={p.slug}>

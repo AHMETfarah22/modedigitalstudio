@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useExperience } from "@/lib/experience";
 import { asset } from "@/lib/asset";
+import { useLang } from "@/lib/i18n";
 import ModeLogo from "@/components/ui/ModeLogo";
 
 /**
@@ -11,12 +12,12 @@ import ModeLogo from "@/components/ui/ModeLogo";
  * closing scene (where he appears full size) comes into view. Clicking him goes to the contact scene.
  */
 
-const LINES: { anchor: string; say: string }[] = [
-  { anchor: "#work", say: "These sites are live. Open one and look around." },
-  { anchor: "#concepts-title", say: "Concept sites for local shops. Try one." },
-  { anchor: "#motion", say: "Our games, VR and films. Tap a card to watch." },
-  { anchor: "#documents", say: "Leaf through the Mode Academy brochure." },
-  { anchor: "#about", say: "This is what the studio makes." },
+const LINES: { anchor: string; say: string; sayTr: string }[] = [
+  { anchor: "#work", say: "These sites are live. Open one and look around.", sayTr: "Bu siteler yayında. Birini açıp gezin." },
+  { anchor: "#concepts-title", say: "Concept sites for local shops. Try one.", sayTr: "Yerel dükkânlar için konsept siteler. Birini deneyin." },
+  { anchor: "#motion", say: "Our games, VR and films. Tap a card to watch.", sayTr: "Oyunlarımız, VR ve filmlerimiz. İzlemek için bir karta dokunun." },
+  { anchor: "#documents", say: "Leaf through the Mode Academy brochure.", sayTr: "Mode Academy kitapçığını çevirin." },
+  { anchor: "#about", say: "This is what the studio makes.", sayTr: "Stüdyonun yaptıkları bunlar." },
 ];
 
 /** Gestures he cycles through: a body move plus a sign that pops up over his head. */
@@ -33,6 +34,7 @@ const IDLE: Act[] = ["think", "nod", "idea", "wave", "spin", "surprise"];
 
 export default function Guide() {
   const { phase, reducedMotion } = useExperience();
+  const { t } = useLang();
   const [line, setLine] = useState(-1);
   const [show, setShow] = useState(false);
   const [act, setAct] = useState<{ name: Act; n: number } | null>(null);
@@ -108,12 +110,12 @@ export default function Guide() {
   }, [reducedMotion, phase]);
 
   if (phase !== "entered") return null;
-  const say = line >= 0 ? LINES[line].say : "";
+  const say = line >= 0 ? t(LINES[line].say, LINES[line].sayTr) : "";
 
   return (
     <a
       href="#contact"
-      aria-label="Talk to the studio"
+      aria-label={t("Talk to the studio", "Stüdyoyla konuşun")}
       className={`guide ${show ? "is-on" : ""} ${quiet ? "is-quiet" : ""}`}
       onClick={(e) => {
         const lenis = window.__lenis;

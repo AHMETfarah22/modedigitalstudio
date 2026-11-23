@@ -1,8 +1,12 @@
+"use client";
+
 import { NAV, STUDIO } from "@/data/studio";
 import { Mark } from "./Header";
 import Welcome from "./Welcome";
+import { useLang } from "@/lib/i18n";
 
 export default function Footer() {
+  const { t } = useLang();
   return (
     <footer id="contact" className="relative overflow-hidden bg-navy">
       <div aria-hidden className="glow-ring pointer-events-none absolute left-1/2 top-0 size-[90vw] -translate-x-1/2 -translate-y-1/2" />
@@ -15,20 +19,21 @@ export default function Footer() {
             <div>
               <p className="font-display font-bold">Mode Digital Studio</p>
               <p className="mt-1 text-sm text-mute">
-                Part of{" "}
+                {t("Part of ", "")}
                 <a href={STUDIO.parent.url} target="_blank" rel="noopener" className="link-draw text-ink">
                   Mode Academy
                 </a>
-                . {STUDIO.cities.join(" and ")}.
+                {t(". ", " bünyesindedir. ")}
+                {STUDIO.cities.join(t(" and ", " ve "))}.
               </p>
             </div>
           </div>
-          <nav aria-label="Footer">
+          <nav aria-label={t("Footer", "Alt menü")}>
             <ul className="grid grid-cols-2 gap-x-6">
               {NAV.map((n) => (
                 <li key={n.href}>
                   <a href={n.href} className="link-draw inline-flex min-h-11 items-center text-mute hover:text-ink">
-                    {n.label}
+                    {t(n.label, n.labelTr)}
                   </a>
                 </li>
               ))}

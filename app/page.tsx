@@ -1,4 +1,5 @@
 import { ExperienceProvider } from "@/lib/experience";
+import { LangProvider } from "@/lib/i18n";
 import Intro from "@/components/intro/Intro";
 import Header from "@/components/home/Header";
 import Hero from "@/components/home/Hero";
@@ -14,6 +15,7 @@ import Guide from "@/components/ui/Guide";
 
 export default function Home() {
   return (
+    <LangProvider>
     <ExperienceProvider>
       <a
         href="#work"
@@ -36,5 +38,6 @@ export default function Home() {
       <Cursor />
       <SmoothScroll />
     </ExperienceProvider>
+    </LangProvider>
   );
 }

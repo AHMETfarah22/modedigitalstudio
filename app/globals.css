@@ -393,3 +393,9 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
   .guide__bubble { max-width: 11rem; font-size: 12.5px; padding: 8px 11px; }
 }
 @media (prefers-reduced-motion: reduce) { .guide__act, .guide__sign, .guide__breathe, .guide__orb, .guide__orb-ring, .guide__bubble { animation: none; } }
+
+/* Language switch */
+.lang-switch { display: inline-flex; padding: 3px; border-radius: 999px; border: 1px solid var(--color-line); background: rgb(10 23 51 / 0.6); }
+.lang-switch button { min-width: 40px; min-height: 34px; padding: 0 10px; border-radius: 999px; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; color: var(--color-mute); transition: background-color 0.25s, color 0.25s; }
+.lang-switch button:hover { color: var(--color-ink); }
+.lang-switch button[aria-pressed="true"] { background: var(--color-ink); color: var(--color-night); }

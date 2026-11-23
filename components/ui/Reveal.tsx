@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { useLang } from "@/lib/i18n";
 
 gsap.registerPlugin(SplitText, ScrollTrigger, useGSAP);
 
@@ -24,6 +25,7 @@ export default function Reveal({
   id?: string;
 }) {
   const ref = useRef<HTMLHeadingElement>(null);
+  const { lang } = useLang();
 
   useGSAP(
     () => {
@@ -47,11 +49,11 @@ export default function Reveal({
         split?.revert();
       };
     },
-    { scope: ref },
+    { scope: ref, dependencies: [lang], revertOnUpdate: true },
   );
 
   return (
-    <Tag ref={ref} id={id} className={className}>
+    <Tag key={lang} ref={ref} id={id} className={className}>
       {children}
     </Tag>
   );

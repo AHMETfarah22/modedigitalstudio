@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useExperience } from "@/lib/experience";
+import { useLang } from "@/lib/i18n";
 
 /**
  * A route that runs down the left margin of the page and draws itself as you scroll.
@@ -10,15 +11,15 @@ import { useExperience } from "@/lib/experience";
  * Cards across the page rise into place as they come into view.
  */
 
-type Stop = { id: string; label: string; icon: keyof typeof ICONS; y: number };
+type Stop = { id: string; label: string; labelTr: string; icon: keyof typeof ICONS; y: number };
 
-const STOPS: { id: string; anchor: string; label: string; icon: keyof typeof ICONS; mode: "section" | "heading" }[] = [
-  { id: "work", anchor: "#work", label: "Live websites", icon: "browser", mode: "section" },
-  { id: "concepts", anchor: "#concepts-title", label: "Concept sites", icon: "shop", mode: "heading" },
-  { id: "motion", anchor: "#motion", label: "Motion", icon: "play", mode: "section" },
-  { id: "documents", anchor: "#documents", label: "Brochure", icon: "book", mode: "section" },
-  { id: "about", anchor: "#about", label: "The studio", icon: "spark", mode: "section" },
-  { id: "contact", anchor: "#contact", label: "Say hello", icon: "plane", mode: "section" },
+const STOPS: { id: string; anchor: string; label: string; labelTr: string; icon: keyof typeof ICONS; mode: "section" | "heading" }[] = [
+  { id: "work", anchor: "#work", label: "Live websites", labelTr: "Canlı siteler", icon: "browser", mode: "section" },
+  { id: "concepts", anchor: "#concepts-title", label: "Concept sites", labelTr: "Konsept siteler", icon: "shop", mode: "heading" },
+  { id: "motion", anchor: "#motion", label: "Motion", labelTr: "Videolar", icon: "play", mode: "section" },
+  { id: "documents", anchor: "#documents", label: "Brochure", labelTr: "Kitapçık", icon: "book", mode: "section" },
+  { id: "about", anchor: "#about", label: "The studio", labelTr: "Stüdyo", icon: "spark", mode: "section" },
+  { id: "contact", anchor: "#contact", label: "Say hello", labelTr: "Merhaba deyin", icon: "plane", mode: "section" },
 ];
 
 const ICONS = {
@@ -32,6 +33,7 @@ const ICONS = {
 
 export default function ScrollJourney() {
   const { phase, reducedMotion } = useExperience();
+  const { t } = useLang();
   const svgRef = useRef<SVGSVGElement>(null);
   const drawRef = useRef<SVGPathElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
@@ -61,7 +63,7 @@ export default function ScrollJourney() {
           const top = el.getBoundingClientRect().top + sy;
           const pad = s.mode === "section" ? parseFloat(getComputedStyle(el).paddingTop) || 96 : 0;
           const y = s.mode === "section" ? top + Math.min(pad * 0.45, 80) : top - 46;
-          stops.push({ id: s.id, label: s.label, icon: s.icon, y });
+          stops.push({ id: s.id, label: s.label, labelTr: s.labelTr, icon: s.icon, y });
         }
         const y0 = hero.getBoundingClientRect().bottom + sy - 40;
         const y1 = foot.getBoundingClientRect().top + sy + Math.min(foot.offsetHeight * 0.55, 420);
@@ -169,7 +171,7 @@ export default function ScrollJourney() {
           </span>
           {!geo.compact && (
             <span className="jr-flag">
-              <b>{String(i + 1).padStart(2, "0")}</b> {s.label}
+              <b>{String(i + 1).padStart(2, "0")}</b> {t(s.label, s.labelTr)}
             </span>
           )}
         </div>
