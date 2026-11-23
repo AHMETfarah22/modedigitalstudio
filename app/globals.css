@@ -345,12 +345,34 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 .guide.is-on { transform: none; pointer-events: auto; }
 .guide__stage { position: relative; display: block; width: clamp(110px, 12vw, 190px); perspective: 700px; }
 .guide__tilt { display: block; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1); transform-origin: 50% 100%; }
-.guide__hop { position: relative; display: block; animation: guide-hop 0.7s cubic-bezier(0.3, 1.6, 0.5, 1) both; transform-origin: 50% 100%; }
-@keyframes guide-hop { 0% { transform: translateY(0) scale(1, 1); } 30% { transform: translateY(-14px) scale(0.97, 1.03) rotate(-2deg); } 60% { transform: translateY(0) scale(1.03, 0.97); } 100% { transform: none; } }
+.guide__act { position: relative; display: block; transform-origin: 50% 100%; }
+/* he faces left, toward the page, and holds the mark on his left-side palm */
+.guide__breathe img { transform: scaleX(-1); }
+.act-surprise { animation: g-surprise 0.9s cubic-bezier(0.3, 1.6, 0.5, 1) both; }
+@keyframes g-surprise { 0% { transform: none; } 25% { transform: translateY(-22px) scale(1.06, 0.95) rotate(3deg); } 45% { transform: translateY(0) scale(0.96, 1.05); } 65% { transform: translateY(-6px); } 100% { transform: none; } }
+.act-think { animation: g-think 2.2s ease-in-out both; }
+@keyframes g-think { 20%, 75% { transform: rotate(4deg) translateX(4px); } }
+.act-nod { animation: g-nod 1.2s ease-in-out both; }
+@keyframes g-nod { 20% { transform: translateY(5px) rotate(-1.5deg); } 40% { transform: none; } 60% { transform: translateY(5px) rotate(-1.5deg); } 80% { transform: none; } }
+.act-idea { animation: g-idea 1.6s cubic-bezier(0.3, 1.4, 0.5, 1) both; }
+@keyframes g-idea { 30% { transform: translateY(-14px) scale(1.04); } 70% { transform: translateY(-10px) scale(1.03); } 100% { transform: none; } }
+.act-wave { animation: g-wave 1.6s ease-in-out both; }
+@keyframes g-wave { 15% { transform: rotate(-5deg); } 35% { transform: rotate(4deg); } 55% { transform: rotate(-4deg); } 75% { transform: rotate(3deg); } 100% { transform: none; } }
+.act-spin .guide__orb { animation: g-orb-loop 1.6s cubic-bezier(0.5, 0, 0.3, 1) both; }
+@keyframes g-orb-loop { 0% { transform: none; } 50% { transform: translate(140%, -160%) scale(1.25) rotate(180deg); } 100% { transform: rotate(360deg); } }
+.act-spin { animation: g-nod 1.6s ease-in-out both; }
+.act-idea .guide__orb-core { box-shadow: 0 0 0 2px #ffd166, 0 0 26px 8px rgb(255 209 102 / 0.75); transition: box-shadow 0.3s; }
+.guide__sign { position: absolute; left: 44%; top: -16%; width: 30%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 999px;
+  background: radial-gradient(circle at 32% 28%, #ffffff, var(--tone) 70%); box-shadow: 0 8px 20px -6px rgb(0 0 0 / 0.6), 0 0 18px 2px color-mix(in srgb, var(--tone) 55%, transparent);
+  animation: g-sign 2.4s cubic-bezier(0.3, 1.6, 0.5, 1) both; }
+.guide__sign svg { width: 58%; height: 58%; fill: none; stroke: #0a1733; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.tone-sun { --tone: #ffd166; } .tone-ring { --tone: #2bb8ff; } .tone-green { --tone: #6ee7a8; } .tone-pink { --tone: #ff8fb1; }
+.tone-pink svg { fill: #0a1733; stroke-width: 0; }
+@keyframes g-sign { 0% { opacity: 0; transform: translateY(20px) scale(0.3) rotate(-20deg); } 18% { opacity: 1; transform: translateY(-4px) scale(1.1) rotate(6deg); } 28% { transform: none; } 80% { opacity: 1; transform: translateY(-6px); } 100% { opacity: 0; transform: translateY(-22px) scale(0.8); } }
 .guide__breathe { display: block; animation: guide-breathe 4s ease-in-out infinite; transform-origin: 50% 100%; }
 @keyframes guide-breathe { 50% { transform: scale(1.012, 1.02) rotate(0.6deg); } }
 .guide__breathe img { display: block; width: 100%; height: auto; filter: drop-shadow(0 18px 24px rgb(0 0 0 / 0.55)) drop-shadow(0 0 30px rgb(43 184 255 / 0.18)); user-select: none; }
-.guide__orb { position: absolute; left: 75%; top: 24%; width: 18%; aspect-ratio: 1; animation: guide-float 3s ease-in-out infinite; }
+.guide__orb { position: absolute; left: 7%; top: 24%; width: 18%; aspect-ratio: 1; animation: guide-float 3s ease-in-out infinite; }
 @keyframes guide-float { 50% { transform: translateY(-6px); } }
 .guide__orb-ring { position: absolute; inset: -14%; border-radius: 999px; border: 2px dashed rgb(43 184 255 / 0.7); animation: spin-slow 8s linear infinite; }
 @keyframes spin-slow { to { rotate: 360deg; } }
@@ -370,4 +392,4 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
   .guide__stage { width: 84px; }
   .guide__bubble { max-width: 11rem; font-size: 12.5px; padding: 8px 11px; }
 }
-@media (prefers-reduced-motion: reduce) { .guide__hop, .guide__breathe, .guide__orb, .guide__orb-ring, .guide__bubble { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .guide__act, .guide__sign, .guide__breathe, .guide__orb, .guide__orb-ring, .guide__bubble { animation: none; } }

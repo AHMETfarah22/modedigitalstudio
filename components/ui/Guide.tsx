@@ -19,11 +19,23 @@ const LINES: { anchor: string; say: string }[] = [
   { anchor: "#about", say: "This is what the studio makes." },
 ];
 
+/** Gestures he cycles through: a body move plus a sign that pops up over his head. */
+const ACTS = {
+  surprise: { sign: "M12 4v10 M12 19v.5", tone: "sun" },
+  think: { sign: "M9 9a3 3 0 1 1 4.5 2.6c-.9.5-1.5 1.2-1.5 2.4 M12 18.5v.5", tone: "ring" },
+  nod: { sign: "M5 12.5l4.5 4.5L19 7", tone: "green" },
+  idea: { sign: "M9 18h6 M10 21h4 M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z", tone: "sun" },
+  wave: { sign: "M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z", tone: "pink" },
+  spin: { sign: "M12 3l2.2 6.3L21 9.5l-5.4 4 2 6.5L12 16l-5.6 4 2-6.5-5.4-4 6.8-.2z", tone: "sun" },
+} as const;
+type Act = keyof typeof ACTS;
+const IDLE: Act[] = ["think", "nod", "idea", "wave", "spin", "surprise"];
+
 export default function Guide() {
   const { phase, reducedMotion } = useExperience();
   const [line, setLine] = useState(-1);
   const [show, setShow] = useState(false);
-  const [hop, setHop] = useState(0);
+  const [act, setAct] = useState<{ name: Act; n: number } | null>(null);
   const [quiet, setQuiet] = useState(false);
   const tiltRef = useRef<HTMLDivElement>(null);
 
@@ -59,11 +71,28 @@ export default function Guide() {
   // and, after a few seconds, he steps back so he never sits on the content for long
   useEffect(() => {
     if (line < 0) return;
-    setHop((h) => h + 1);
+    setAct((a) => ({ name: "surprise", n: (a?.n ?? 0) + 1 }));
     setQuiet(false);
     const t = window.setTimeout(() => setQuiet(true), 4500);
     return () => window.clearTimeout(t);
   }, [line]);
+
+  // While he is on screen he does something every few seconds, never the same twice in a row
+  useEffect(() => {
+    if (!show || reducedMotion) return;
+    let t = 0;
+    const next = () => {
+      t = window.setTimeout(() => {
+        setAct((a) => {
+          const pool = IDLE.filter((x) => x !== a?.name);
+          return { name: pool[Math.floor(Math.random() * pool.length)], n: (a?.n ?? 0) + 1 };
+        });
+        next();
+      }, 4200 + Math.random() * 3000);
+    };
+    next();
+    return () => window.clearTimeout(t);
+  }, [show, reducedMotion]);
 
   // Lean toward the pointer, in 3D
   useEffect(() => {
@@ -94,7 +123,7 @@ export default function Guide() {
       <span key={`b${line}`} className="guide__bubble" aria-live="polite">{say}</span>
       <span className="guide__stage">
         <span ref={tiltRef} className="guide__tilt">
-          <span key={`h${hop}`} className="guide__hop">
+          <span key={`a${act?.n ?? 0}`} className={`guide__act ${act ? `act-${act.name}` : ""}`}>
             <span className="guide__breathe">
               <img src={asset("/intro/host.webp")} alt="" width={760} height={1065} draggable={false} />
             </span>
@@ -102,6 +131,11 @@ export default function Guide() {
               <span className="guide__orb-ring" />
               <span className="guide__orb-core"><ModeLogo className="h-[52%] w-auto text-ink" /></span>
             </span>
+            {act && (
+              <span className={`guide__sign tone-${ACTS[act.name].tone}`} aria-hidden>
+                <svg viewBox="0 0 24 24"><path d={ACTS[act.name].sign} /></svg>
+              </span>
+            )}
           </span>
         </span>
         <span className="guide__floor" aria-hidden />
