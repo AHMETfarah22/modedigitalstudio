@@ -26,7 +26,7 @@ The document notebook never turns on its own: pages move only with the Back/Next
 
 ## Before launch
 
-- The intro presenter is an SVG illustration in `components/intro/Presenter.tsx` (no licence needed).
+- The host in the intro and the closing scene is `public/intro/host.webp` (cut out of the supplied image).
 
 ## Publish
 

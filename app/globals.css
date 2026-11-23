@@ -60,7 +60,7 @@
 html.is-locked, html.is-locked body { overflow: hidden; }
 
 /* Intro pieces wait hidden until the timeline starts (no flash of the finished frame) */
-[data-intro-overlay]:not(.is-playing) :is([data-welcome], [data-title], [data-presenter], [data-floor], [data-line]) { visibility: hidden; }
+[data-intro-overlay]:not(.is-playing) :is([data-welcome], [data-title], [data-presenter], [data-floor], [data-line], [data-palm]) { visibility: hidden; }
 
 /* Returning visitors in the same tab skip the intro (set by an inline script in <head>) */
 html[data-intro="seen"] [data-intro-overlay] { display: none; }

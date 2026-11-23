@@ -8,7 +8,7 @@ import { useGSAP } from "@gsap/react";
 import { hasWebGL, useExperience } from "@/lib/experience";
 import type { PortalProgress } from "@/components/three/PortalScene";
 import Magnetic from "@/components/ui/Magnetic";
-import Presenter from "./Presenter";
+import { asset } from "@/lib/asset";
 import { STUDIO } from "@/data/studio";
 
 gsap.registerPlugin(SplitText, useGSAP);
@@ -94,10 +94,9 @@ export default function Intro() {
         .to(title.chars, { color: "#2bb8ff", duration: 0.25, stagger: 0.03, yoyo: true, repeat: 1, ease: "sine.inOut" }, 3.1)
         .from(q("[data-presenter]"), { xPercent: -28, autoAlpha: 0, duration: 1.4, ease: "power3.out" }, 2.3)
         .from(q("[data-floor]"), { scaleX: 0.2, autoAlpha: 0, duration: 1.2, ease: "power2.out" }, 2.5)
-        .from(q("[data-arm]"), { rotate: 62, duration: 1.3, ease: "back.out(1.4)" }, 2.9)
-        .from(q("[data-head]"), { rotate: -6, duration: 1.2, ease: "power2.out" }, 2.9)
-        .to(q("[data-eyes]"), { scaleY: 0.1, duration: 0.09, yoyo: true, repeat: 1, repeatDelay: 0.02, ease: "none" }, 3.9)
-        .to(q("[data-eyes]"), { scaleY: 0.1, duration: 0.09, yoyo: true, repeat: 1, repeatDelay: 0.02, ease: "none" }, 5.1)
+        .from(q("[data-palm]"), { scale: 0, y: 30, autoAlpha: 0, duration: 1, ease: "back.out(2)" }, 3.0)
+        .to(q("[data-palm]"), { y: -10, duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 4.0)
+        .to(q("[data-breathe]"), { y: -5, scaleY: 1.006, duration: 1.6, ease: "sine.inOut", yoyo: true, repeat: 1 }, 3.4)
         .from(q("[data-line]"), { y: 16, autoAlpha: 0, duration: 0.8 }, 3.2)
         .to(q("[data-bar]"), { scaleX: 1, duration: 5.6, ease: "none" }, 0)
         .addLabel("portal", 5.6);
@@ -159,7 +158,24 @@ export default function Intro() {
         <div className="relative order-2 flex h-full items-end justify-center self-end md:order-1">
           <div data-floor aria-hidden className="absolute bottom-[3%] left-1/2 h-8 w-[60%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgba(10,23,51,0.28),transparent)] blur-sm" />
           <div data-presenter className="relative">
-            <Presenter className="h-[40vh] w-auto drop-shadow-[0_30px_40px_rgba(10,23,51,0.16)] md:h-[76vh]" />
+            <div data-breathe style={{ transformOrigin: "50% 100%" }}>
+              <img
+                src={asset("/intro/host.webp")}
+                alt="The studio host smiling and presenting the studio with an open hand"
+                width={760}
+                height={1065}
+                className="block h-[42vh] w-auto max-w-none select-none drop-shadow-[0_30px_40px_rgba(10,23,51,0.18)] md:h-[82vh]"
+                draggable={false}
+              />
+            </div>
+            {/* the studio mark appears above his raised palm */}
+            <div data-palm aria-hidden className="absolute left-[78%] top-[28%] aspect-square w-[15%]">
+              <div className="absolute inset-[-55%] rounded-full bg-[radial-gradient(closest-side,rgba(43,184,255,0.5),transparent)] blur-md" />
+              <svg viewBox="0 0 32 32" className="absolute inset-0 size-full drop-shadow-[0_0_10px_rgba(43,184,255,0.9)]">
+                <circle cx="16" cy="16" r="12" fill="none" stroke="#2bb8ff" strokeWidth="3" />
+              </svg>
+              <span className="absolute left-1/2 top-1/2 size-[30%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-sun shadow-[0_0_16px_5px_rgba(255,209,102,0.7)]" />
+            </div>
           </div>
         </div>
 
