@@ -97,8 +97,6 @@ export default function Intro() {
         .to(title.chars, { color: "#2bb8ff", duration: 0.25, stagger: 0.03, yoyo: true, repeat: 1, ease: "sine.inOut" }, 3.1)
         .from(q("[data-presenter]"), { xPercent: -28, autoAlpha: 0, duration: 1.4, ease: "power3.out" }, 2.3)
         .from(q("[data-floor]"), { scaleX: 0.2, autoAlpha: 0, duration: 1.2, ease: "power2.out" }, 2.5)
-        .from(q("[data-palm]"), { scale: 0, y: 30, autoAlpha: 0, duration: 1, ease: "back.out(2)" }, 3.0)
-        .to(q("[data-palm]"), { y: -10, duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 4.0)
         .to(q("[data-breathe]"), { y: -5, scaleY: 1.006, duration: 1.6, ease: "sine.inOut", yoyo: true, repeat: 1 }, 3.4)
         .from(q("[data-line]"), { y: 16, autoAlpha: 0, duration: 0.8 }, 3.2)
         .to(q("[data-bar]"), { scaleX: 1, duration: 5.6, ease: "none" }, 0)
@@ -170,13 +168,6 @@ export default function Intro() {
                 className="block h-[42vh] w-auto max-w-none select-none drop-shadow-[0_30px_40px_rgba(10,23,51,0.18)] md:h-[82vh]"
                 draggable={false}
               />
-            </div>
-            {/* the studio mark appears above his raised palm */}
-            <div data-palm aria-hidden className="absolute left-[81%] top-[26%] aspect-square w-[17%]">
-              <div className="absolute inset-[-55%] rounded-full bg-[radial-gradient(closest-side,rgba(43,184,255,0.5),transparent)] blur-md" />
-              <span className="absolute inset-0 grid place-items-center rounded-full bg-night shadow-[0_0_0_3px_#2bb8ff,0_0_28px_6px_rgba(43,184,255,0.65)]">
-                <ModeLogo className="h-[52%] w-auto text-ink" />
-              </span>
             </div>
           </div>
         </div>

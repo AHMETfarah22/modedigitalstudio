@@ -6,7 +6,6 @@ import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { useExperience } from "@/lib/experience";
-import ModeLogo from "@/components/ui/ModeLogo";
 import Magnetic from "@/components/ui/Magnetic";
 import { FEATURED, hostOf, logoTile } from "@/data/projects";
 import { STUDIO } from "@/data/studio";
@@ -60,12 +59,6 @@ export default function Hero() {
           <span className="hero-host__bubble">{t("Scroll down to see our work", "Aşağı kaydırın, işlerimizi görün")}</span>
           <span className="hero-host__fig">
             <img src={asset("/intro/pose-5.webp")} alt="" width={203} height={495} draggable={false} />
-            {/* the studio mark floats over his open palm, as in the welcome */}
-            <span className="hero-host__orb">
-              <span className="hero-host__orb-glow" />
-              <span className="hero-host__orb-ring" />
-              <span className="hero-host__orb-core"><ModeLogo className="h-[52%] w-auto text-ink" /></span>
-            </span>
           </span>
           <span className="hero-host__floor" />
         </div>
