@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
@@ -21,6 +21,13 @@ gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
 export default function Welcome() {
   const root = useRef<HTMLDivElement>(null);
   const { t, lang } = useLang();
+  // the ball on his palm turns every 2 s between the mark and the studio's name
+  const [face, setFace] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = window.setInterval(() => setFace((f) => 1 - f), 2000);
+    return () => window.clearInterval(id);
+  }, []);
 
   useGSAP(
     () => {
@@ -98,8 +105,17 @@ export default function Welcome() {
           <div data-orb aria-hidden className="absolute left-[81%] top-[26%] aspect-square w-[18%]">
             <div className="absolute inset-[-55%] rounded-full bg-[radial-gradient(closest-side,rgba(43,184,255,0.55),transparent)] blur-md" />
             <span data-orb-ring className="absolute inset-[-12%] rounded-full border-2 border-dashed border-ring/70" />
-            <span className="absolute inset-0 grid place-items-center rounded-full bg-night shadow-[0_0_0_3px_#2bb8ff,0_0_28px_6px_rgba(43,184,255,0.65)]">
-              <ModeLogo className="h-[52%] w-auto text-ink" />
+            <span className="orb-flip absolute inset-0 rounded-full bg-night shadow-[0_0_0_3px_#2bb8ff,0_0_28px_6px_rgba(43,184,255,0.65)]" data-face={face}>
+              <span className="orb-flip__face">
+                <ModeLogo className="h-[52%] w-auto text-ink" />
+              </span>
+              <span className="orb-flip__face orb-flip__face--back">
+                <span className="orb-name">
+                  <b>MODE</b>
+                  <span>DIGITAL</span>
+                  <span>STUDIO</span>
+                </span>
+              </span>
             </span>
           </div>
           {[0, 1, 2, 3].map((i) => (
