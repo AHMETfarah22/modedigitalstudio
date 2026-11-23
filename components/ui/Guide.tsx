@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useExperience } from "@/lib/experience";
 import { asset } from "@/lib/asset";
 import { useLang } from "@/lib/i18n";
+import ModeLogo from "@/components/ui/ModeLogo";
 
 /**
  * The studio host walks the visitor through the page: he steps in at the corner after the hero,
@@ -25,9 +26,9 @@ const LINES: { anchor: string; say: string; sayTr: string }[] = [
  * `ax` is where his feet are across the picture, so the poses line up.
  */
 const POSES = [
-  { src: "/intro/studio-5.webp", w: 227, h: 572, ax: 0.57 },
-  { src: "/intro/studio-2.webp", w: 183, h: 572, ax: 0.44 },
-  { src: "/intro/studio-4.webp", w: 180, h: 572, ax: 0.486 },
+  { src: "/intro/pose-5.webp", w: 203, h: 495, ax: 0.636 },
+  { src: "/intro/pose-2.webp", w: 183, h: 492, ax: 0.445 },
+  { src: "/intro/pose-4.webp", w: 173, h: 490, ax: 0.5 },
 ];
 
 /** Gestures he cycles through: a pose, a body move, and a sign that pops up over his head. */
@@ -146,6 +147,13 @@ export default function Guide() {
                   style={{ aspectRatio: `${p.w} / ${p.h}`, ["--ax" as string]: p.ax } as React.CSSProperties}
                 >
                   <img src={asset(p.src)} alt="" width={p.w} height={p.h} draggable={false} />
+                  <span className="ambient" style={{ WebkitMaskImage: `url(${asset(p.src)})`, maskImage: `url(${asset(p.src)})` }} />
+                  {i === 0 && (
+                    <span className="guide__orb" aria-hidden>
+                      <span className="guide__orb-ring" />
+                      <span className="guide__orb-core"><ModeLogo className="h-[52%] w-auto text-ink" /></span>
+                    </span>
+                  )}
                 </span>
               ))}
             </span>
