@@ -173,9 +173,6 @@ export default function Hero() {
             autoPlay={!reducedMotion}
             preload="auto"
           />
-          <a href="#work" className="hero-walk__cue" tabIndex={idle ? 0 : -1} aria-label={t("Scroll down to the work", "Aşağı, işlere in")}>
-            <svg viewBox="0 0 24 24" aria-hidden><path d="M12 5v14M6 13l6 6 6-6" /></svg>
-          </a>
           <span aria-hidden className="hero-host__bubble hero-walk__bubble">{t("Scroll down to see our work", "Aşağı kaydırın, işlerimizi görün")}</span>
         </div>
       )}

@@ -6,29 +6,26 @@ import { asset } from "@/lib/asset";
 
 /**
  * The host in the bottom-right corner (computers only), in front of the page, between the first screen
- * and the closing scene. While the page scrolls he walks (frames 0-7 of public/intro/walker.webp, cut from
- * his walk-in film, mirrored so he faces the content; backwards when scrolling up). Each time it comes to
- * rest he turns in 3D and makes the next hand gesture: presenting the content, or pointing down with both
- * fingers under a bouncing arrow. When it moves again he turns back and walks on.
- * On a long scroll he does not just walk: every couple of seconds of walking he stops for a gesture anyway.
+ * and the closing scene. While the page scrolls he walks toward you pointing down with both hands
+ * (public/intro/walk-point.webp, stepping in CSS). Each time it comes to rest he turns in 3D and makes
+ * the next hand gesture: pointing to the side, or presenting the content. When it moves again he turns
+ * back and walks on. On a long scroll he stops for a gesture every couple of seconds anyway.
  */
+const WALK_POSE = { src: "/intro/walk-point.webp", w: 361, h: 942 };
 const POSES = [
+  { src: "/intro/pose-side.webp", w: 158, h: 509, act: "side" },
   { src: "/intro/pose-5.webp", w: 222, h: 495, act: "present" },
-  { src: "/intro/pose-4.webp", w: 173, h: 490, act: "point" },
 ] as const;
 const STOP_MS = 160; // smooth scrolling glides on after the wheel stops: count a slow glide as stopped
 const SLOW_PX = 2.5;
 const WALK_MS = 2200; // longest walk before he stops to gesture anyway
 const HOLD_MS = 1900; // how long that gesture holds while the page keeps scrolling
-const FRAMES = 25;
-const WALK = 8;
-const PX_PER_FRAME = 26;
 
 export default function Gestures() {
   const { phase, reducedMotion } = useExperience();
   const box = useRef<HTMLDivElement>(null);
   const body = useRef<HTMLDivElement>(null);
-  const fig = useRef<HTMLDivElement>(null);
+  const fig = useRef<HTMLImageElement>(null);
   const imgs = useRef<(HTMLImageElement | null)[]>([]);
 
   useEffect(() => {
@@ -46,17 +43,10 @@ export default function Gestures() {
     let busy = false;
     let lastY = window.scrollY;
     let movedAt = 0;
-    let walked = 0;
-    let shown = -1;
     let walkFrom = 0;
     let holdUntil = 0;
     let raf = 0;
 
-    const draw = (n: number) => {
-      if (n === shown) return;
-      shown = n;
-      f.style.backgroundPosition = `${(n / (FRAMES - 1)) * 100}% 0`;
-    };
     const show = (k: number) => {
       pose = k;
       f.classList.toggle("is-on", k < 0);
@@ -97,8 +87,6 @@ export default function Gestures() {
         // gesturing: walk on once the page moves again (after a forced pause has had its moment)
         if (moving && now > holdUntil) { turnTo(-1); walkFrom = now + 490; }
       } else if (moving) {
-        walked += dy / PX_PER_FRAME;
-        draw(((Math.floor(walked) % WALK) + WALK) % WALK);
         if (now - walkFrom > WALK_MS) { holdUntil = now + HOLD_MS; gesture(); }
       } else {
         gesture();
@@ -109,10 +97,10 @@ export default function Gestures() {
   }, [phase, reducedMotion]);
 
   return (
-    <div ref={box} aria-hidden className="gest" data-act="present">
+    <div ref={box} aria-hidden className="gest" data-act="side">
       <span className="gest__floor" />
       <div ref={body} className="gest__body">
-        <div ref={fig} className="gest__walk" style={{ backgroundImage: `url(${asset("/intro/walker.webp")})` }} />
+        <img ref={fig} src={asset(WALK_POSE.src)} alt="" width={WALK_POSE.w} height={WALK_POSE.h} draggable={false} className="gest__pose gest__pose--walk" />
         {POSES.map((p, i) => (
           <img
             key={p.src}

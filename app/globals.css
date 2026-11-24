@@ -541,18 +541,6 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 @keyframes hw-sway { 0%, 100% { --hw-sway: -5deg; } 50% { --hw-sway: 5deg; } }
 @keyframes hw-breathe { 0%, 100% { --hw-breathe: 1; } 50% { --hw-breathe: 1.012; } }
 
-/* a round "down" button beside his presenting hand, bouncing, once he has arrived */
-.hero-walk__cue { position: absolute; z-index: 1; left: 38%; top: 24%; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 999px;
-  background: var(--color-sun); color: var(--color-night); pointer-events: auto; opacity: 0; visibility: hidden; transform: scale(0.4);
-  box-shadow: 0 12px 30px -8px rgb(10 23 51 / 0.45), 0 0 0 6px rgb(255 209 102 / 0.25);
-  transition: opacity 0.5s, transform 0.6s cubic-bezier(0.3, 1.6, 0.5, 1), visibility 0s 0.5s; }
-.hero-walk__cue svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-.hero-walk.is-idle .hero-walk__cue { opacity: 1; visibility: visible; transform: none; transition: opacity 0.5s, transform 0.6s cubic-bezier(0.3, 1.6, 0.5, 1), visibility 0s;
-  animation: hw-cue 1.6s ease-in-out 0.8s infinite; }
-@keyframes hw-cue { 50% { translate: 0 10px; } }
-.hero-walk__cue:focus-visible { outline: 2px solid var(--color-night); outline-offset: 4px; }
-@media (max-width: 1023px) { .hero-walk__cue { left: 34%; top: 20%; width: 46px; height: 46px; } }
-@media (prefers-reduced-motion: reduce) { .hero-walk.is-idle .hero-walk__film, .hero-walk.is-idle .hero-walk__cue { animation: none; } }
 
 /* The host stands inside the scene, not on top of it.
    --px / --py (-0.5..0.5) follow the pointer: far layers move least, he moves most, so the room has depth. */
@@ -615,41 +603,35 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 /* first screen on phones: the host a size larger */
 @media (max-width: 767px) {
   .hero-walk { width: 165vw; margin: -12vw 0 0 -47vw; }
-  .hero-walk__cue { left: 36%; top: 22%; }
 }
 
-/* Gesturing host: bottom-right corner, computers only, between the first screen and the closing scene */
+@media (prefers-reduced-motion: reduce) { .hero-walk.is-idle .hero-walk__film { animation: none; } }
+
+/* Gesturing host: bottom-right corner, computers only, between the first screen and the closing scene.
+   No glow or outline: a soft contact shadow and the page's own light, so he stands in the page. */
 .gest { display: none; }
 @media (min-width: 768px) {
   .gest { display: block; position: fixed; right: clamp(8px, 2vw, 40px); bottom: 0; z-index: 30; height: min(42vh, 400px); aspect-ratio: 1 / 2; pointer-events: none;
     perspective: 900px; opacity: 0; translate: 0 40%; transition: opacity 0.6s ease, translate 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
   .gest.is-on { opacity: 1; translate: 0 0; }
 }
-.gest__body { position: absolute; inset: 0; transform-origin: 61% 100%; transform-style: preserve-3d; }
-.gest__pose { position: absolute; bottom: 0; height: 100%; width: auto; max-width: none; opacity: 0; transform-origin: 50% 100%;
-  filter: drop-shadow(0 0 1px rgb(170 210 255 / 0.5)) drop-shadow(8px 0 22px rgb(43 184 255 / 0.22)) drop-shadow(0 18px 20px rgb(0 0 0 / 0.5)); }
+.gest__body { position: absolute; inset: 0; transform-origin: 60% 100%; transform-style: preserve-3d; }
+.gest__pose { position: absolute; bottom: 1.5%; height: 98.5%; width: auto; max-width: none; opacity: 0; transform-origin: 50% 100%;
+  transition: opacity 0.25s ease; filter: drop-shadow(0 6px 14px rgb(0 0 0 / 0.22)); }
+.gest__pose--walk { left: 20.2%; }
+.gest__pose--side { left: 31.4%; }
 .gest__pose--present { left: 0; }
-.gest__pose--point { left: 25.7%; }
 .gest__pose.is-on { opacity: 1; }
+/* walking: a step every half second, his body rising and settling and rocking from foot to foot */
+.gest__pose--walk.is-on { animation: gs-walk 0.56s ease-in-out infinite; }
+@keyframes gs-walk { 0%, 100% { transform: translateY(0) rotate(-1.2deg); } 25% { transform: translateY(-2.2%) rotate(0deg); } 50% { transform: translateY(0) rotate(1.2deg); } 75% { transform: translateY(-2.2%) rotate(0deg); } }
+.gest__pose--side.is-on { animation: gs-side 1.6s ease-in-out 0.3s infinite; }
+@keyframes gs-side { 0%, 100% { transform: none; } 50% { transform: translateX(2%) rotate(1deg); } }
 .gest__pose--present.is-on { animation: gs-present 2.6s ease-in-out 0.3s infinite; }
 @keyframes gs-present { 0%, 100% { transform: none; } 50% { transform: rotate(-1.6deg) translateX(-2%); } }
-.gest__pose--point.is-on { animation: gs-point 1.3s ease-in-out 0.3s infinite; }
-@keyframes gs-point { 0%, 100% { transform: none; } 50% { transform: translateY(1.6%) scale(1.01, 0.99); } }
-.gest__floor { position: absolute; left: 10%; right: 0; bottom: -5%; height: 14%; border-radius: 50%;
-  background: radial-gradient(closest-side, rgb(43 184 255 / 0.32), rgb(31 92 220 / 0.1) 60%, transparent); filter: blur(4px); }
-/* a bouncing arrow sign over his head while he points down */
-.gest::after { content: ""; position: absolute; left: 61%; top: -14%; width: 40px; height: 40px; margin-left: -20px; border-radius: 999px; opacity: 0; scale: 0.4;
-  background: #ffd166 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a1733' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v14M6 13l6 6 6-6'/%3E%3C/svg%3E") center / 22px no-repeat;
-  box-shadow: 0 0 0 6px rgb(255 209 102 / 0.22), 0 10px 26px -6px rgb(0 0 0 / 0.6); transition: opacity 0.3s, scale 0.45s cubic-bezier(0.3, 1.6, 0.5, 1); }
-.gest[data-act="point"]::after { opacity: 1; scale: 1; animation: gs-sign 1.3s ease-in-out 0.4s infinite; }
-@keyframes gs-sign { 50% { translate: 0 8px; } }
-@media (prefers-reduced-motion: reduce) { .gest { transition: opacity 0.4s; } .gest__pose.is-on, .gest::after { animation: none !important; } }
-/* his walk: the side-on sprite, mirrored to face the content, lined up with the poses (head at the top, body at 61%);
-   the film ends at his shins, so they fade into the floor glow */
-.gest__walk { position: absolute; top: 0; left: 16.2%; width: 128%; height: 100%; opacity: 0;
-  background-repeat: no-repeat; background-size: 2500% 100%; background-position: 0 0; transform: translateY(-20%) scale(-0.94, 0.94);
-  filter: drop-shadow(0 0 1px rgb(170 210 255 / 0.5)) drop-shadow(-8px 0 22px rgb(43 184 255 / 0.22));
-  -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 99%); mask-image: linear-gradient(to bottom, #000 80%, transparent 99%); }
-.gest__walk.is-on { opacity: 1; }
-.gest[data-act="walk"] .gest__floor { animation: gs-step 0.5s ease-in-out infinite; }
-@keyframes gs-step { 50% { scale: 0.9 1; opacity: 0.75; } }
+/* contact shadow on the floor under his feet */
+.gest__floor { position: absolute; left: 24%; right: 6%; bottom: -2%; height: 7%; border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.32), rgb(0 0 0 / 0.1) 60%, transparent); filter: blur(3px); }
+.gest[data-act="walk"] .gest__floor { animation: gs-step 0.28s ease-in-out infinite; }
+@keyframes gs-step { 50% { scale: 0.9 1; opacity: 0.8; } }
+@media (prefers-reduced-motion: reduce) { .gest { transition: opacity 0.4s; } .gest__pose.is-on, .gest__floor { animation: none !important; } }
