@@ -607,19 +607,22 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 
 @media (prefers-reduced-motion: reduce) { .hero-walk.is-idle .hero-walk__film { animation: none; } }
 
-/* Gesturing host: bottom-right corner, computers only, between the first screen and the closing scene.
-   No glow or outline: a soft contact shadow and the page's own light, so he stands in the page. */
+/* The host's column: on wide screens every section between the first screen and the closing scene keeps
+   a column free on the left of its content, and the host walks down the page in it, never over the cards. */
+@media (min-width: 1280px) {
+  :root { --host-col: clamp(230px, 17vw, 290px); }
+  main > section:not(#top) > .wrap { padding-left: calc(var(--pad) + var(--host-col)); }
+}
 .gest { display: none; }
-@media (min-width: 768px) {
-  .gest { display: block; position: fixed; right: clamp(8px, 2vw, 40px); bottom: 0; z-index: 30; height: min(50vh, 460px); aspect-ratio: 392 / 680; pointer-events: none;
-    perspective: 900px; opacity: 0; translate: 0 40%; transition: opacity 0.6s ease, translate 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
+@media (min-width: 1280px) {
+  .gest { --gp: clamp(20px, 4vw, 56px); display: block; position: fixed; bottom: 0; z-index: 30; pointer-events: none;
+    left: calc(max(0px, (100% - 1280px - 2 * var(--gp)) / 2) + var(--gp) - 12px); width: var(--host-col); aspect-ratio: 380 / 486;
+    opacity: 0; translate: -30% 0; transition: opacity 0.6s ease, translate 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
   .gest.is-on { opacity: 1; translate: 0 0; }
 }
-/* his film: pinned to the bottom edge, legs running off it; a short fade between plays */
+/* his film: same size in every frame, cut at the thigh, so the legs fade into the bottom of the screen */
 .gest__film { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%;
-  transition: opacity 0.25s ease; filter: drop-shadow(0 8px 18px rgb(0 0 0 / 0.25)); }
-.gest.is-swap .gest__film { opacity: 0; }
-/* contact shadow on the floor under his feet */
-.gest__floor { position: absolute; left: 24%; right: 6%; bottom: -2%; height: 7%; border-radius: 50%;
-  background: radial-gradient(closest-side, rgb(0 0 0 / 0.32), rgb(0 0 0 / 0.1) 60%, transparent); filter: blur(3px); }
+  transition: opacity 0.11s ease; filter: drop-shadow(0 10px 22px rgb(0 0 0 / 0.3));
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%); mask-image: linear-gradient(to bottom, #000 78%, transparent 100%); }
+.gest.is-swap .gest__film { opacity: 0.35; }
 @media (prefers-reduced-motion: reduce) { .gest { transition: opacity 0.4s; } .gest__film { transition: none; } }
