@@ -526,3 +526,30 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 @media (max-width: 767px) {
   .guide { display: none !important; }
 }
+
+/* The first-screen host in 3D. The film turns on its own axis (his feet), never the wrapper:
+   the multiply blend needs the wrapper to stay flat. */
+@property --hw-sway { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@property --hw-breathe { syntax: "<number>"; inherits: false; initial-value: 1; }
+.hero-walk__film {
+  --hw-tx: 0deg; --hw-ty: 0deg; --hw-turn: 0deg; --hw-rise: 0%;
+  transform-origin: 64% 100%;
+  transform: perspective(1400px) translateY(var(--hw-rise)) rotateX(var(--hw-tx))
+    rotateY(calc(var(--hw-sway) + var(--hw-ty) + var(--hw-turn))) scale(1, var(--hw-breathe));
+}
+.hero-walk.is-idle .hero-walk__film { animation: hw-sway 7s ease-in-out infinite, hw-breathe 3.6s ease-in-out infinite; }
+@keyframes hw-sway { 0%, 100% { --hw-sway: -5deg; } 50% { --hw-sway: 5deg; } }
+@keyframes hw-breathe { 0%, 100% { --hw-breathe: 1; } 50% { --hw-breathe: 1.012; } }
+
+/* a round "down" button beside his presenting hand, bouncing, once he has arrived */
+.hero-walk__cue { position: absolute; z-index: 1; left: 38%; top: 24%; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 999px;
+  background: var(--color-sun); color: var(--color-night); pointer-events: auto; opacity: 0; visibility: hidden; transform: scale(0.4);
+  box-shadow: 0 12px 30px -8px rgb(10 23 51 / 0.45), 0 0 0 6px rgb(255 209 102 / 0.25);
+  transition: opacity 0.5s, transform 0.6s cubic-bezier(0.3, 1.6, 0.5, 1), visibility 0s 0.5s; }
+.hero-walk__cue svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.hero-walk.is-idle .hero-walk__cue { opacity: 1; visibility: visible; transform: none; transition: opacity 0.5s, transform 0.6s cubic-bezier(0.3, 1.6, 0.5, 1), visibility 0s;
+  animation: hw-cue 1.6s ease-in-out 0.8s infinite; }
+@keyframes hw-cue { 50% { translate: 0 10px; } }
+.hero-walk__cue:focus-visible { outline: 2px solid var(--color-night); outline-offset: 4px; }
+@media (max-width: 1023px) { .hero-walk__cue { left: 34%; top: 20%; width: 46px; height: 46px; } }
+@media (prefers-reduced-motion: reduce) { .hero-walk.is-idle .hero-walk__film, .hero-walk.is-idle .hero-walk__cue { animation: none; } }

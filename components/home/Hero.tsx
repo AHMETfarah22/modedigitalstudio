@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -18,6 +18,59 @@ export default function Hero() {
   const { phase, reducedMotion } = useExperience();
   const root = useRef<HTMLElement>(null);
   const { t, lang } = useLang();
+  const walk = useRef<HTMLDivElement>(null);
+  const film = useRef<HTMLVideoElement>(null);
+  const [idle, setIdle] = useState(false);
+
+  // The host in 3D: once his walk-in ends he breathes and sways (CSS), turns toward the pointer,
+  // and turns away as the page scrolls on. Every move is on the film itself (via CSS variables):
+  // a transform on the wrapper would give it its own layer and break the white-multiply blend.
+  useEffect(() => {
+    if (phase !== "entered") return;
+    const v = film.current;
+    if (!v) return;
+    if (reducedMotion) { setIdle(true); return; }
+    const done = () => setIdle(true);
+    v.addEventListener("ended", done);
+    // autoplay blocked (low-power mode): the poster is already his last frame
+    const check = window.setTimeout(() => { if (v.paused && v.currentTime === 0) done(); }, 1500);
+
+    const tilt = { x: 0, y: 0 };
+    const apply = () => {
+      v.style.setProperty("--hw-tx", `${tilt.x.toFixed(2)}deg`);
+      v.style.setProperty("--hw-ty", `${tilt.y.toFixed(2)}deg`);
+    };
+    const toX = gsap.quickTo(tilt, "x", { duration: 1.1, ease: "power3.out", onUpdate: apply });
+    const toY = gsap.quickTo(tilt, "y", { duration: 1.1, ease: "power3.out", onUpdate: apply });
+    const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    const onMove = (e: PointerEvent) => {
+      const nx = e.clientX / window.innerWidth - 0.5;
+      const ny = e.clientY / window.innerHeight - 0.5;
+      toY(nx * 16);
+      toX(-ny * 6);
+    };
+    if (fine) window.addEventListener("pointermove", onMove, { passive: true });
+
+    const turn = { a: 0, r: 0 };
+    const st = gsap.to(turn, {
+      a: 22,
+      r: -5,
+      ease: "none",
+      onUpdate: () => {
+        v.style.setProperty("--hw-turn", `${turn.a.toFixed(2)}deg`);
+        v.style.setProperty("--hw-rise", `${turn.r.toFixed(2)}%`);
+      },
+      scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: 0.6 },
+    });
+
+    return () => {
+      v.removeEventListener("ended", done);
+      window.clearTimeout(check);
+      window.removeEventListener("pointermove", onMove);
+      st.scrollTrigger?.kill();
+      st.kill();
+    };
+  }, [phase, reducedMotion]);
 
   useGSAP(
     () => {
@@ -91,8 +144,10 @@ export default function Hero() {
       {/* The host walks into the right half and presents the heading. His film has a pure white
           background and is multiplied onto the page, so he walks on the page itself, with no box. */}
       {phase === "entered" && (
-        <div aria-hidden className="hero-walk">
+        <div ref={walk} className={`hero-walk${idle ? " is-idle" : ""}`}>
           <video
+            ref={film}
+            aria-hidden
             className="hero-walk__film"
             src={asset("/intro/host-walk.mp4")}
             poster={asset("/intro/host-walk-end.webp")}
@@ -101,7 +156,10 @@ export default function Hero() {
             autoPlay={!reducedMotion}
             preload="auto"
           />
-          <span className="hero-host__bubble hero-walk__bubble">{t("Scroll down to see our work", "Aşağı kaydırın, işlerimizi görün")}</span>
+          <a href="#work" className="hero-walk__cue" tabIndex={idle ? 0 : -1} aria-label={t("Scroll down to the work", "Aşağı, işlere in")}>
+            <svg viewBox="0 0 24 24" aria-hidden><path d="M12 5v14M6 13l6 6 6-6" /></svg>
+          </a>
+          <span aria-hidden className="hero-host__bubble hero-walk__bubble">{t("Scroll down to see our work", "Aşağı kaydırın, işlerimizi görün")}</span>
         </div>
       )}
 
@@ -140,7 +198,7 @@ export default function Hero() {
           <ul className="flex flex-wrap gap-x-8 gap-y-3">
             {FEATURED.filter((p) => p.logo).map((p) => (
               <li key={p.slug}>
-                <a href={p.liveUrl} target="_blank" rel="noopener" className="group flex min-h-11 items-center gap-3 text-ink">
+                <a href={p.liveUrl} target="_blank" rel="noopener" className="group flex min-h-11 items-center gap-3 rounded-full py-1 pl-1 pr-3 text-ink lg:bg-porcelain/85 lg:backdrop-blur-sm">
                   {p.logo && (
                     <img src={p.logo} alt="" width={28} height={28} className={`size-7 rounded-md object-contain p-0.5 ${logoTile(p)}`} />
                   )}
