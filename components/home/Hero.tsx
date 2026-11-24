@@ -43,22 +43,34 @@ export default function Hero() {
     const toX = gsap.quickTo(tilt, "x", { duration: 1.1, ease: "power3.out", onUpdate: apply });
     const toY = gsap.quickTo(tilt, "y", { duration: 1.1, ease: "power3.out", onUpdate: apply });
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    const sec = root.current!;
+    const par = { x: 0, y: 0 };
+    const applyPar = () => {
+      sec.style.setProperty("--px", par.x.toFixed(3));
+      sec.style.setProperty("--py", par.y.toFixed(3));
+    };
+    const toPX = gsap.quickTo(par, "x", { duration: 1.4, ease: "power3.out", onUpdate: applyPar });
+    const toPY = gsap.quickTo(par, "y", { duration: 1.4, ease: "power3.out", onUpdate: applyPar });
     const onMove = (e: PointerEvent) => {
       const nx = e.clientX / window.innerWidth - 0.5;
       const ny = e.clientY / window.innerHeight - 0.5;
       toY(nx * 16);
       toX(-ny * 6);
+      toPX(nx);
+      toPY(ny);
     };
     if (fine) window.addEventListener("pointermove", onMove, { passive: true });
 
-    const turn = { a: 0, r: 0 };
+    const turn = { a: 0, r: 0, d: 1 };
     const st = gsap.to(turn, {
       a: 22,
       r: -5,
+      d: 0.86,
       ease: "none",
       onUpdate: () => {
         v.style.setProperty("--hw-turn", `${turn.a.toFixed(2)}deg`);
         v.style.setProperty("--hw-rise", `${turn.r.toFixed(2)}%`);
+        v.style.setProperty("--hw-depth", turn.d.toFixed(3));
       },
       scrollTrigger: { trigger: root.current, start: "top top", end: "bottom top", scrub: 0.6 },
     });
@@ -138,6 +150,10 @@ export default function Hero() {
     <section ref={root} id="top" className="hero-light relative isolate flex min-h-[100svh] flex-col overflow-hidden">
       {/* The same light studio as the welcome: porcelain wall, soft white light, a glowing ring */}
       <div aria-hidden className="absolute inset-0 -z-10 bg-porcelain bg-[radial-gradient(60%_55%_at_70%_42%,#ffffff_0%,transparent_70%),radial-gradient(50%_40%_at_15%_100%,rgba(31,92,220,0.10),transparent_70%)]" />
+      {/* A 3D studio floor he stands in: a perspective grid fading to the horizon, a pool of light under him */}
+      <div aria-hidden className="hero-stage">
+        <div className="hero-stage__floor" />
+      </div>
       <div aria-hidden className="hero-ring" />
       <div aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-5 bg-gradient-to-b from-transparent to-night/40" />
 
@@ -145,6 +161,7 @@ export default function Hero() {
           background and is multiplied onto the page, so he walks on the page itself, with no box. */}
       {phase === "entered" && (
         <div ref={walk} className={`hero-walk${idle ? " is-idle" : ""}`}>
+          <span aria-hidden className="hero-walk__pool" />
           <video
             ref={film}
             aria-hidden

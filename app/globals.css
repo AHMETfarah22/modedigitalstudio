@@ -553,3 +553,47 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 .hero-walk__cue:focus-visible { outline: 2px solid var(--color-night); outline-offset: 4px; }
 @media (max-width: 1023px) { .hero-walk__cue { left: 34%; top: 20%; width: 46px; height: 46px; } }
 @media (prefers-reduced-motion: reduce) { .hero-walk.is-idle .hero-walk__film, .hero-walk.is-idle .hero-walk__cue { animation: none; } }
+
+/* The host stands inside the scene, not on top of it.
+   --px / --py (-0.5..0.5) follow the pointer: far layers move least, he moves most, so the room has depth. */
+.hero-light { --px: 0; --py: 0; }
+.hero-stage { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; perspective: 700px; perspective-origin: 64% 30%; }
+.hero-stage__floor { position: absolute; left: -60%; right: -60%; bottom: -2%; height: 62%; transform-origin: 50% 100%;
+  transform: translateX(calc(var(--px) * -40px)) rotateX(76deg);
+  background-image: linear-gradient(rgb(31 92 220 / 0.22) 1.5px, transparent 1.5px), linear-gradient(90deg, rgb(31 92 220 / 0.22) 1.5px, transparent 1.5px);
+  background-size: 90px 90px; background-position: 50% 0;
+  -webkit-mask-image: linear-gradient(to top, #000 0%, rgb(0 0 0 / 0.55) 45%, transparent 92%); mask-image: linear-gradient(to top, #000 0%, rgb(0 0 0 / 0.55) 45%, transparent 92%);
+  animation: hs-floor 14s linear infinite, hh-fade 1.6s 0.2s both; }
+@keyframes hs-floor { to { background-position: 50% 90px; } }
+/* a soft pool of studio light on the floor where he stands */
+.hero-stage__pool { position: absolute; left: 64%; bottom: 0; width: min(54vw, 760px); height: 26%; translate: calc(-50% + var(--px) * -18px) 30%; border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(43 184 255 / 0.30), rgb(31 92 220 / 0.12) 55%, transparent); filter: blur(6px); animation: hh-fade 1.6s 0.6s both; }
+.hero-ring { translate: calc(var(--px) * -26px) calc(var(--py) * -16px); }
+@media (max-width: 1023px) {
+  .hero-stage { perspective-origin: 56% 55%; }
+  .hero-stage__floor { height: 40%; background-size: 56px 56px; }
+  .hero-stage__pool { left: 58%; bottom: 16%; width: 110vw; height: 18%; }
+}
+
+/* he melts into the floor below the knees instead of being cut at the edge, sits a step back in the room,
+   and every few seconds leans toward the viewer to invite them down */
+@property --hw-lean { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+.hero-walk__film {
+  --hw-depth: 1;
+  -webkit-mask-image: linear-gradient(to bottom, #000 74%, transparent 99%); mask-image: linear-gradient(to bottom, #000 74%, transparent 99%);
+  transform: perspective(1400px) translateX(calc(var(--px, 0) * 14px)) translateY(var(--hw-rise)) rotateX(calc(var(--hw-tx) + var(--hw-lean)))
+    rotateY(calc(var(--hw-sway) + var(--hw-ty) + var(--hw-turn))) scale(var(--hw-depth), calc(var(--hw-breathe) * var(--hw-depth)));
+}
+.hero-walk.is-idle .hero-walk__film { animation: hw-sway 7s ease-in-out infinite, hw-breathe 3.6s ease-in-out infinite, hw-lean 9s ease-in-out 2s infinite; }
+@keyframes hw-lean { 0%, 74%, 100% { --hw-lean: 0deg; } 82%, 88% { --hw-lean: 7deg; } }
+@media (prefers-reduced-motion: reduce) { .hero-stage__floor { animation: none; } }
+.hero-stage__pool { bottom: 3%; translate: calc(-50% + var(--px) * -18px) 0; height: 22%; background: radial-gradient(closest-side, rgb(43 184 255 / 0.38), rgb(31 92 220 / 0.14) 55%, transparent); }
+@media (max-width: 1023px) {
+  .hero-stage__floor { height: 50%; bottom: 0; }
+  .hero-stage__pool { left: 60%; bottom: 112px; width: 100vw; height: 90px; }
+}
+/* the pool of light sits in his own box, so it stays under his feet on every screen; drawn before the film so the blend sees it */
+.hero-walk__pool { position: absolute; left: 64%; bottom: 0; width: 62%; height: 26%; translate: -50% 18%; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgb(43 184 255 / 0.42), rgb(31 92 220 / 0.14) 55%, transparent); filter: blur(6px); }
+.hero-walk.is-idle .hero-walk__pool { animation: hw-pool 3.6s ease-in-out infinite; }
+@keyframes hw-pool { 50% { opacity: 0.75; scale: 0.94 1; } }
