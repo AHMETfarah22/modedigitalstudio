@@ -10,12 +10,16 @@ import { asset } from "@/lib/asset";
  * his walk-in film, mirrored so he faces the content; backwards when scrolling up). Each time it comes to
  * rest he turns in 3D and makes the next hand gesture: presenting the content, or pointing down with both
  * fingers under a bouncing arrow. When it moves again he turns back and walks on.
+ * On a long scroll he does not just walk: every couple of seconds of walking he stops for a gesture anyway.
  */
 const POSES = [
   { src: "/intro/pose-5.webp", w: 222, h: 495, act: "present" },
   { src: "/intro/pose-4.webp", w: 173, h: 490, act: "point" },
 ] as const;
-const STOP_MS = 380;
+const STOP_MS = 160; // smooth scrolling glides on after the wheel stops: count a slow glide as stopped
+const SLOW_PX = 2.5;
+const WALK_MS = 2200; // longest walk before he stops to gesture anyway
+const HOLD_MS = 1900; // how long that gesture holds while the page keeps scrolling
 const FRAMES = 25;
 const WALK = 8;
 const PX_PER_FRAME = 26;
@@ -44,6 +48,8 @@ export default function Gestures() {
     let movedAt = 0;
     let walked = 0;
     let shown = -1;
+    let walkFrom = 0;
+    let holdUntil = 0;
     let raf = 0;
 
     const draw = (n: number) => {
@@ -79,17 +85,23 @@ export default function Gestures() {
       const y = window.scrollY;
       const dy = y - lastY;
       lastY = y;
-      if (Math.abs(dy) > 0.5) movedAt = now;
+      if (Math.abs(dy) > SLOW_PX) movedAt = now;
       const moving = now - movedAt < STOP_MS;
       if (busy) return;
       if (!on) { if (pose < 0) show(0); return; }
-      if (moving && pose >= 0) turnTo(-1); // stop gesturing, turn side-on and walk
-      else if (moving) {
-        walked += dy / PX_PER_FRAME;
-        draw(((Math.floor(walked) % WALK) + WALK) % WALK);
-      } else if (pose < 0) {
+      const gesture = () => {
         turnTo(next);
         next = (next + 1) % POSES.length;
+      };
+      if (pose >= 0) {
+        // gesturing: walk on once the page moves again (after a forced pause has had its moment)
+        if (moving && now > holdUntil) { turnTo(-1); walkFrom = now + 490; }
+      } else if (moving) {
+        walked += dy / PX_PER_FRAME;
+        draw(((Math.floor(walked) % WALK) + WALK) % WALK);
+        if (now - walkFrom > WALK_MS) { holdUntil = now + HOLD_MS; gesture(); }
+      } else {
+        gesture();
       }
     };
     raf = requestAnimationFrame(loop);
