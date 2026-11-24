@@ -7,13 +7,13 @@ import { asset } from "@/lib/asset";
 /**
  * The host walks down the page in his own column, left of the cards (wide screens only, between the first
  * screen and the closing scene), so he never covers the content. His 3D film (public/intro/host-talk.webm:
- * background cut away, every frame scaled to the same size, no sound) is played in parts:
- * while the page scrolls he walks; each time it comes to rest he plays the next hand gesture toward the
- * cards on his right, then holds it until the page moves again.
+ * background cut away, every frame scaled to the same size, no sound) plays while the page scrolls:
+ * he walks and shows the cards on his right with his hands. When the page stops he stops too.
+ * He sits behind the route and the header, shaded like the page, so he is part of it, not stuck on top.
  * Safari cannot show a see-through WebM, so there he stands as a still.
  */
-const WALKS: [number, number][] = [[0.05, 1.2], [3.2, 4.3]];
-const GESTURES: [number, number][] = [[4.3, 6.6], [1.2, 3.2], [6.6, 8.25]];
+const FROM = 0.05; // the film runs from here to END, then starts again behind a short fade
+const END = 8.25;
 const STOP_MS = 180; // smooth scrolling glides on after the wheel stops: count a slow glide as stopped
 const SLOW_PX = 2;
 const W = 380;
@@ -41,27 +41,10 @@ export default function Gestures() {
     const closing = document.querySelector<HTMLElement>("[data-closing]");
 
     let on = false;
-    let mode: "walk" | "gesture" | "hold" = "hold";
-    let seg: [number, number] = WALKS[0];
-    let walkN = 0;
-    let gestN = 0;
     let lastY = window.scrollY;
     let movedAt = -1e9;
-    let gestureAt = 0;
+    let wrapping = false;
     let raf = 0;
-
-    // jump to a part of the film behind a very short fade, so the cut does not show
-    const start = (m: typeof mode, s: [number, number]) => {
-      if (!v) return;
-      mode = m;
-      seg = s;
-      b.classList.add("is-swap");
-      window.setTimeout(() => {
-        v.currentTime = s[0];
-        v.play().catch(() => {});
-        window.setTimeout(() => b.classList.remove("is-swap"), 60);
-      }, 110);
-    };
 
     const loop = (now: number) => {
       raf = requestAnimationFrame(loop);
@@ -70,28 +53,21 @@ export default function Gestures() {
       if (show !== on) {
         on = show;
         b.classList.toggle("is-on", on);
-        if (!on && v) { v.pause(); mode = "hold"; }
       }
       const y = window.scrollY;
       if (Math.abs(y - lastY) > SLOW_PX) movedAt = now;
       lastY = y;
-      if (!on || !v) return;
-      const moving = now - movedAt < STOP_MS;
-
-      if (moving) {
-        // walk on; a gesture that has only just begun is allowed to finish its first beat
-        if (mode !== "walk" && !(mode === "gesture" && now - gestureAt < 700)) {
-          start("walk", WALKS[walkN++ % WALKS.length]);
-        } else if (mode === "walk" && v.currentTime >= seg[1]) {
-          start("walk", WALKS[walkN++ % WALKS.length]);
-        }
-      } else if (mode === "walk") {
-        gestureAt = now;
-        start("gesture", GESTURES[gestN++ % GESTURES.length]);
-      }
-      if (mode === "gesture" && v.currentTime >= seg[1]) {
-        v.pause();
-        mode = "hold";
+      if (!v) return;
+      const moving = on && now - movedAt < STOP_MS;
+      if (moving && v.paused && !wrapping) v.play().catch(() => {});
+      if (!moving && !v.paused) v.pause();
+      if (!wrapping && v.currentTime >= END) {
+        wrapping = true;
+        b.classList.add("is-swap");
+        window.setTimeout(() => {
+          v.currentTime = FROM;
+          window.setTimeout(() => { b.classList.remove("is-swap"); wrapping = false; }, 80);
+        }, 110);
       }
     };
     raf = requestAnimationFrame(loop);
