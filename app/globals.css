@@ -611,27 +611,15 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
    No glow or outline: a soft contact shadow and the page's own light, so he stands in the page. */
 .gest { display: none; }
 @media (min-width: 768px) {
-  .gest { display: block; position: fixed; right: clamp(8px, 2vw, 40px); bottom: 0; z-index: 30; height: min(42vh, 400px); aspect-ratio: 1 / 2; pointer-events: none;
+  .gest { display: block; position: fixed; right: clamp(8px, 2vw, 40px); bottom: 0; z-index: 30; height: min(50vh, 460px); aspect-ratio: 392 / 680; pointer-events: none;
     perspective: 900px; opacity: 0; translate: 0 40%; transition: opacity 0.6s ease, translate 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
   .gest.is-on { opacity: 1; translate: 0 0; }
 }
-.gest__body { position: absolute; inset: 0; transform-origin: 60% 100%; transform-style: preserve-3d; }
-.gest__pose { position: absolute; bottom: 1.5%; height: 98.5%; width: auto; max-width: none; opacity: 0; transform-origin: 50% 100%;
-  transition: opacity 0.25s ease; filter: drop-shadow(0 6px 14px rgb(0 0 0 / 0.22)); }
-.gest__pose--walk { left: 20.2%; }
-.gest__pose--side { left: 31.4%; }
-.gest__pose--present { left: 0; }
-.gest__pose.is-on { opacity: 1; }
-/* walking: a step every half second, his body rising and settling and rocking from foot to foot */
-.gest__pose--walk.is-on { animation: gs-walk 0.56s ease-in-out infinite; }
-@keyframes gs-walk { 0%, 100% { transform: translateY(0) rotate(-1.2deg); } 25% { transform: translateY(-2.2%) rotate(0deg); } 50% { transform: translateY(0) rotate(1.2deg); } 75% { transform: translateY(-2.2%) rotate(0deg); } }
-.gest__pose--side.is-on { animation: gs-side 1.6s ease-in-out 0.3s infinite; }
-@keyframes gs-side { 0%, 100% { transform: none; } 50% { transform: translateX(2%) rotate(1deg); } }
-.gest__pose--present.is-on { animation: gs-present 2.6s ease-in-out 0.3s infinite; }
-@keyframes gs-present { 0%, 100% { transform: none; } 50% { transform: rotate(-1.6deg) translateX(-2%); } }
+/* his film: pinned to the bottom edge, legs running off it; a short fade between plays */
+.gest__film { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%;
+  transition: opacity 0.25s ease; filter: drop-shadow(0 8px 18px rgb(0 0 0 / 0.25)); }
+.gest.is-swap .gest__film { opacity: 0; }
 /* contact shadow on the floor under his feet */
 .gest__floor { position: absolute; left: 24%; right: 6%; bottom: -2%; height: 7%; border-radius: 50%;
   background: radial-gradient(closest-side, rgb(0 0 0 / 0.32), rgb(0 0 0 / 0.1) 60%, transparent); filter: blur(3px); }
-.gest[data-act="walk"] .gest__floor { animation: gs-step 0.28s ease-in-out infinite; }
-@keyframes gs-step { 50% { scale: 0.9 1; opacity: 0.8; } }
-@media (prefers-reduced-motion: reduce) { .gest { transition: opacity 0.4s; } .gest__pose.is-on, .gest__floor { animation: none !important; } }
+@media (prefers-reduced-motion: reduce) { .gest { transition: opacity 0.4s; } .gest__film { transition: none; } }
