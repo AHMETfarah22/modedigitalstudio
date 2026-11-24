@@ -597,3 +597,7 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
   background: radial-gradient(closest-side, rgb(43 184 255 / 0.42), rgb(31 92 220 / 0.14) 55%, transparent); filter: blur(6px); }
 .hero-walk.is-idle .hero-walk__pool { animation: hw-pool 3.6s ease-in-out infinite; }
 @keyframes hw-pool { 50% { opacity: 0.75; scale: 0.94 1; } }
+
+/* When the corner guide is off he is fully gone: slid out he used to leave one hand peeking at the right edge */
+.guide { visibility: hidden; transition: transform 1.6s cubic-bezier(0.25, 0.8, 0.3, 1), visibility 0s linear 1.6s; }
+.guide.is-on { visibility: visible; transition: transform 1.6s cubic-bezier(0.25, 0.8, 0.3, 1), visibility 0s; }

@@ -95,7 +95,7 @@ export default function Welcome() {
                 width={363}
                 height={521}
                 loading="lazy"
-                className="relative block w-full select-none"
+                className="relative block w-full select-none [mask-image:linear-gradient(to_bottom,#000_78%,transparent_99%)]"
                 draggable={false}
               />
             </div>
