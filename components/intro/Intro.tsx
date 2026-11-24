@@ -1,27 +1,43 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useExperience } from "@/lib/experience";
+import gsap from "gsap";
+import { hasWebGL, useExperience } from "@/lib/experience";
+import type { PortalProgress } from "@/components/three/PortalScene";
 import { asset } from "@/lib/asset";
 import { useLang } from "@/lib/i18n";
 
+const PortalScene = dynamic(() => import("@/components/three/PortalScene"), { ssr: false });
+
 /**
- * Opening: the welcome film, full screen, and nothing else.
- * When it ends, the overlay fades away and then the site's own opening animation starts.
- * "Enter studio" (or Esc) skips it; the film starts muted, with a sound button.
+ * Opening:
+ *  1. The welcome film, full screen, and nothing else.
+ *  2. Only once it has ended: the room dims, the blue 3D portal opens and the camera flies through.
+ *  3. A flash of light, and the site's own opening animation starts.
+ * "Enter studio" (or Esc) skips straight to the site; the film starts muted, with a sound button.
  */
 export default function Intro() {
-  const { phase, enter } = useExperience();
+  const { phase, enter, reducedMotion, lite } = useExperience();
   const { t } = useLang();
+  const root = useRef<HTMLDivElement>(null);
   const film = useRef<HTMLVideoElement>(null);
+  const progress = useRef<PortalProgress>({ p: 0 }).current;
+  const portalTl = useRef<gsap.core.Timeline | null>(null);
+  const [gl, setGl] = useState(false);
   const [closing, setClosing] = useState(false);
   const [done, setDone] = useState(false);
   const [muted, setMuted] = useState(true);
 
+  useEffect(() => {
+    if (phase === "intro") setGl(!reducedMotion && hasWebGL());
+  }, [phase, reducedMotion]);
+
+  // Fade the overlay away, then hand over to the site (its own opening animation starts on enter)
   const close = useCallback(() => {
     if (closing) return;
     setClosing(true);
-    // let the film fade out first, then hand over to the site
+    portalTl.current?.kill();
     window.setTimeout(() => {
       enter();
       setDone(true);
@@ -30,28 +46,50 @@ export default function Intro() {
   const closeRef = useRef(close);
   closeRef.current = close;
 
-  // Play the film and open the site when it ends. If it cannot play at all, do not keep the visitor waiting.
+  // The blue portal, played only after the film has finished
+  const portal = useCallback(() => {
+    const el = root.current;
+    if (!el || portalTl.current) return;
+    const q = gsap.utils.selector(el);
+    const tl = gsap.timeline();
+    portalTl.current = tl;
+    tl.to(q("[data-film]"), { scale: 1.08, filter: "blur(8px) brightness(1.08)", duration: 1, ease: "power2.in" }, 0)
+      .to(q("[data-film]"), { autoAlpha: 0, duration: 0.8, ease: "power2.in" }, 0.2)
+      .to(q("[data-night]"), { autoAlpha: 1, duration: 0.9, ease: "power2.inOut" }, 0.3);
+    if (gl) {
+      tl.to(q("[data-canvas]"), { autoAlpha: 1, duration: 0.6 }, 0.6)
+        .to(progress, { p: 1, duration: 3.6, ease: "power1.inOut" }, 0.6)
+        .to(q("[data-flash]"), { autoAlpha: 1, duration: 0.35, ease: "power2.in" }, 3.8)
+        .add(() => closeRef.current(), 4.15);
+    } else {
+      tl.add(() => closeRef.current(), 1.3);
+    }
+  }, [gl, progress]);
+  const portalRef = useRef(portal);
+  portalRef.current = portal;
+
+  // Play the film; when it ends, run the portal. If the film cannot play, do not keep the visitor waiting.
   useEffect(() => {
     if (phase !== "intro") return;
     const v = film.current;
     if (!v) return;
-    const close = () => closeRef.current();
-    const onEnd = () => close();
-    v.addEventListener("ended", onEnd);
-    v.addEventListener("error", onEnd);
+    const toPortal = () => portalRef.current();
+    v.addEventListener("ended", toPortal);
+    v.addEventListener("error", toPortal);
     v.play().catch(() => {});
     const stuck = window.setTimeout(() => {
-      if (v.paused && v.currentTime === 0) close();
+      if (v.paused && v.currentTime === 0) toPortal();
     }, 4000);
-    const cap = window.setTimeout(close, 16000);
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
+    const cap = window.setTimeout(() => closeRef.current(), 22000);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && closeRef.current();
     window.addEventListener("keydown", onKey);
     return () => {
-      v.removeEventListener("ended", onEnd);
-      v.removeEventListener("error", onEnd);
+      v.removeEventListener("ended", toPortal);
+      v.removeEventListener("error", toPortal);
       window.clearTimeout(stuck);
       window.clearTimeout(cap);
       window.removeEventListener("keydown", onKey);
+      portalTl.current?.kill();
     };
   }, [phase]);
 
@@ -60,6 +98,7 @@ export default function Intro() {
 
   return (
     <div
+      ref={root}
       data-intro-overlay
       role="dialog"
       aria-modal="true"
@@ -68,6 +107,7 @@ export default function Intro() {
     >
       <video
         ref={film}
+        data-film
         src={asset("/intro/welcome.mp4")}
         poster={asset("/intro/welcome.webp")}
         muted
@@ -77,7 +117,14 @@ export default function Intro() {
         className="intro-film absolute inset-0 size-full object-cover"
       />
 
-      <div className="absolute bottom-0 right-0 flex items-center gap-3 p-6 md:p-10">
+      {/* The portal: dark room, the blue 3D portal, and the flash at the end */}
+      <div data-night aria-hidden className="invisible absolute inset-0 z-[3] bg-night bg-[radial-gradient(60%_60%_at_50%_50%,#0a1733,#050b1e)]" />
+      <div data-canvas aria-hidden className="invisible absolute inset-0 z-[4]">
+        {gl && <PortalScene progress={progress} lite={lite} />}
+      </div>
+      <div data-flash aria-hidden className="invisible absolute inset-0 z-[5] bg-[radial-gradient(circle_at_50%_50%,#ffffff,#bfe8ff_35%,#050b1e_80%)]" />
+
+      <div className="absolute bottom-0 right-0 z-[6] flex items-center gap-3 p-6 md:p-10">
         <button
           type="button"
           onClick={() => {
@@ -85,7 +132,7 @@ export default function Intro() {
             if (!v) return;
             v.muted = !v.muted;
             setMuted(v.muted);
-            if (v.paused) v.play().catch(() => {});
+            if (v.paused && !v.ended) v.play().catch(() => {});
           }}
           aria-pressed={!muted}
           className="btn btn-sm border border-navy/20 bg-white/70 text-navy backdrop-blur hover:bg-white"
