@@ -46,6 +46,17 @@ export default function Welcome() {
         .from(split.words, { yPercent: 110, duration: 1, stagger: 0.07 }, 1.2)
         .from(q("[data-after] > *"), { y: 18, autoAlpha: 0, duration: 0.9, stagger: 0.1 }, 1.6);
 
+      // At the very end of the page he turns and walks out of the scene (scrolling back brings him back)
+      gsap.to(q("[data-exit]"), {
+        xPercent: -70,
+        rotationY: -40,
+        transformPerspective: 1200,
+        transformOrigin: "50% 100%",
+        autoAlpha: 0,
+        ease: "power1.in",
+        scrollTrigger: { trigger: q("[data-exit]")[0], start: "bottom bottom", end: () => ScrollTrigger.maxScroll(window), scrub: 0.8, invalidateOnRefresh: true },
+      });
+
       // Idle life, always running once he is on screen
       gsap.to(q("[data-breathe]"), { y: -6, scaleY: 1.006, duration: 2.6, ease: "sine.inOut", yoyo: true, repeat: -1, transformOrigin: "50% 100%" });
       gsap.to(q("[data-orb]"), { y: -14, duration: 1.8, ease: "sine.inOut", yoyo: true, repeat: -1 });
@@ -82,9 +93,9 @@ export default function Welcome() {
   );
 
   return (
-    <div ref={root} className="grid items-end gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-10">
+    <div ref={root} data-closing className="grid items-end gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-10">
       {/* Host */}
-      <div className="relative order-2 mx-auto w-full max-w-[460px] lg:order-1 lg:mx-0">
+      <div data-exit className="relative order-2 mx-auto w-full max-w-[460px] lg:order-1 lg:mx-0">
         <div data-halo aria-hidden className="absolute left-[8%] top-[6%] aspect-square w-[84%] rounded-full border-[10px] border-ring/25 shadow-[0_0_120px_rgba(43,184,255,0.35),inset_0_0_80px_rgba(43,184,255,0.18)]" />
         <div data-host className="relative">
           <div data-lean style={{ transformOrigin: "50% 100%" }}>

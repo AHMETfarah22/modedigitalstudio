@@ -11,7 +11,7 @@ import Footer from "@/components/home/Footer";
 import Cursor from "@/components/ui/Cursor";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import ScrollJourney from "@/components/ui/ScrollJourney";
-import Guide from "@/components/ui/Guide";
+import Walker from "@/components/ui/Walker";
 
 export default function Home() {
   return (
@@ -25,6 +25,7 @@ export default function Home() {
       </a>
       <Intro />
       <Header />
+      <Walker />
       <main className="relative z-[1]">
         <Hero />
         <Work />
@@ -34,7 +35,6 @@ export default function Home() {
       </main>
       <Footer />
       <ScrollJourney />
-      <Guide />
       <Cursor />
       <SmoothScroll />
     </ExperienceProvider>
