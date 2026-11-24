@@ -34,7 +34,7 @@ export default function Documents() {
   return (
     <section id="documents" aria-labelledby="docs-title" className="py-[clamp(6rem,12vw,10rem)]">
       <div className="wrap">
-        <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-6 md:grid-cols-[1fr_auto] md:items-end">
           <Reveal id="docs-title" className="max-w-[16ch] text-[clamp(2.2rem,5.4vw,4.75rem)] font-bold">
             {t("Presentations and project documents.", "Sunumlar ve proje belgeleri.")}
           </Reveal>

@@ -128,11 +128,11 @@ export default function SiteCard({
       </div>
 
       <div className="mt-4 flex items-baseline justify-between gap-4">
-        <h3 className="flex min-w-0 items-baseline gap-2.5">
-          <button type="button" onClick={onOpen} className="truncate font-display text-lg font-bold leading-tight hover:text-ring">
+        <h3 className="flex min-w-0 flex-wrap items-baseline gap-x-2.5 gap-y-0.5 md:flex-nowrap">
+          <button type="button" onClick={onOpen} className="text-left font-display md:truncate text-lg font-bold leading-tight hover:text-ring">
             {p.name}
           </button>
-          <span className="truncate text-sm text-mute/80">
+          <span className="min-w-0 truncate text-sm text-mute/80">
             {p.liveUrl ? hostOf(p.liveUrl).replace(/\/.*$/, "") : p.demoUrl ? t("Concept site", "Konsept site") : p.author ? t(`by ${p.author}`, p.author) : ""}
           </span>
         </h3>
@@ -149,7 +149,7 @@ export default function SiteCard({
           </span>
         )}
       </div>
-      <p className="mt-1.5 truncate text-[0.95rem] text-mute">{(lang === "tr" && p.summaryTr) || p.summary}</p>
+      <p className="mt-1.5 text-[0.95rem] text-mute md:truncate">{(lang === "tr" && p.summaryTr) || p.summary}</p>
     </article>
   );
 }

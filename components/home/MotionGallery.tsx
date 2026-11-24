@@ -158,13 +158,13 @@ function VideoCard({ video: v, onPlay, lang }: { video: VideoItem; onPlay: () =>
         )}
       </div>
 
-      <div className="mt-4 flex min-w-0 items-baseline gap-2.5">
-        <h3 className="min-w-0 truncate">
-          <button type="button" onClick={onPlay} className="truncate font-display text-lg font-bold leading-tight hover:text-ring">
+      <div className="mt-4 flex min-w-0 flex-wrap items-baseline gap-x-2.5 gap-y-0.5 md:flex-nowrap">
+        <h3 className="min-w-0 md:truncate">
+          <button type="button" onClick={onPlay} className="text-left font-display md:truncate text-lg font-bold leading-tight hover:text-ring">
             {tx.title}
           </button>
         </h3>
-        {tx.note && <span className="truncate text-sm text-mute/80">{tx.note}</span>}
+        {tx.note && <span className="min-w-0 truncate text-sm text-mute/80">{tx.note}</span>}
       </div>
     </article>
   );

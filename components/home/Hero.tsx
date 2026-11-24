@@ -105,7 +105,7 @@ export default function Hero() {
         </div>
       )}
 
-      <div data-hero-in className="wrap invisible relative z-[2] flex flex-1 flex-col justify-center pb-10 pt-32">
+      <div data-hero-in className="wrap invisible relative z-[2] order-1 flex flex-1 flex-col justify-center pb-10 pt-28 max-lg:flex-none max-lg:pb-2 lg:pt-32">
         <div data-hero-copy>
           <h1 key={lang} data-hero-title className="relative font-display text-[clamp(2.4rem,8.6vw,4.2rem)] font-extrabold leading-[1.08] tracking-[-0.04em] lg:text-[clamp(3rem,4.9vw,5.4rem)]">
             <span data-caret aria-hidden className="type-caret" />
@@ -134,7 +134,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <div data-hero-foot data-hero-in className="wrap invisible relative z-[2] pb-8">
+      <div data-hero-foot data-hero-in className="wrap invisible relative z-[2] order-3 pb-8">
         <div className="flex flex-col gap-4 border-t border-line pt-6 text-sm text-mute md:flex-row md:items-center md:justify-between">
           <p>{t("Live now", "Şu an yayında")}</p>
           <ul className="flex flex-wrap gap-x-8 gap-y-3">

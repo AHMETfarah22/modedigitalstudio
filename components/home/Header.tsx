@@ -38,10 +38,10 @@ export default function Header() {
         solid || open ? "border-b border-line bg-night/75 backdrop-blur-xl" : "header-light border-b border-transparent"
       }`}
     >
-      <div className="wrap flex h-[72px] items-center justify-between gap-6">
-        <a href="#top" className="flex items-center gap-3" aria-label={t("Mode Digital Studio, back to top", "Mode Digital Studio, başa dön")}>
-          <Mark className="h-9 w-auto text-ink" />
-          <span className="whitespace-nowrap font-display text-[0.85rem] font-bold tracking-[0.04em] sm:text-[0.95rem]">
+      <div className="wrap flex h-[72px] items-center justify-between gap-3 sm:gap-6">
+        <a href="#top" className="flex min-w-0 items-center gap-2 sm:gap-3" aria-label={t("Mode Digital Studio, back to top", "Mode Digital Studio, başa dön")}>
+          <Mark className="h-8 w-auto shrink-0 text-ink sm:h-9" />
+          <span className="whitespace-nowrap font-display text-[0.85rem] font-bold tracking-[0.04em] max-[359px]:hidden max-sm:text-[0.78rem] sm:text-[0.95rem]">
             DIGITAL STUDIO
           </span>
         </a>
@@ -54,7 +54,7 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <LangSwitch />
           <span className="hidden sm:block">
             <Magnetic>

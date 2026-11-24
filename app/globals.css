@@ -516,3 +516,13 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 .hero-walk__film { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; }
 .hero-walk__bubble { z-index: 1; right: auto !important; left: 20%; top: 62% !important; animation-delay: 2.9s !important; }
 @media (max-width: 1023px) { .hero-walk { width: 150vw; right: -28vw; } .hero-walk__bubble { display: none; } }
+
+/* Phones and tablets: nothing covers the page.
+   The first-screen host stands in the flow between the buttons and the "Live now" list instead of over them,
+   and the corner guide stays off small screens, where he would sit on top of text and cards. */
+@media (max-width: 1023px) {
+  .hero-walk { position: relative; right: auto; bottom: auto; order: 2; flex: none; width: 130vw; margin: -8vw 0 0 -23vw; }
+}
+@media (max-width: 767px) {
+  .guide { display: none !important; }
+}
