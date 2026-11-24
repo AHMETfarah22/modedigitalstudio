@@ -93,13 +93,18 @@ export default function Intro() {
         // however long it took to load, then hold its last frame for a beat before moving on.
         .addPause(HIT + 4.0, () => {
           const v = film.current;
-          const go = () => gsap.delayedCall(0.6, () => t.play());
+          const go = () =>
+            gsap
+              .timeline()
+              .set(q("[data-clean]"), { autoAlpha: 1, "--wipe": "46%" })
+              .to(q("[data-clean]"), { "--wipe": "115%", duration: 1.3, ease: "power1.inOut" })
+              .call(() => { t.play(); }, [], "+=0.45");
           if (!v || v.ended || v.error) go();
           else v.addEventListener("ended", go, { once: true });
         })
         .addLabel("portal", HIT + 4.01);
       // safety net: if the film never plays (blocked, offline), carry on anyway
-      gsap.delayedCall(11, () => { if (t.paused()) t.play(); });
+      gsap.delayedCall(12, () => { if (t.paused()) t.play(); });
 
       if (!gl) {
         // No WebGL: the mark expands past the screen instead of the 3D portal.
@@ -111,7 +116,7 @@ export default function Intro() {
       }
 
       // the film drifts back and softens, then the room dims into the portal
-      t.to(q("[data-film]"), { scale: 1.08, filter: "blur(8px) brightness(1.08)", duration: 1.1, ease: "power2.in" }, "portal")
+      t.to(q("[data-film], [data-clean]"), { scale: 1.08, filter: "blur(8px) brightness(1.08)", duration: 1.1, ease: "power2.in" }, "portal")
         .to(q("[data-stage]"), { autoAlpha: 0, duration: 0.9, ease: "power2.in" }, "portal+=0.2")
         .to(q("[data-night]"), { autoAlpha: 1, duration: 0.9, ease: "power2.inOut" }, "portal+=0.3")
         .to(q("[data-bar-wrap]"), { autoAlpha: 0, duration: 0.4 }, "portal")
@@ -162,6 +167,15 @@ export default function Intro() {
           preload="auto"
           aria-label={t("The studio host walks in and welcomes you to Mode Digital Studio", "Stüdyo sunucusu içeri girip sizi Mode Digital Studio'ya davet ediyor")}
           className="intro-film invisible absolute inset-0 size-full object-cover"
+        />
+        {/* the film ends before its title has finished dissolving: this clean wall, laid exactly
+            over the last frame, wipes the rest of the letters away from left to right */}
+        <img
+          data-clean
+          src={asset("/intro/welcome-clean.webp")}
+          alt=""
+          aria-hidden
+          className="intro-film intro-clean invisible absolute inset-0 size-full object-cover"
         />
         {/* soft light and a gentle fade at the bottom */}
         <div aria-hidden className="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_0%,transparent_55%,rgba(10,23,51,0.10)),linear-gradient(to_top,rgba(238,242,250,0.92),rgba(238,242,250,0)_34%)]" />
