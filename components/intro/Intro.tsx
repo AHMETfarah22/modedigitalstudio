@@ -15,7 +15,8 @@ const PortalScene = dynamic(() => import("@/components/three/PortalScene"), { ss
  *  1. The welcome film, full screen, and nothing else.
  *  2. Only once it has ended: the room dims, the blue 3D portal opens and the camera flies through.
  *  3. A flash of light, and the site's own opening animation starts.
- * "Enter studio" (or Esc) skips straight to the site; the film starts muted, with a sound button.
+ * No buttons: the film plays with sound. Browsers refuse sound before the visitor has touched the page,
+ * so if it is refused the film plays muted and the sound comes on at the first tap, click or key. Esc skips.
  */
 export default function Intro() {
   const { phase, enter, reducedMotion, lite } = useExperience();
@@ -27,7 +28,6 @@ export default function Intro() {
   const [gl, setGl] = useState(false);
   const [closing, setClosing] = useState(false);
   const [done, setDone] = useState(false);
-  const [muted, setMuted] = useState(true);
 
   useEffect(() => {
     if (phase === "intro") setGl(!reducedMotion && hasWebGL());
@@ -76,7 +76,19 @@ export default function Intro() {
     const toPortal = () => portalRef.current();
     v.addEventListener("ended", toPortal);
     v.addEventListener("error", toPortal);
-    v.play().catch(() => {});
+    // sound on; if the browser refuses, play muted and turn the sound on at the first touch, click or key
+    const unmute = () => {
+      v.muted = false;
+      if (v.paused && !v.ended) v.play().catch(() => {});
+      off();
+    };
+    const off = () => ["pointerdown", "touchstart", "keydown"].forEach((ev) => window.removeEventListener(ev, unmute));
+    v.muted = false;
+    v.play().catch(() => {
+      v.muted = true;
+      v.play().catch(() => {});
+      ["pointerdown", "touchstart", "keydown"].forEach((ev) => window.addEventListener(ev, unmute, { passive: true }));
+    });
     const stuck = window.setTimeout(() => {
       if (v.paused && v.currentTime === 0) toPortal();
     }, 4000);
@@ -89,6 +101,7 @@ export default function Intro() {
       window.clearTimeout(stuck);
       window.clearTimeout(cap);
       window.removeEventListener("keydown", onKey);
+      off();
       portalTl.current?.kill();
     };
   }, [phase]);
@@ -100,8 +113,7 @@ export default function Intro() {
     <div
       ref={root}
       data-intro-overlay
-      role="dialog"
-      aria-modal="true"
+      role="region"
       aria-label={t("Welcome to Mode Digital Studio", "Mode Digital Studio'ya hoş geldiniz")}
       className={`fixed inset-0 z-[70] overflow-hidden bg-[#e9e8e6] transition-opacity duration-[600ms] ${closing ? "pointer-events-none opacity-0" : "opacity-100"}`}
     >
@@ -124,35 +136,6 @@ export default function Intro() {
       </div>
       <div data-flash aria-hidden className="invisible absolute inset-0 z-[5] bg-[radial-gradient(circle_at_50%_50%,#ffffff,#bfe8ff_35%,#050b1e_80%)]" />
 
-      <div className="absolute bottom-0 right-0 z-[6] flex items-center gap-3 p-6 md:p-10">
-        <button
-          type="button"
-          onClick={() => {
-            const v = film.current;
-            if (!v) return;
-            v.muted = !v.muted;
-            setMuted(v.muted);
-            if (v.paused && !v.ended) v.play().catch(() => {});
-          }}
-          aria-pressed={!muted}
-          className="btn btn-sm border border-navy/20 bg-white/70 text-navy backdrop-blur hover:bg-white"
-        >
-          <svg viewBox="0 0 24 24" aria-hidden className="size-4 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 9v6h4l5 4V5L8 9z" />
-            {muted ? <path d="M16 9l5 6M21 9l-5 6" /> : <path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" />}
-          </svg>
-          {muted ? t("Sound on", "Sesi aç") : t("Sound off", "Sesi kapat")}
-        </button>
-        <button
-          type="button"
-          autoFocus
-          onClick={close}
-          className="btn bg-navy text-ink shadow-[0_10px_40px_-10px_rgba(10,23,51,0.6)] hover:bg-signal"
-        >
-          {t("Enter studio", "Stüdyoya gir")}
-          <span aria-hidden className="inline-block size-2 rounded-full bg-sun" />
-        </button>
-      </div>
     </div>
   );
 }
