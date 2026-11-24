@@ -601,3 +601,19 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 /* When the corner guide is off he is fully gone: slid out he used to leave one hand peeking at the right edge */
 .guide { visibility: hidden; transition: transform 1.6s cubic-bezier(0.25, 0.8, 0.3, 1), visibility 0s linear 1.6s; }
 .guide.is-on { visibility: visible; transition: transform 1.6s cubic-bezier(0.25, 0.8, 0.3, 1), visibility 0s; }
+
+/* Welcome film on tall screens: show the whole frame (the host AND the "Welcome to Mode Digital Studio" title
+   on its right), centred on the film's own grey, instead of cropping to a giant half of him */
+@media (max-aspect-ratio: 1/1) {
+  .intro-film { inset: auto !important; left: 50% !important; top: 44% !important; width: 116vw !important; height: auto !important; aspect-ratio: 16 / 9;
+    translate: -50% -50%; object-fit: cover;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent), linear-gradient(to right, transparent 5%, #000 11%, #000 92%, transparent 97%);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent), linear-gradient(to right, transparent 5%, #000 11%, #000 92%, transparent 97%);
+    mask-composite: intersect; }
+}
+/* first screen on phones: the host a size larger */
+@media (max-width: 767px) {
+  .hero-walk { width: 165vw; margin: -12vw 0 0 -47vw; }
+  .hero-walk__cue { left: 36%; top: 22%; }
+}
