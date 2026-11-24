@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -18,13 +18,6 @@ export default function Hero() {
   const { phase, reducedMotion } = useExperience();
   const root = useRef<HTMLElement>(null);
   const { t, lang } = useLang();
-  // He switches between presenting with both hands and pointing down to the work
-  const [pose, setPose] = useState(0);
-  useEffect(() => {
-    if (phase !== "entered" || reducedMotion) return;
-    const id = window.setInterval(() => setPose((p) => 1 - p), 5200);
-    return () => window.clearInterval(id);
-  }, [phase, reducedMotion]);
 
   useGSAP(
     () => {
@@ -95,14 +88,20 @@ export default function Hero() {
       <div aria-hidden className="hero-ring" />
       <div aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-5 bg-gradient-to-b from-transparent to-night/40" />
 
-      {/* The host stands in the right half and presents the page with both hands */}
+      {/* The host walks into the right half and presents the heading. His film has a pure white
+          background and is multiplied onto the page, so he walks on the page itself, with no box. */}
       {phase === "entered" && (
-        <div aria-hidden className="hero-host">
-          <span className="hero-host__bubble">{t("Scroll down to see our work", "Aşağı kaydırın, işlerimizi görün")}</span>
-          <span className="hero-host__fig">
-            <img key={`p${pose}`} className={`hero-host__pose pose-${pose}`} src={asset(pose ? "/intro/pose-4.webp" : "/intro/pose-5.webp")} alt="" width={pose ? 173 : 222} height={pose ? 490 : 495} draggable={false} />
-          </span>
-          <span className="hero-host__floor" />
+        <div aria-hidden className="hero-walk">
+          <video
+            className="hero-walk__film"
+            src={asset("/intro/host-walk.mp4")}
+            poster={asset("/intro/host-walk-end.webp")}
+            muted
+            playsInline
+            autoPlay={!reducedMotion}
+            preload="auto"
+          />
+          <span className="hero-host__bubble hero-walk__bubble">{t("Scroll down to see our work", "Aşağı kaydırın, işlerimizi görün")}</span>
         </div>
       )}
 
