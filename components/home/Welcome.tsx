@@ -82,7 +82,7 @@ export default function Welcome() {
   );
 
   return (
-    <div ref={root} className="grid items-end gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-10">
+    <div ref={root} data-closing className="grid items-end gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-10">
       {/* Host */}
       <div className="relative order-2 mx-auto w-full max-w-[460px] lg:order-1 lg:mx-0">
         <div data-halo aria-hidden className="absolute left-[8%] top-[6%] aspect-square w-[84%] rounded-full border-[10px] border-ring/25 shadow-[0_0_120px_rgba(43,184,255,0.35),inset_0_0_80px_rgba(43,184,255,0.18)]" />

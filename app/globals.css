@@ -617,3 +617,30 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
   .hero-walk { width: 165vw; margin: -12vw 0 0 -47vw; }
   .hero-walk__cue { left: 36%; top: 22%; }
 }
+
+/* Gesturing host: bottom-right corner, computers only, between the first screen and the closing scene */
+.gest { display: none; }
+@media (min-width: 768px) {
+  .gest { display: block; position: fixed; right: clamp(8px, 2vw, 40px); bottom: 0; z-index: 30; height: min(42vh, 400px); aspect-ratio: 1 / 2; pointer-events: none;
+    perspective: 900px; opacity: 0; translate: 0 40%; transition: opacity 0.6s ease, translate 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .gest.is-on { opacity: 1; translate: 0 0; }
+}
+.gest__body { position: absolute; inset: 0; transform-origin: 61% 100%; transform-style: preserve-3d; }
+.gest__pose { position: absolute; bottom: 0; height: 100%; width: auto; max-width: none; opacity: 0; transform-origin: 50% 100%;
+  filter: drop-shadow(0 0 1px rgb(170 210 255 / 0.5)) drop-shadow(8px 0 22px rgb(43 184 255 / 0.22)) drop-shadow(0 18px 20px rgb(0 0 0 / 0.5)); }
+.gest__pose--present { left: 0; }
+.gest__pose--point { left: 25.7%; }
+.gest__pose.is-on { opacity: 1; }
+.gest__pose--present.is-on { animation: gs-present 2.6s ease-in-out 0.3s infinite; }
+@keyframes gs-present { 0%, 100% { transform: none; } 50% { transform: rotate(-1.6deg) translateX(-2%); } }
+.gest__pose--point.is-on { animation: gs-point 1.3s ease-in-out 0.3s infinite; }
+@keyframes gs-point { 0%, 100% { transform: none; } 50% { transform: translateY(1.6%) scale(1.01, 0.99); } }
+.gest__floor { position: absolute; left: 10%; right: 0; bottom: -5%; height: 14%; border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(43 184 255 / 0.32), rgb(31 92 220 / 0.1) 60%, transparent); filter: blur(4px); }
+/* a bouncing arrow sign over his head while he points down */
+.gest::after { content: ""; position: absolute; left: 61%; top: -14%; width: 40px; height: 40px; margin-left: -20px; border-radius: 999px; opacity: 0; scale: 0.4;
+  background: #ffd166 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a1733' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 5v14M6 13l6 6 6-6'/%3E%3C/svg%3E") center / 22px no-repeat;
+  box-shadow: 0 0 0 6px rgb(255 209 102 / 0.22), 0 10px 26px -6px rgb(0 0 0 / 0.6); transition: opacity 0.3s, scale 0.45s cubic-bezier(0.3, 1.6, 0.5, 1); }
+.gest[data-act="point"]::after { opacity: 1; scale: 1; animation: gs-sign 1.3s ease-in-out 0.4s infinite; }
+@keyframes gs-sign { 50% { translate: 0 8px; } }
+@media (prefers-reduced-motion: reduce) { .gest { transition: opacity 0.4s; } .gest__pose.is-on, .gest::after { animation: none !important; } }
