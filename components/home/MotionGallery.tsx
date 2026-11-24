@@ -24,7 +24,7 @@ export default function MotionGallery() {
   const count = (f: Filter) => (f === "all" ? VIDEOS.length : VIDEOS.filter((v) => v.chapter === f).length);
 
   return (
-    <section id="motion" aria-labelledby="motion-title" className="relative overflow-hidden bg-navy/75 py-[clamp(6rem,12vw,10rem)]">
+    <section id="motion" aria-labelledby="motion-title" className="relative overflow-hidden bg-navy py-[clamp(6rem,12vw,10rem)]">
       <div aria-hidden className="glow-ring pointer-events-none absolute -right-[20%] -top-[30%] size-[70vw]" />
       <div className="wrap relative">
         <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
