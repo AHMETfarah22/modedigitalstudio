@@ -51,6 +51,8 @@ export default function Intro() {
         ease: "power2.out",
         onComplete: () => setDone(true),
       });
+      // make sure the overlay (and its 3D portal) is really removed even if that fade is cut short
+      window.setTimeout(() => setDone(true), fast ? 700 : 1100);
     },
     [closing, enter],
   );
@@ -87,7 +89,17 @@ export default function Intro() {
       t.fromTo(q("[data-film]"), { autoAlpha: 0, scale: 1.04 }, { autoAlpha: 1, scale: 1, duration: 1, ease: "power2.out" }, HIT)
         .call(() => { film.current?.play().catch(() => {}); }, [], HIT)
         .to(q("[data-bar]"), { scaleX: 1, duration: HIT + 4.4, ease: "none" }, 0)
-        .addLabel("portal", HIT + 4.4);
+        // Wait here until the film has really finished (its "Welcome" has fully dissolved),
+        // however long it took to load, then hold its last frame for a beat before moving on.
+        .addPause(HIT + 4.0, () => {
+          const v = film.current;
+          const go = () => gsap.delayedCall(0.6, () => t.play());
+          if (!v || v.ended || v.error) go();
+          else v.addEventListener("ended", go, { once: true });
+        })
+        .addLabel("portal", HIT + 4.01);
+      // safety net: if the film never plays (blocked, offline), carry on anyway
+      gsap.delayedCall(11, () => { if (t.paused()) t.play(); });
 
       if (!gl) {
         // No WebGL: the mark expands past the screen instead of the 3D portal.
@@ -98,13 +110,15 @@ export default function Intro() {
         return;
       }
 
-      t.to(q("[data-stage]"), { autoAlpha: 0, scale: 0.96, filter: "blur(6px)", duration: 0.7, ease: "power2.in" }, "portal")
-        .to(q("[data-night]"), { autoAlpha: 1, duration: 0.8, ease: "power2.inOut" }, "portal")
+      // the film drifts back and softens, then the room dims into the portal
+      t.to(q("[data-film]"), { scale: 1.08, filter: "blur(8px) brightness(1.08)", duration: 1.1, ease: "power2.in" }, "portal")
+        .to(q("[data-stage]"), { autoAlpha: 0, duration: 0.9, ease: "power2.in" }, "portal+=0.2")
+        .to(q("[data-night]"), { autoAlpha: 1, duration: 0.9, ease: "power2.inOut" }, "portal+=0.3")
         .to(q("[data-bar-wrap]"), { autoAlpha: 0, duration: 0.4 }, "portal")
-        .to(q("[data-canvas]"), { autoAlpha: 1, duration: 0.6 }, "portal+=0.35")
-        .to(progress, { p: 1, duration: 3.6, ease: "power1.inOut" }, "portal+=0.35")
-        .to(q("[data-flash]"), { autoAlpha: 1, duration: 0.35, ease: "power2.in" }, "portal+=3.55")
-        .add(() => close(), "portal+=3.9");
+        .to(q("[data-canvas]"), { autoAlpha: 1, duration: 0.6 }, "portal+=0.6")
+        .to(progress, { p: 1, duration: 3.6, ease: "power1.inOut" }, "portal+=0.6")
+        .to(q("[data-flash]"), { autoAlpha: 1, duration: 0.35, ease: "power2.in" }, "portal+=3.8")
+        .add(() => close(), "portal+=4.15");
 
     },
     { scope: root, dependencies: [phase, gl, reducedMotion], revertOnUpdate: true },

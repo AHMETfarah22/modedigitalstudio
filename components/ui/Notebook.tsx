@@ -207,7 +207,7 @@ export default function Notebook({
 
         {/* Page corners: click to turn */}
         {turned < maxTurn && (
-          <button type="button" tabIndex={-1} aria-hidden onClick={next} className="nb-corner nb-corner-next" data-cursor="Next" />
+          <button type="button" tabIndex={-1} aria-hidden onClick={next} className="nb-corner nb-corner-next" data-cursor={t("Next", "İleri")} />
         )}
         {turned > 0 && (
           <button type="button" tabIndex={-1} aria-hidden onClick={prev} className="nb-corner nb-corner-prev" data-cursor={t("Back", "Geri")} style={spread ? undefined : { display: "none" }} />
