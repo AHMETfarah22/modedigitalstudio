@@ -644,3 +644,12 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 .gest[data-act="point"]::after { opacity: 1; scale: 1; animation: gs-sign 1.3s ease-in-out 0.4s infinite; }
 @keyframes gs-sign { 50% { translate: 0 8px; } }
 @media (prefers-reduced-motion: reduce) { .gest { transition: opacity 0.4s; } .gest__pose.is-on, .gest::after { animation: none !important; } }
+/* his walk: the side-on sprite, mirrored to face the content, lined up with the poses (head at the top, body at 61%);
+   the film ends at his shins, so they fade into the floor glow */
+.gest__walk { position: absolute; top: 0; left: 16.2%; width: 128%; height: 100%; opacity: 0;
+  background-repeat: no-repeat; background-size: 2500% 100%; background-position: 0 0; transform: translateY(-20%) scale(-0.94, 0.94);
+  filter: drop-shadow(0 0 1px rgb(170 210 255 / 0.5)) drop-shadow(-8px 0 22px rgb(43 184 255 / 0.22));
+  -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 99%); mask-image: linear-gradient(to bottom, #000 80%, transparent 99%); }
+.gest__walk.is-on { opacity: 1; }
+.gest[data-act="walk"] .gest__floor { animation: gs-step 0.5s ease-in-out infinite; }
+@keyframes gs-step { 50% { scale: 0.9 1; opacity: 0.75; } }
