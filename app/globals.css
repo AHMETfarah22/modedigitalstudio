@@ -504,3 +504,7 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 .orb-name { display: grid; justify-items: center; line-height: 1.05; color: var(--color-ink); font-family: var(--font-display, inherit); font-weight: 700; letter-spacing: 0.06em; text-align: center; }
 .orb-name b { font-size: 21cqw; font-weight: 800; letter-spacing: 0.02em; }
 .orb-name span { font-size: 10cqw; color: var(--color-ring); }
+
+/* Welcome film: the host stays in frame on any screen shape */
+.intro-film { object-position: 50% 50%; }
+@media (max-aspect-ratio: 4/3) { .intro-film { object-position: 30% 50%; } }

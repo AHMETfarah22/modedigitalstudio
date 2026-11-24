@@ -19,10 +19,10 @@ const PortalScene = dynamic(() => import("@/components/three/PortalScene"), { ss
 
 /**
  * Opening sequence:
- *  1. Porcelain stage. A small glowing gyroscope appears in the top-left corner and travels to the centre.
- *  2. "WELCOME TO" and "MODE DIGITAL STUDIO" reveal; the presenter steps in from the side.
- *  3. The room goes dark, the mark becomes a 3D portal, it opens and the camera flies through.
- * "Enter studio" (or Esc) skips at any point. Plays once per tab.
+ *  1. Porcelain stage. Four glowing orbs fly in from the four sides, collide and burst.
+ *  2. In the flash the welcome film starts: the host walks in and welcomes the visitor;
+ *  3. The room goes dark, a 3D portal opens and the camera flies through to the site.
+ * "Enter studio" (or Esc) skips at any point; the film starts muted with a sound button.
  */
 export default function Intro() {
   const { phase, enter, reducedMotion, lite } = useExperience();
@@ -33,6 +33,8 @@ export default function Intro() {
   const [gl, setGl] = useState(false);
   const [closing, setClosing] = useState(false);
   const [done, setDone] = useState(false);
+  const film = useRef<HTMLVideoElement>(null);
+  const [muted, setMuted] = useState(true);
 
   useEffect(() => {
     if (phase === "intro") setGl(!reducedMotion && hasWebGL());
@@ -65,8 +67,6 @@ export default function Intro() {
     () => {
       if (phase !== "intro") return;
       const q = gsap.utils.selector(root);
-      const welcome = new SplitText(q("[data-welcome]"), { type: "chars", mask: "chars" });
-      const title = new SplitText(q("[data-title]"), { type: "lines,chars", mask: "lines" });
 
       const t = gsap.timeline({ defaults: { ease: "expo.out" } });
       tl.current = t;
@@ -76,7 +76,7 @@ export default function Intro() {
       if (process.env.NODE_ENV !== "production") (window as unknown as { __introTl?: gsap.core.Timeline }).__introTl = t;
 
       if (reducedMotion) {
-        t.set([q("[data-orb]"), q("[data-presenter]"), q("[data-line]")], { autoAlpha: 1 })
+        t.set(q("[data-film]"), { autoAlpha: 1 })
           .from(q("[data-stage]"), { autoAlpha: 0, duration: 0.6 })
           .to({}, { duration: 2.4 })
           .add(() => close());
@@ -115,40 +115,30 @@ export default function Intro() {
         )
         .fromTo(root.current, { x: 0, y: 0 }, { x: () => (Math.random() - 0.5) * 18, y: () => (Math.random() - 0.5) * 14, duration: 0.05, repeat: 7, yoyo: true, ease: "none", clearProps: "x,y" }, HIT)
         .fromTo(q("[data-orb]"), { scale: 0.5 }, { scale: 1.6, duration: 0.25, ease: "back.out(3)" }, HIT)
-        .to(q("[data-orb]"), { scale: 3.4, autoAlpha: 0.32, duration: 1.3, ease: "power2.inOut" }, HIT + 0.3)
-        .from(welcome.chars, { yPercent: 115, duration: 0.9, stagger: 0.035 }, HIT + 0.45)
-        .from(title.chars, { yPercent: 120, rotateX: -70, transformOrigin: "50% 100%", duration: 1.1, stagger: 0.028 }, HIT + 0.7)
-        // a wave of light runs through the letters once
-        .to(title.chars, { color: "#2bb8ff", duration: 0.25, stagger: 0.03, yoyo: true, repeat: 1, ease: "sine.inOut" }, 3.1)
-        .from(q("[data-presenter]"), { xPercent: -28, autoAlpha: 0, duration: 1.4, ease: "power3.out" }, 2.3)
-        .from(q("[data-floor]"), { scaleX: 0.2, autoAlpha: 0, duration: 1.2, ease: "power2.out" }, 2.5)
-        .to(q("[data-breathe]"), { y: -5, scaleY: 1.006, duration: 1.6, ease: "sine.inOut", yoyo: true, repeat: 1 }, 3.4)
-        .from(q("[data-line]"), { y: 16, autoAlpha: 0, duration: 0.8 }, 3.2)
-        .to(q("[data-bar]"), { scaleX: 1, duration: 5.6, ease: "none" }, 0)
-        .addLabel("portal", 5.6);
+        .to(q("[data-orb]"), { scale: 5, autoAlpha: 0, duration: 0.8, ease: "power2.out" }, HIT + 0.1)
+        // the welcome film fades in under the flash and starts playing
+        .fromTo(q("[data-film]"), { autoAlpha: 0, scale: 1.06 }, { autoAlpha: 1, scale: 1, duration: 1.2, ease: "power2.out" }, HIT)
+        .call(() => { film.current?.play().catch(() => {}); }, [], HIT)
+        .to(q("[data-bar]"), { scaleX: 1, duration: HIT + 4.4, ease: "none" }, 0)
+        .addLabel("portal", HIT + 4.4);
 
       if (!gl) {
         // No WebGL: the mark expands past the screen instead of the 3D portal.
         t.to(q("[data-stage]"), { autoAlpha: 0, scale: 0.97, duration: 0.6, ease: "power2.in" }, "portal")
           .to(q("[data-night]"), { autoAlpha: 1, duration: 0.6 }, "portal")
-          .to(q("[data-orb]"), { scale: 24, autoAlpha: 1, duration: 1.4, ease: "power3.in" }, "portal+=0.2")
+          .fromTo(q("[data-orb]"), { scale: 1, autoAlpha: 1 }, { scale: 24, duration: 1.4, ease: "power3.in" }, "portal+=0.2")
           .add(() => close(), "portal+=1.5");
         return;
       }
 
       t.to(q("[data-stage]"), { autoAlpha: 0, scale: 0.96, filter: "blur(6px)", duration: 0.7, ease: "power2.in" }, "portal")
         .to(q("[data-night]"), { autoAlpha: 1, duration: 0.8, ease: "power2.inOut" }, "portal")
-        .to(q("[data-orb]"), { scale: 7, autoAlpha: 0, duration: 0.9, ease: "power2.in" }, "portal")
         .to(q("[data-bar-wrap]"), { autoAlpha: 0, duration: 0.4 }, "portal")
         .to(q("[data-canvas]"), { autoAlpha: 1, duration: 0.6 }, "portal+=0.35")
         .to(progress, { p: 1, duration: 3.6, ease: "power1.inOut" }, "portal+=0.35")
         .to(q("[data-flash]"), { autoAlpha: 1, duration: 0.35, ease: "power2.in" }, "portal+=3.55")
         .add(() => close(), "portal+=3.9");
 
-      return () => {
-        welcome.revert();
-        title.revert();
-      };
     },
     { scope: root, dependencies: [phase, gl, reducedMotion], revertOnUpdate: true },
   );
@@ -197,42 +187,22 @@ export default function Intro() {
         <span key={i} data-spark-burst aria-hidden className={`invisible pointer-events-none absolute left-1/2 top-1/2 z-[5] -ml-1 -mt-1 rounded-full ${i % 3 === 0 ? "size-3 bg-sun shadow-[0_0_14px_4px_rgba(255,209,102,0.8)]" : "size-2 bg-ring shadow-[0_0_12px_3px_rgba(43,184,255,0.8)]"}`} />
       ))}
 
-      {/* Stage A: welcome */}
-      <div data-stage className="relative z-[2] mx-auto grid h-full max-w-[1400px] grid-rows-[1fr_auto] items-center px-6 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:grid-rows-1 md:px-12">
-        <div className="relative order-2 flex h-full items-end justify-center self-end md:order-1">
-          <div data-floor aria-hidden className="absolute bottom-[3%] left-1/2 h-8 w-[60%] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgba(10,23,51,0.28),transparent)] blur-sm" />
-          <div data-presenter className="relative">
-            <div data-breathe style={{ transformOrigin: "50% 100%" }}>
-              <img
-                src={asset("/intro/host.webp")}
-                alt={t("The studio host smiling and presenting the studio with an open hand", "Gülümseyen ve açık eliyle stüdyoyu tanıtan stüdyo sunucusu")}
-                width={363}
-                height={521}
-                className="block h-[42vh] w-auto max-w-none select-none drop-shadow-[0_30px_40px_rgba(10,23,51,0.18)] md:h-[82vh]"
-                draggable={false}
-              />
-            </div>
-          </div>
-        </div>
+      {/* Stage A: the welcome film. It starts in the flash of the burst. */}
+      <div data-stage className="absolute inset-0 z-[2]">
+        <video
+          ref={film}
+          data-film
+          src={asset("/intro/welcome.mp4")}
+          poster={asset("/intro/welcome.webp")}
+          muted
+          playsInline
+          preload="auto"
+          aria-label={t("The studio host walks in and welcomes you to Mode Digital Studio", "Stüdyo sunucusu içeri girip sizi Mode Digital Studio'ya davet ediyor")}
+          className="intro-film invisible absolute inset-0 size-full object-cover"
+        />
+        {/* soft light and a gentle fade at the bottom */}
+        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_0%,transparent_55%,rgba(10,23,51,0.10)),linear-gradient(to_top,rgba(238,242,250,0.92),rgba(238,242,250,0)_34%)]" />
 
-        <div className="order-1 pt-[12vh] text-center md:order-2 md:pt-0 md:text-left">
-          <p data-welcome className="font-display text-[clamp(0.95rem,1.6vw,1.35rem)] font-medium tracking-[0.42em] text-signal">
-            {t("WELCOME TO", "HOŞ GELDİNİZ")}
-          </p>
-          <h1
-            data-title
-            className="mt-4 font-display text-[clamp(2.5rem,7.2vw,7.6rem)] font-extrabold leading-[0.95] tracking-[-0.035em] text-navy [perspective:800px]"
-          >
-            MODE
-            <br />
-            DIGITAL
-            <br />
-            STUDIO
-          </h1>
-          <p data-line className="mt-6 text-[clamp(1rem,1.4vw,1.2rem)] text-navy/70">
-            {t("The digital production studio of Mode Academy.", "Mode Academy'nin dijital üretim stüdyosu.")}
-          </p>
-        </div>
       </div>
 
       {/* Stage B: the portal */}
@@ -251,7 +221,25 @@ export default function Intro() {
       </div>
 
       {/* Skip */}
-      <div className="absolute bottom-0 right-0 z-[6] p-6 md:p-10">
+      <div className="absolute bottom-0 right-0 z-[6] flex items-center gap-3 p-6 md:p-10">
+        <button
+          type="button"
+          onClick={() => {
+            const v = film.current;
+            if (!v) return;
+            v.muted = !v.muted;
+            setMuted(v.muted);
+            if (v.paused) v.play().catch(() => {});
+          }}
+          aria-pressed={!muted}
+          className="btn btn-sm border border-navy/20 bg-white/70 text-navy backdrop-blur hover:bg-white"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden className="size-4 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 9v6h4l5 4V5L8 9z" />
+            {muted ? <path d="M16 9l5 6M21 9l-5 6" /> : <path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" />}
+          </svg>
+          {muted ? t("Sound on", "Sesi aç") : t("Sound off", "Sesi kapat")}
+        </button>
         <Magnetic>
           <button
             type="button"
