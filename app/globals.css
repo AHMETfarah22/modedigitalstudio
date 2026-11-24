@@ -508,4 +508,3 @@ dialog.viewer[open] { animation: viewer-in .45s var(--ease-out-expo); }
 /* Welcome film: the host stays in frame on any screen shape */
 .intro-film { object-position: 50% 50%; }
 @media (max-aspect-ratio: 4/3) { .intro-film { object-position: 30% 50%; } }
-.intro-clean { -webkit-mask-image: linear-gradient(90deg, #000 calc(var(--wipe, 0%) - 9%), transparent var(--wipe, 0%)); mask-image: linear-gradient(90deg, #000 calc(var(--wipe, 0%) - 9%), transparent var(--wipe, 0%)); }
