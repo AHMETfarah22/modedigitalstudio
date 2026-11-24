@@ -53,8 +53,7 @@ export default function ScrollJourney() {
         if (!wrap || !hero || !foot) return;
         const sy = window.scrollY;
         const cs = getComputedStyle(wrap);
-        // the margin left of the content; the host's column (wide screens) is not part of it
-        const contentLeft = wrap.getBoundingClientRect().left + parseFloat(cs.paddingRight);
+        const contentLeft = wrap.getBoundingClientRect().left + parseFloat(cs.paddingLeft);
         const compact = contentLeft < 56;
         const x = compact ? Math.max(8, contentLeft * 0.42) : contentLeft / 2;
         const stops: Stop[] = [];

@@ -11,6 +11,7 @@ import Footer from "@/components/home/Footer";
 import Cursor from "@/components/ui/Cursor";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import ScrollJourney from "@/components/ui/ScrollJourney";
+import Presenter from "@/components/ui/Presenter";
 
 export default function Home() {
   return (
@@ -33,6 +34,7 @@ export default function Home() {
       </main>
       <Footer />
       <ScrollJourney />
+      <Presenter />
       <Cursor />
       <SmoothScroll />
     </ExperienceProvider>
